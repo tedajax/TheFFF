@@ -16,10 +16,11 @@ var Game = (function () {
 
         this.test = new Quad();
         this.test.setShader(this.spriteShader);
-        this.test.scale.x = 5;
+        this.test.position = new TSM.vec2([200, 200]);
     };
 
     Game.prototype.update = function (dt) {
+        this.test.scale.x += 0.1 * dt;
     };
 
     Game.prototype.render = function () {

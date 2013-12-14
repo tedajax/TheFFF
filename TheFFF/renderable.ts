@@ -72,9 +72,12 @@ class Renderable {
     }
 
     buildWorldMatrix() {
-        var scale = TSM.mat4.identity.scale(new TSM.vec3([this.scale.x, this.scale.y, 1]));
-        var translation = TSM.mat4.identity.translate(new TSM.vec3([this.position.x, this.position.y, 0]));
+        var scale = new TSM.mat4().setIdentity();
+        scale.scale(new TSM.vec3([this.scale.x, this.scale.y, 1]));
+        console.log(scale.at(0));
+        var translation = new TSM.mat4().setIdentity();
+        translation.translate(new TSM.vec3([this.position.x, this.position.y, 0]));
 
-        return scale.multiply(translation);
+        return translation.multiply(scale);
     }
 } 

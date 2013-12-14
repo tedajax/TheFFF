@@ -27,11 +27,12 @@ class Game {
         
         this.test = new Quad();
         this.test.setShader(this.spriteShader);
-        this.test.scale.x = 5;
+        this.test.position = new TSM.vec2([200, 200]);
     }
 
     update(dt: number) {
         
+        this.test.scale.x += 0.1 * dt;
     }
 
     render() {
