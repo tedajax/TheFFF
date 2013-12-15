@@ -23,6 +23,7 @@
     <TypeScriptCompile Include="shaders.ts" />
     <TypeScriptCompile Include="quad.ts" />
     <TypeScriptCompile Include="renderable.ts" />
+    <TypeScriptCompile Include="texturemanager.ts" />
     <Content Include="tsm-0.7.min.js" />
     <Content Include="TSM\common.ts" />
     <Content Include="TSM\mat2.ts" />

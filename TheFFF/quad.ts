@@ -1,4 +1,6 @@
 class Quad extends Renderable {
+    texture: ImageTexture;
+
     constructor() {
         super();
         this.buildMesh();
@@ -7,9 +9,9 @@ class Quad extends Renderable {
     buildMesh() {
         this.vertices = [
              0,  0, 0,
-             0, 50, 0,
-            50, 50, 0,
-            50,  0, 0
+             0, 64, 0,
+            64, 64, 0,
+            64,  0, 0
         ];
 
         this.colors = [
@@ -32,6 +34,12 @@ class Quad extends Renderable {
         ];
 
         this.createBuffers();
+    }
+
+    setTexture(texture: ImageTexture) {
+        var spriteShader = <SpriteShader>this.shader;
+        spriteShader.texture = texture;
+        this.texture = texture;
     }
 
     render() {

@@ -10,6 +10,9 @@ var Game = (function () {
     Game.prototype.initialize = function () {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
+        this.textures = new TextureManager();
+        this.textures.loadTexture("smile", "assets/smile.png");
+
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
         this.spriteShader.initLocales();
@@ -17,10 +20,11 @@ var Game = (function () {
         this.test = new Quad();
         this.test.setShader(this.spriteShader);
         this.test.position = new TSM.vec2([200, 200]);
+        this.test.setTexture(this.textures.getTexture("smile"));
     };
 
     Game.prototype.update = function (dt) {
-        this.test.scale.x += 0.1 * dt;
+        this.test.position.x += 25 * dt;
     };
 
     Game.prototype.render = function () {

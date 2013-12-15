@@ -13,9 +13,9 @@ var Quad = (function (_super) {
     Quad.prototype.buildMesh = function () {
         this.vertices = [
             0, 0, 0,
-            0, 50, 0,
-            50, 50, 0,
-            50, 0, 0
+            0, 64, 0,
+            64, 64, 0,
+            64, 0, 0
         ];
 
         this.colors = [
@@ -38,6 +38,12 @@ var Quad = (function (_super) {
         ];
 
         this.createBuffers();
+    };
+
+    Quad.prototype.setTexture = function (texture) {
+        var spriteShader = this.shader;
+        spriteShader.texture = texture;
+        this.texture = texture;
     };
 
     Quad.prototype.render = function () {

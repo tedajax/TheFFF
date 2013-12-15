@@ -7,6 +7,8 @@ class Game {
     width: number;
     height: number;
 
+    textures: TextureManager;
+
     test: Quad;
     spriteShader: SpriteShader;
 
@@ -21,6 +23,9 @@ class Game {
     initialize() {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
+        this.textures = new TextureManager();
+        this.textures.loadTexture("smile", "assets/smile.png");
+
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
         this.spriteShader.initLocales();
@@ -28,11 +33,11 @@ class Game {
         this.test = new Quad();
         this.test.setShader(this.spriteShader);
         this.test.position = new TSM.vec2([200, 200]);
+        this.test.setTexture(this.textures.getTexture("smile"));
     }
 
     update(dt: number) {
-        
-        this.test.scale.x += 0.1 * dt;
+        this.test.position.x += 25 * dt;
     }
 
     render() {

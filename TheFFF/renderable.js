@@ -54,7 +54,6 @@ var Renderable = (function () {
     Renderable.prototype.buildWorldMatrix = function () {
         var scale = new TSM.mat4().setIdentity();
         scale.scale(new TSM.vec3([this.scale.x, this.scale.y, 1]));
-        console.log(scale.at(0));
         var translation = new TSM.mat4().setIdentity();
         translation.translate(new TSM.vec3([this.position.x, this.position.y, 0]));
 

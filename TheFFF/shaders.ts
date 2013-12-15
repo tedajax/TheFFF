@@ -93,7 +93,7 @@ class Shader {
                                                         \
                     void main()                         \
                     {                                   \
-                        gl_FragColor = vVertexColor;    \
+                        gl_FragColor = vVertexColor * texture2D(uTexture, vVertexUV);    \
                     }";
         } else if (file == "sprite-vs.glsl") {
             return "attribute vec3 aVertexPosition;                                             \
@@ -130,6 +130,7 @@ class SpriteShader extends Shader {
     worldMatrix: TSM.mat4;
     viewMatrix: TSM.mat4;
     projectionMatrix: TSM.mat4;
+    texture: ImageTexture;
 
     constructor() {
         super();
@@ -170,5 +171,11 @@ class SpriteShader extends Shader {
         game.gl.useProgram(this.program);
 
         game.gl.uniformMatrix4fv(this.uniforms["world"], false, new Float32Array(this.worldMatrix.all()));
+
+        if (this.texture != null && this.texture.loaded) {
+            game.gl.activeTexture(game.gl.TEXTURE0);
+            game.gl.bindTexture(game.gl.TEXTURE_2D, this.texture.texture);
+            game.gl.uniform1i(this.uniforms["texture"], 0);
+        }
     }
 }

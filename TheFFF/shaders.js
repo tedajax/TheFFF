@@ -92,7 +92,7 @@ var Shader = (function () {
                                                         \
                     void main()                         \
                     {                                   \
-                        gl_FragColor = vVertexColor;    \
+                        gl_FragColor = vVertexColor * texture2D(uTexture, vVertexUV);    \
                     }";
         } else if (file == "sprite-vs.glsl") {
             return "attribute vec3 aVertexPosition;                                             \
@@ -166,6 +166,12 @@ var SpriteShader = (function (_super) {
         game.gl.useProgram(this.program);
 
         game.gl.uniformMatrix4fv(this.uniforms["world"], false, new Float32Array(this.worldMatrix.all()));
+
+        if (this.texture != null && this.texture.loaded) {
+            game.gl.activeTexture(game.gl.TEXTURE0);
+            game.gl.bindTexture(game.gl.TEXTURE_2D, this.texture.texture);
+            game.gl.uniform1i(this.uniforms["texture"], 0);
+        }
     };
     return SpriteShader;
 })(Shader);
