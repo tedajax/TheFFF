@@ -14,7 +14,7 @@ class GameObject {
         this.activeAnimation = null;
     }
 
-    addAnimation(name: string, textureRootName: string, numFrames: number, frameDelays?: number[]) {
+    addAnimation(name: string, textureRootName: string, numFrames: number, loop?: boolean, frameDelays?: number[]) {
         if (this.animations[name] != null) {
             return;
         }
@@ -34,10 +34,9 @@ class GameObject {
             }
             tex += i.toString();
             textureNames[i] = tex;
-            console.log(textureNames[i]);
         }
 
-        this.animations[name] = new Animation(textureNames, frameDelays);
+        this.animations[name] = new Animation(textureNames, frameDelays, loop);
     }
 
     setActiveAnimation(name: string) {

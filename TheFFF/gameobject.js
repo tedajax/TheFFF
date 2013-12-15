@@ -7,7 +7,7 @@ var GameObject = (function () {
         this.animations = [];
         this.activeAnimation = null;
     }
-    GameObject.prototype.addAnimation = function (name, textureRootName, numFrames, frameDelays) {
+    GameObject.prototype.addAnimation = function (name, textureRootName, numFrames, loop, frameDelays) {
         if (this.animations[name] != null) {
             return;
         }
@@ -27,10 +27,9 @@ var GameObject = (function () {
             }
             tex += i.toString();
             textureNames[i] = tex;
-            console.log(textureNames[i]);
         }
 
-        this.animations[name] = new Animation(textureNames, frameDelays);
+        this.animations[name] = new Animation(textureNames, frameDelays, loop);
     };
 
     GameObject.prototype.setActiveAnimation = function (name) {

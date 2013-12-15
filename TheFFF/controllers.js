@@ -10,11 +10,45 @@ var Controller = (function () {
         if (this.gameObject != null) {
             this.gameObject.setController(this);
         }
+
+        this.position = new TSM.vec2([0, 0]);
+        this.velocity = new TSM.vec2([0, 0]);
     }
     Controller.prototype.posess = function (gameObject) {
-        this.gameObject.setController(null);
+        if (gameObject == null) {
+            return;
+        }
+
+        if (this.gameObject != null) {
+            this.gameObject.setController(null);
+        }
+
         this.gameObject = gameObject;
         this.gameObject.setController(this);
+    };
+
+    Controller.prototype.handleStateSync = function (sync) {
+        this.gameObject.position.x = sync.transformState.position.x;
+        this.gameObject.position.y = sync.transformState.position.y;
+    };
+
+    Controller.prototype.getStateSyncInfo = function () {
+        var info = {
+            "transformState": {
+                "position": {
+                    "x": this.gameObject.position.x,
+                    "y": this.gameObject.position.y
+                }
+            },
+            "moveableState": {
+                "velocity": {
+                    "x": this.velocity.x,
+                    "y": this.velocity.y
+                }
+            }
+        };
+
+        return info;
     };
 
     Controller.prototype.unposess = function () {
@@ -39,29 +73,55 @@ var LocalPlayerController = (function (_super) {
 
         var speed = 500;
         var moved = false;
+        this.velocity.x = 0;
+        this.velocity.y = 0;
         if (game.input.getKey(Keys.A)) {
-            this.gameObject.position.x -= speed * dt;
+            this.velocity.x = -speed * dt;
             moved = true;
         }
         if (game.input.getKey(Keys.D)) {
-            this.gameObject.position.x += speed * dt;
+            this.velocity.x = speed * dt;
             moved = true;
         }
         if (game.input.getKey(Keys.W)) {
-            this.gameObject.position.y -= speed * dt;
+            this.velocity.y = -speed * dt;
             moved = true;
         }
         if (game.input.getKey(Keys.S)) {
-            this.gameObject.position.y += speed * dt;
+            this.velocity.y = speed * dt;
             moved = true;
         }
 
-        if (moved) {
-            this.gameObject.setActiveAnimation("Walk");
-        } else {
-            this.gameObject.setActiveAnimation("Idle");
+        this.position = TSM.vec2.sum(this.position, this.velocity);
+        this.gameObject.position = this.position;
+
+        if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
+            this.gameObject.setActiveAnimation("Attack");
+            this.attacking = true;
+        }
+
+        if (!this.attacking) {
+            if (moved) {
+                this.gameObject.setActiveAnimation("Walk");
+            } else {
+                this.gameObject.setActiveAnimation("Idle");
+            }
         }
     };
     return LocalPlayerController;
+})(Controller);
+
+var NetworkPlayerController = (function (_super) {
+    __extends(NetworkPlayerController, _super);
+    function NetworkPlayerController(gameObject) {
+        _super.call(this, gameObject);
+    }
+    NetworkPlayerController.prototype.update = function (dt) {
+        var vx = this.velocity.x * dt;
+        var vy = this.velocity.y * dt;
+        this.gameObject.position.x += vx;
+        this.gameObject.position.y += vy;
+    };
+    return NetworkPlayerController;
 })(Controller);
 //# sourceMappingURL=controllers.js.map

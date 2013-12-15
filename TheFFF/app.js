@@ -5,6 +5,7 @@ var prevTime;
 window.onload = initialize;
 
 var connection;
+var messageHandler;
 
 function initialize() {
     var canvas = document.getElementById('canvas');
@@ -12,6 +13,7 @@ function initialize() {
 
     game.initialize();
 
+    messageHandler = new MessageHandler();
     connection = new Connection("ws://caemlyn.xsfn.net:8081/");
     connection.connect();
 

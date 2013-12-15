@@ -50,12 +50,14 @@ class Connection {
 
     onMessage(msg: MessageEvent) {
         var data = this.messageRoot.Message.decode(msg.data);
-        console.log(data);
 
-        var seqAck = data["seqAck"];
-        if (seqAck > this.highSeqAck) {
-            this.highSeqAck = seqAck;
+        for (var i = 0; i < data.reliableCommands; ++i) {
+            if (data.reliableCommands[i].sequence > this.highSeqAck) {
+                this.highSeqAck = data.reliableCommands[i].sequence;
+            }
         }
+
+        messageHandler.parseMessage(data);
     }
 
     sendCommands(commands: any[]) {
@@ -68,7 +70,6 @@ class Connection {
             }
         };
 
-        console.log(msg);
         var message = new this.messageRoot.ClientMessage(msg);
         
         this.sendMessage(message.encode().toArrayBuffer());

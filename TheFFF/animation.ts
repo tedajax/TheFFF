@@ -7,12 +7,12 @@ class Animation {
     loop: boolean;
     paused: boolean;
 
-    constructor(imageNames: string[], delays: number[]) {
+    constructor(imageNames: string[], delays: number[], loop?: boolean) {
         this.maxFrames = imageNames.length;
         this.currentFrame = 0;
         this.currentTimer = 0;
         this.frameDelays = delays.slice(0);
-        this.loop = true;
+        this.loop = (loop == null) ? true : loop;
         this.paused = true;
 
         this.frameImages = [];

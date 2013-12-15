@@ -1,24 +1,25 @@
-var MessageHandler = (function () {
-    function MessageHandler() {
+class MessageHandler {
+    constructor() {
     }
-    MessageHandler.prototype.parseMessage = function (msg) {
+
+    parseMessage(msg: any) {
         this.parseCommands(msg.commands);
         this.parseReliableCommands(msg.reliableCommands);
-    };
+    }
 
-    MessageHandler.prototype.parseCommands = function (commands) {
+    parseCommands(commands: any[]) {
         for (var i = 0; i < commands.length; ++i) {
             this.parseCommand(commands[i]);
         }
-    };
+    }
 
-    MessageHandler.prototype.parseReliableCommands = function (commands) {
+    parseReliableCommands(commands: any[]) {
         for (var i = 0; i < commands.length; ++i) {
             this.parseCommand(commands[i].command);
         }
-    };
+    }
 
-    MessageHandler.prototype.parseCommand = function (command) {
+    parseCommand(command: any) {
         switch (command.type) {
             case 100:
                 console.log("wut");
@@ -37,11 +38,11 @@ var MessageHandler = (function () {
                 break;
 
             case 104:
-                this.parseStateSync(command.stateSync);
+                this.parseStateSync(command.stateSync);           
         }
-    };
+    }
 
-    MessageHandler.prototype.parseStateSync = function (sync) {
+    parseStateSync(sync: any) {
         var id = sync.networkId;
 
         if (game.gameObjects.gameObjects[id] == null) {
@@ -52,7 +53,5 @@ var MessageHandler = (function () {
             var controller = game.gameObjects.gameObjects[id].controller;
             controller.handleStateSync(sync);
         }
-    };
-    return MessageHandler;
-})();
-//# sourceMappingURL=messagehandler.js.map
+    }
+} 

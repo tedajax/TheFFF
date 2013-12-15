@@ -24,36 +24,39 @@ var Game = (function () {
         document.onmousemove = function (event) {
             return _this.input.onMouseMove(event);
         };
+
+        this.localPlayerId = -1;
+        this.localPlayerUpdateInterval = 0.1;
+        this.localPlayerUpdateTimer = 0;
     }
     Game.prototype.initialize = function () {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
         this.textures = new TextureManager();
-        this.textures.loadTexture("smile", "assets/smile.png");
-        this.textures.loadTexture("dirt0", "assets/dirt0.png");
-        this.textures.loadTexture("dirt1", "assets/dirt1.png");
-        this.textures.loadTexture("grass0", "assets/grass0.png");
-        this.textures.loadTexture("grass1", "assets/grass1.png");
-        this.textures.loadTexture("grass2", "assets/grass2.png");
-        this.textures.loadTexture("mtn0", "assets/mtn0.png");
-        this.textures.loadTexture("water0", "assets/water0.png");
-        this.textures.loadTexture("water1", "assets/water1.png");
-        this.textures.loadTexture("mageIdle00", "assets/mageWalk00.png");
-        this.textures.loadTexture("mageIdle01", "assets/mageWalk01.png");
-        this.textures.loadTexture("mageIdle02", "assets/mageWalk02.png");
-        this.textures.loadTexture("mageIdle03", "assets/mageWalk03.png");
-        this.textures.loadTexture("mageWalk00", "assets/mageWalk00.png");
-        this.textures.loadTexture("mageWalk01", "assets/mageWalk01.png");
-        this.textures.loadTexture("mageWalk02", "assets/mageWalk02.png");
-        this.textures.loadTexture("mageWalk03", "assets/mageWalk03.png");
-        this.textures.loadTexture("mageAttack00", "assets/mageAttack00.png");
-        this.textures.loadTexture("mageAttack01", "assets/mageAttack01.png");
-        this.textures.loadTexture("mageAttack02", "assets/mageAttack02.png");
-        this.textures.loadTexture("mageAttack03", "assets/mageAttack03.png");
-        this.textures.loadTexture("mageAttack04", "assets/mageAttack04.png");
-        this.textures.loadTexture("mageAttack05", "assets/mageAttack05.png");
-        this.textures.loadTexture("mageAttack06", "assets/mageAttack06.png");
-        this.textures.loadTexture("mageAttack07", "assets/mageAttack07.png");
+        this.textures.loadTexture("dirt0", "assets/tiles/dirt0.png");
+        this.textures.loadTexture("dirt1", "assets/tiles/dirt1.png");
+        this.textures.loadTexture("grass0", "assets/tiles/grass0.png");
+        this.textures.loadTexture("grass1", "assets/tiles/grass1.png");
+        this.textures.loadTexture("grass2", "assets/tiles/grass2.png");
+        this.textures.loadTexture("mtn0", "assets/tiles/mtn0.png");
+        this.textures.loadTexture("water0", "assets/tiles/water0.png");
+        this.textures.loadTexture("water1", "assets/tiles/water1.png");
+        this.textures.loadTexture("mageIdle00", "assets/magus/mageWalk00.png");
+        this.textures.loadTexture("mageIdle01", "assets/magus/mageWalk01.png");
+        this.textures.loadTexture("mageIdle02", "assets/magus/mageWalk02.png");
+        this.textures.loadTexture("mageIdle03", "assets/magus/mageWalk03.png");
+        this.textures.loadTexture("mageWalk00", "assets/magus/mageWalk00.png");
+        this.textures.loadTexture("mageWalk01", "assets/magus/mageWalk01.png");
+        this.textures.loadTexture("mageWalk02", "assets/magus/mageWalk02.png");
+        this.textures.loadTexture("mageWalk03", "assets/magus/mageWalk03.png");
+        this.textures.loadTexture("mageAttack00", "assets/magus/mageAttack00.png");
+        this.textures.loadTexture("mageAttack01", "assets/magus/mageAttack01.png");
+        this.textures.loadTexture("mageAttack02", "assets/magus/mageAttack02.png");
+        this.textures.loadTexture("mageAttack03", "assets/magus/mageAttack03.png");
+        this.textures.loadTexture("mageAttack04", "assets/magus/mageAttack04.png");
+        this.textures.loadTexture("mageAttack05", "assets/magus/mageAttack05.png");
+        this.textures.loadTexture("mageAttack06", "assets/magus/mageAttack06.png");
+        this.textures.loadTexture("mageAttack07", "assets/magus/mageAttack07.png");
 
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
@@ -62,23 +65,43 @@ var Game = (function () {
         this.terrain = new WorldTerrain();
 
         this.gameObjects = new GameObjectManager();
-        var go = this.gameObjects.add(new GameObject("mageIdle00"));
-        go.addAnimation("Idle", "mageIdle", 4);
-        go.addAnimation("Walk", "mageWalk", 4, [0.1, 0.1, 0.1, 0.1]);
-        go.addAnimation("Attack", "mageAttack", 7, [0.5, 0, 0.1, 0.5, 0, 0, 0.5, 0.1]);
-        go.setActiveAnimation("Idle");
-        go.sprite.alpha = true;
-        this.playerController = new LocalPlayerController(go);
-        this.camera.gameObjectToFollow = go;
+
+        //var go = this.gameObjects.add(new GameObject("mageIdle00"), 0);
+        //go.addAnimation("Idle", "mageIdle", 4);
+        //go.addAnimation("Walk", "mageWalk", 4, true, [0.1, 0.1, 0.1, 0.1]);
+        //go.addAnimation("Attack", "mageAttack", 7, false, [0.5, 0, 0.1, 0.5, 0, 0, 0.5, 0.1]);
+        //go.setActiveAnimation("Idle");
+        //go.sprite.alpha = true;
+        this.playerController = new LocalPlayerController(null);
     };
 
     Game.prototype.update = function (dt) {
-        this.input.update();
+        this.updateLocalPlayer();
 
         this.gameObjects.update(dt);
 
         this.camera.update();
         this.terrain.update();
+
+        if (this.localPlayerId >= 0) {
+            this.localPlayerUpdateTimer += dt;
+            if (this.localPlayerUpdateTimer >= this.localPlayerUpdateInterval) {
+                this.localPlayerUpdateTimer = 0;
+                var info = this.playerController.getStateSyncInfo();
+                connection.sendCommands([
+                    {
+                        "type": 104,
+                        "stateSync": {
+                            "networkId": this.localPlayerId,
+                            "moveableState": info["moveableState"],
+                            "transformState": info["transformState"]
+                        }
+                    }
+                ]);
+            }
+        }
+
+        this.input.update();
     };
 
     Game.prototype.render = function () {
@@ -87,6 +110,15 @@ var Game = (function () {
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
         this.gameObjects.render();
+    };
+
+    Game.prototype.updateLocalPlayer = function () {
+        if (this.localPlayerId >= 0 && this.playerController.gameObject == null) {
+            if (this.gameObjects.gameObjects[this.localPlayerId] != null) {
+                this.playerController.posess(this.gameObjects.gameObjects[this.localPlayerId]);
+                this.camera.gameObjectToFollow = this.gameObjects.gameObjects[this.localPlayerId];
+            }
+        }
     };
     return Game;
 })();

@@ -8,6 +8,7 @@ message Command {
     NotifyError = 102;
     ConnectionClose = 103;
     StateSync = 104;
+    EntityDestroy = 105;
   }
 
   required Type type = 1;
@@ -41,6 +42,7 @@ message ConnectResponse {
   }
 
   required ErrorInfo errorInfo = 1;
+  optional int32 playerId = 2;
 }
 
 message ConnectionClose {
@@ -77,6 +79,8 @@ message StateSync {
 
   enum StateType {
     Transform = 100;
+    Owned = 101;
+    MoveableState = 102;
   }
 
   extend Command {
@@ -93,8 +97,32 @@ message NetVec2 {
 
 message TransformState {
   extend StateSync {
-    required TransformState transformState = 100;
+    optional TransformState transformState = 100;
   }
 
   required NetVec2 position = 1;
+}
+
+message OwnedState {
+  extend StateSync {
+    optional OwnedState ownedState = 101;
+  }
+
+  required int32 playerId = 1;
+}
+
+message MoveableState {
+  extend StateSync {
+    optional MoveableState moveableState = 102;
+  }
+
+  required NetVec2 velocity = 1;
+}
+
+message EntityDestroy {
+  extend Command {
+    optional EntityDestroy entityDestroy = 105;
+  }
+
+  required int32 networkId = 1;
 }
