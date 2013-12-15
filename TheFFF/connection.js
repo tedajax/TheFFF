@@ -12,6 +12,7 @@ var Connection = (function () {
 
         try  {
             this.socket = new WebSocket(this.url);
+            this.socket.binaryType = "arraybuffer";
         } catch (exception) {
             console.log(exception);
         }
@@ -34,7 +35,10 @@ var Connection = (function () {
     };
 
     Connection.prototype.onMessage = function (msg) {
-        console.log(msg);
+        var Protobuf = dcodeIO.ProtoBuf;
+        var builder = Protobuf.loadProtoFile("proto/core.proto");
+        var root = builder.build("Message");
+        //console.log(root.decode(msg.data));
     };
 
     Connection.prototype.sendMessage = function (msg) {

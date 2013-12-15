@@ -1,3 +1,5 @@
+declare var ProtoBuf;
+
 class Connection {
     socket: WebSocket;
     url: string;
@@ -17,6 +19,7 @@ class Connection {
 
         try {
             this.socket = new WebSocket(this.url);
+            this.socket.binaryType = "arraybuffer";
         } catch (exception) {
             console.log(exception);
         }
@@ -32,8 +35,11 @@ class Connection {
         this.flushQueue();
     }
 
-    onMessage(msg: Object) {
-        console.log(msg);
+    onMessage(msg: MessageEvent) {
+        var Protobuf = dcodeIO.ProtoBuf;
+        var builder = Protobuf.loadProtoFile("proto/core.proto");
+        var root = builder.build("Message");
+        //console.log(root.decode(msg.data));
     }
 
     sendMessage(msg: Object) {

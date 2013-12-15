@@ -35,17 +35,28 @@ class LocalPlayerController extends Controller {
         }
 
         var speed = 500;
+        var moved = false;
         if (game.input.getKey(Keys.A)) {
             this.gameObject.position.x -= speed * dt;
+            moved = true;
         }
         if (game.input.getKey(Keys.D)) {
             this.gameObject.position.x += speed * dt;
+            moved = true;
         }
         if (game.input.getKey(Keys.W)) {
             this.gameObject.position.y -= speed * dt;
+            moved = true;
         }
         if (game.input.getKey(Keys.S)) {
             this.gameObject.position.y += speed * dt;
+            moved = true;
+        }
+
+        if (moved) {
+            this.gameObject.setActiveAnimation("Walk");
+        } else {
+            this.gameObject.setActiveAnimation("Idle");
         }
     }
 }

@@ -7,16 +7,27 @@ var GameObject = (function () {
         this.animations = [];
         this.activeAnimation = null;
     }
-    GameObject.prototype.addAnimation = function (name, textureNames, frameDelays) {
+    GameObject.prototype.addAnimation = function (name, textureRootName, numFrames, frameDelays) {
         if (this.animations[name] != null) {
             return;
         }
 
         if (frameDelays == null) {
             frameDelays = [];
-            for (var i = 0; i < textureNames.length; ++i) {
+            for (var i = 0; i < numFrames; ++i) {
                 frameDelays[i] = 0.2;
             }
+        }
+
+        var textureNames = [];
+        for (var i = 0; i < numFrames; ++i) {
+            var tex = textureRootName.slice(0);
+            if (i < 10) {
+                tex += "0";
+            }
+            tex += i.toString();
+            textureNames[i] = tex;
+            console.log(textureNames[i]);
         }
 
         this.animations[name] = new Animation(textureNames, frameDelays);

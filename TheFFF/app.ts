@@ -12,12 +12,11 @@ function initialize() {
     var canvas = <HTMLCanvasElement>document.getElementById('canvas');
     game = new Game(canvas);
     
-    console.log("foo");
     var Protobuf = dcodeIO.ProtoBuf;
     var builder = Protobuf.loadProtoFile("proto/core.proto");
     var root = builder.build();
     var myMessage = new root.ClientMessage({
-      "token": 1,
+      "token": Math.floor(Math.random() * 10000000),
       "message": {
         "seqAck": 0,
         "reliableCommands": [],

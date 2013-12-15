@@ -68,7 +68,9 @@ class Game {
 
         this.gameObjects = new GameObjectManager();
         var go = this.gameObjects.add(new GameObject("mageIdle00"));
-        go.addAnimation("Idle", ["mageIdle00", "mageIdle01", "mageIdle02", "mageIdle03"]);
+        go.addAnimation("Idle", "mageIdle", 4);
+        go.addAnimation("Walk", "mageWalk", 4, [0.1, 0.1, 0.1, 0.1]);
+        go.addAnimation("Attack", "mageAttack", 7, [0.5, 0, 0.1, 0.5, 0, 0, 0.5, 0.1]);
         go.setActiveAnimation("Idle");
         go.sprite.alpha = true;
         this.playerController = new LocalPlayerController(go);

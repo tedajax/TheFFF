@@ -14,16 +14,27 @@ class GameObject {
         this.activeAnimation = null;
     }
 
-    addAnimation(name: string, textureNames: string[], frameDelays?: number[]) {
+    addAnimation(name: string, textureRootName: string, numFrames: number, frameDelays?: number[]) {
         if (this.animations[name] != null) {
             return;
         }
 
         if (frameDelays == null) {
             frameDelays = [];
-            for (var i = 0; i < textureNames.length; ++i) {
+            for (var i = 0; i < numFrames; ++i) {
                 frameDelays[i] = 0.2;
             }
+        }
+
+        var textureNames: string[] = [];
+        for (var i = 0; i < numFrames; ++i) {
+            var tex = textureRootName.slice(0);
+            if (i < 10) {
+                tex += "0";
+            }
+            tex += i.toString();
+            textureNames[i] = tex;
+            console.log(textureNames[i]);
         }
 
         this.animations[name] = new Animation(textureNames, frameDelays);
