@@ -28,6 +28,10 @@ var Controller = (function () {
     };
 
     Controller.prototype.handleStateSync = function (sync) {
+        if (sync.moveableState != null) {
+            this.velocity.x = sync.moveableState.velocity.x;
+            this.velocity.y = sync.moveableState.velocity.y;
+        }
         this.gameObject.position.x = sync.transformState.position.x;
         this.gameObject.position.y = sync.transformState.position.y;
     };
@@ -117,8 +121,8 @@ var NetworkPlayerController = (function (_super) {
         _super.call(this, gameObject);
     }
     NetworkPlayerController.prototype.update = function (dt) {
-        var vx = this.velocity.x * dt;
-        var vy = this.velocity.y * dt;
+        var vx = this.velocity.x;
+        var vy = this.velocity.y;
         this.position.x += vx;
         this.position.y += vy;
         this.gameObject.position = this.position;
