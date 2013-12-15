@@ -15,7 +15,7 @@ function initialize() {
     var Protobuf = dcodeIO.ProtoBuf;
     var builder = Protobuf.loadProtoFile("proto/core.proto");
     var root = builder.build();
-    var myMessage = new root.ConnectRequest();
+    var myMessage = new root.ClientMessage(1, root.Command(100));
     var byteBuffer = myMessage.encode();
     var buffer = byteBuffer.toArrayBuffer();
 

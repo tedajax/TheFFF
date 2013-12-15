@@ -2,7 +2,7 @@ class Connection {
     socket: WebSocket;
     url: string;
     connected: boolean;
-    msgQueue: string[];
+    msgQueue: Object[];
 
     constructor(url) {
         this.url = url;
@@ -32,11 +32,11 @@ class Connection {
         this.flushQueue();
     }
 
-    onMessage(msg: string) {
+    onMessage(msg: Object) {
         console.log(msg);
     }
 
-    sendMessage(msg: string) {
+    sendMessage(msg: Object) {
         if (!this.connected) {
             this.msgQueue.push(msg);
             return;
