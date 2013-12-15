@@ -8,6 +8,9 @@ function initialize() {
     var canvas = document.getElementById('canvas');
     game = new Game(canvas);
 
+    var Protobuf = dcodeIO.ProtoBuf;
+    var builder = Protobuf.loadProtoFile("proto/core.proto");
+
     game.initialize();
 
     var FPS = 60;

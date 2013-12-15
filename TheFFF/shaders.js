@@ -83,40 +83,6 @@ var Shader = (function () {
     };
 
     Shader.prototype.getFileString = function (file) {
-        if (file == "sprite-fs.glsl") {
-            return "precision highp float;              \
-                                                        \
-                    varying vec4 vVertexColor;          \
-                    varying vec2 vVertexUV;             \
-                    uniform sampler2D uTexture;         \
-                                                        \
-                    void main()                         \
-                    {                                   \
-                        gl_FragColor = vVertexColor * texture2D(uTexture, vVertexUV);    \
-                    }";
-        } else if (file == "sprite-vs.glsl") {
-            return "attribute vec3 aVertexPosition;                                             \
-                    attribute vec4 aVertexColor;                                                \
-                    attribute vec2 aVertexUV;                                                   \
-                                                                                                \
-                    varying vec4 vVertexColor;                                                  \
-                    varying vec2 vVertexUV;                                                     \
-                                                                                                \
-                    uniform mat4 uWorld;                                                        \
-                    uniform mat4 uView;                                                         \
-                    uniform mat4 uProjection;                                                   \
-                                                                                                \
-                    void main()                                                                 \
-                    {                                                                           \
-                        mat4 modelView = uView * uWorld;                                        \
-                                                                                                \
-                        vVertexColor = aVertexColor;                                            \
-                        vVertexUV = aVertexUV;                                                  \
-                                                                                                \
-                        gl_Position = uProjection * modelView * vec4(aVertexPosition, 1.0);     \
-                    }";
-        }
-
         var request = new XMLHttpRequest();
         request.open("GET", "./" + file, false);
         request.send();

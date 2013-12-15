@@ -20,12 +20,18 @@
     <Content Include="app.css" />
     <TypeScriptCompile Include="worldterrain.ts" />
     <TypeScriptCompile Include="camera.ts" />
+    <TypeScriptCompile Include="controllers.ts" />
+    <Content Include="ByteBuffer.min.js" />
     <Content Include="default.htm" />
     <TypeScriptCompile Include="shaders.ts" />
     <TypeScriptCompile Include="quad.ts" />
     <TypeScriptCompile Include="renderable.ts" />
     <TypeScriptCompile Include="texturemanager.ts" />
     <TypeScriptCompile Include="input.ts" />
+    <TypeScriptCompile Include="gameobject.ts" />
+    <TypeScriptCompile Include="gameobjectmanager.ts" />
+    <Content Include="Long.min.js" />
+    <Content Include="ProtoBuf.min.js" />
     <Content Include="tsm-0.7.min.js" />
     <Content Include="TSM\common.ts" />
     <Content Include="TSM\mat2.ts" />
@@ -46,6 +52,7 @@
   <ItemGroup>
     <Content Include="sprite-vs.glsl" />
     <Content Include="sprite-fs.glsl" />
+    <Content Include="proto\core.proto" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -85,6 +92,7 @@
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>

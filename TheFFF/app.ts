@@ -1,3 +1,5 @@
+declare var dcodeIO;
+
 var game: Game;
 var currTime: number;
 var prevTime: number;
@@ -7,6 +9,10 @@ window.onload = initialize;
 function initialize() {
     var canvas = <HTMLCanvasElement>document.getElementById('canvas');
     game = new Game(canvas);
+
+    
+    var Protobuf = dcodeIO.ProtoBuf;
+    var builder = Protobuf.loadProtoFile("proto/core.proto");
 
     game.initialize();
 
