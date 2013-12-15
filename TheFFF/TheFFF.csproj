@@ -59,7 +59,7 @@
     <TypeScriptCompile Include="gameobject.ts" />
     <TypeScriptCompile Include="gameobjectmanager.ts" />
     <Content Include="Long.min.js" />
-    <Content Include="ProtoBuf.min.js" />
+    <Content Include="ProtoBuf.js" />
     <Content Include="tsm-0.7.min.js" />
     <Content Include="TSM\common.ts" />
     <Content Include="TSM\mat2.ts" />
@@ -72,7 +72,9 @@
     <Content Include="TSM\vec4.ts" />
     <Content Include="WebGL.d.ts" />
     <TypeScriptCompile Include="game.ts" />
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
@@ -103,7 +105,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>16805</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:10679/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

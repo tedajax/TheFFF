@@ -10,10 +10,23 @@ function initialize() {
     var canvas = document.getElementById('canvas');
     game = new Game(canvas);
 
+    console.log("foo");
     var Protobuf = dcodeIO.ProtoBuf;
     var builder = Protobuf.loadProtoFile("proto/core.proto");
     var root = builder.build();
-    var myMessage = new root.ClientMessage(1, root.Command(100));
+    var myMessage = new root.ClientMessage({
+        "token": 1,
+        "message": {
+            "seqAck": 0,
+            "reliableCommands": [],
+            "commands": [
+                {
+                    "type": 100,
+                    "connectRequest": {}
+                }
+            ]
+        }
+    });
     var byteBuffer = myMessage.encode();
     var buffer = byteBuffer.toArrayBuffer();
 

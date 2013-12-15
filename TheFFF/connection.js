@@ -43,8 +43,8 @@ var Connection = (function () {
             return;
         }
 
-        console.log("sending - " + this.msgQueue[0]);
-        this.socket.send(this.msgQueue[0]);
+        console.log("sending - " + msg);
+        this.socket.send(msg);
     };
 
     Connection.prototype.flushQueue = function () {
