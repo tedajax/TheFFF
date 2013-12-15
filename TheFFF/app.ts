@@ -36,7 +36,7 @@ function initialize() {
     connection = new Connection("ws://caemlyn.xsfn.net:8081/");
     connection.connect();
 
-    connection.sendMessage(buffer);
+    connection.sendCommands([{ "type": 100, "connectRequest": {} }]);
 
     var FPS = 60;
     setInterval(tick, 1000 / FPS);

@@ -6,10 +6,23 @@ class Connection {
     connected: boolean;
     msgQueue: Object[];
 
+    token: number;
+    highSeqAck: number;
+    Protobuf: any;
+    builder: any;
+    messageRoot: any;
+
     constructor(url) {
         this.url = url;
         this.connected = false;
         this.msgQueue = [];
+
+        this.token = Math.floor(Math.random() * 1000000) + 1;
+        this.highSeqAck = 0;
+
+        this.Protobuf = dcodeIO.ProtoBuf;
+        this.builder = this.Protobuf.loadProtoFile("proto/core.proto");
+        this.messageRoot = this.builder.build();
     }
 
     connect() {
@@ -36,10 +49,27 @@ class Connection {
     }
 
     onMessage(msg: MessageEvent) {
-        var Protobuf = dcodeIO.ProtoBuf;
-        var builder = Protobuf.loadProtoFile("proto/core.proto");
-        var root = builder.build("Message");
-        //console.log(root.decode(msg.data));
+        var data = this.messageRoot.decode(msg.data);
+        var seqAck = data["seqAck"];
+        if (seqAck > this.highSeqAck) {
+            this.highSeqAck = seqAck;
+        }
+    }
+
+    sendCommands(commands: any[]) {
+        var msg = {
+            "token": this.token,
+            "message": {
+                "seqAck": 0,
+                "reliableCommands": [],
+                "commands": commands
+            }
+        };
+
+        console.log(msg);
+        var message = this.messageRoot.ClientMessage(msg);
+        
+        this.sendMessage(message.encode().toArrayBuffer());
     }
 
     sendMessage(msg: Object) {
@@ -59,7 +89,7 @@ class Connection {
 
         while (this.msgQueue.length > 0) {
             this.sendMessage(this.msgQueue[0]);
-            this.msgQueue = this.msgQueue.slice(1);
+            this.msgQueue.shift();
         }
     }
 
