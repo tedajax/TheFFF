@@ -81,23 +81,24 @@ class LocalPlayerController extends Controller {
         this.velocity.x = 0;
         this.velocity.y = 0;
         if (game.input.getKey(Keys.A)) {
-            this.velocity.x = -speed * dt;
+            this.velocity.x = -speed;
             moved = true;
         }
         if (game.input.getKey(Keys.D)) {
-            this.velocity.x = speed * dt;
+            this.velocity.x = speed;
             moved = true;
         }
         if (game.input.getKey(Keys.W)) {
-            this.velocity.y = -speed * dt;
+            this.velocity.y = -speed;
             moved = true;
         }
         if (game.input.getKey(Keys.S)) {
-            this.velocity.y = speed * dt;
+            this.velocity.y = speed;
             moved = true;
         }
 
-        this.position = TSM.vec2.sum(this.position, this.velocity);
+        this.position.x += this.velocity.x * dt;
+        this.position.y += this.velocity.y * dt;
         this.gameObject.position = this.position;
 
         if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
@@ -121,8 +122,8 @@ class NetworkPlayerController extends Controller {
     }
 
     update(dt) {
-        var vx = this.velocity.x;
-        var vy = this.velocity.y;
+        var vx = this.velocity.x * dt;
+        var vy = this.velocity.y * dt;
         this.position.x += vx;
         this.position.y += vy;
         this.gameObject.position = this.position;
