@@ -49,7 +49,9 @@ class Connection {
     }
 
     onMessage(msg: MessageEvent) {
-        var data = this.messageRoot.decode(msg.data);
+        var data = this.messageRoot.Message.decode(msg.data);
+        console.log(data);
+
         var seqAck = data["seqAck"];
         if (seqAck > this.highSeqAck) {
             this.highSeqAck = seqAck;
@@ -67,7 +69,7 @@ class Connection {
         };
 
         console.log(msg);
-        var message = this.messageRoot.ClientMessage(msg);
+        var message = new this.messageRoot.ClientMessage(msg);
         
         this.sendMessage(message.encode().toArrayBuffer());
     }
@@ -78,7 +80,6 @@ class Connection {
             return;
         }
 
-        console.log("sending - " + msg);
         this.socket.send(msg);
     }
 

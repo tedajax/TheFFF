@@ -42,7 +42,9 @@ var Connection = (function () {
     };
 
     Connection.prototype.onMessage = function (msg) {
-        var data = this.messageRoot.decode(msg.data);
+        var data = this.messageRoot.Message.decode(msg.data);
+        console.log(data);
+
         var seqAck = data["seqAck"];
         if (seqAck > this.highSeqAck) {
             this.highSeqAck = seqAck;
@@ -60,7 +62,7 @@ var Connection = (function () {
         };
 
         console.log(msg);
-        var message = this.messageRoot.ClientMessage(msg);
+        var message = new this.messageRoot.ClientMessage(msg);
 
         this.sendMessage(message.encode().toArrayBuffer());
     };
@@ -71,7 +73,6 @@ var Connection = (function () {
             return;
         }
 
-        console.log("sending - " + msg);
         this.socket.send(msg);
     };
 
