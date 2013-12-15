@@ -37,8 +37,6 @@ class Quad extends Renderable {
     }
 
     setTexture(texture: ImageTexture) {
-        var spriteShader = <SpriteShader>this.shader;
-        spriteShader.texture = texture;
         this.texture = texture;
     }
 
@@ -47,6 +45,7 @@ class Quad extends Renderable {
 
         var spriteShader = <SpriteShader>this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
+        spriteShader.texture = this.texture;
         spriteShader.objectDrawSetup();
 
         game.gl.bindBuffer(game.gl.ARRAY_BUFFER, this.vertexBuffer.glBuffer);

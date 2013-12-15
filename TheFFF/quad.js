@@ -41,8 +41,6 @@ var Quad = (function (_super) {
     };
 
     Quad.prototype.setTexture = function (texture) {
-        var spriteShader = this.shader;
-        spriteShader.texture = texture;
         this.texture = texture;
     };
 
@@ -51,6 +49,7 @@ var Quad = (function (_super) {
 
         var spriteShader = this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
+        spriteShader.texture = this.texture;
         spriteShader.objectDrawSetup();
 
         game.gl.bindBuffer(game.gl.ARRAY_BUFFER, this.vertexBuffer.glBuffer);

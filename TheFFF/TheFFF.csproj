@@ -18,12 +18,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <TypeScriptCompile Include="worldterrain.ts" />
     <TypeScriptCompile Include="camera.ts" />
     <Content Include="default.htm" />
     <TypeScriptCompile Include="shaders.ts" />
     <TypeScriptCompile Include="quad.ts" />
     <TypeScriptCompile Include="renderable.ts" />
     <TypeScriptCompile Include="texturemanager.ts" />
+    <TypeScriptCompile Include="input.ts" />
     <Content Include="tsm-0.7.min.js" />
     <Content Include="TSM\common.ts" />
     <Content Include="TSM\mat2.ts" />
