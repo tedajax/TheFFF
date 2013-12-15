@@ -1,9 +1,11 @@
 class Quad extends Renderable {
     texture: ImageTexture;
+    alpha: boolean;
 
     constructor() {
         super();
         this.buildMesh();
+        this.alpha = false;
     }
 
     buildMesh() {
@@ -47,6 +49,11 @@ class Quad extends Renderable {
         spriteShader.worldMatrix = this.buildWorldMatrix();
         spriteShader.texture = this.texture;
         spriteShader.objectDrawSetup();
+
+        if (this.alpha) {
+            game.gl.blendFunc(game.gl.SRC_ALPHA, game.gl.ONE_MINUS_SRC_ALPHA);
+            game.gl.enable(game.gl.BLEND);
+        }
 
         game.gl.bindBuffer(game.gl.ARRAY_BUFFER, this.vertexBuffer.glBuffer);
         game.gl.vertexAttribPointer(this.shader.attribs["position"],

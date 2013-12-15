@@ -29,17 +29,15 @@ message ClientMessage {
   required Message message = 2;
 }
 
-
-
 message ConnectRequest {
   extend Command {
-    required ConnectRequest command = 100;
+    required ConnectRequest connectRequest = 100;
   }
 }
 
 message ConnectResponse {
   extend Command {
-    required ConnectResponse command = 101;
+    required ConnectResponse connectResponse = 101;
   }
 
   required ErrorInfo errorInfo = 1;
@@ -47,7 +45,7 @@ message ConnectResponse {
 
 message ConnectionClose {
   extend Command {
-    required ConnectionClose command = 103;
+    required ConnectionClose connectionClose = 103;
   }
 
   required ErrorInfo errorInfo = 1;
@@ -68,7 +66,7 @@ message ErrorInfo {
 
 message NotifyError {
   extend Command {
-    required NotifyError command = 102;
+    required NotifyError notifyError = 102;
   }
 
   required ErrorInfo errorInfo = 1;
@@ -82,7 +80,7 @@ message StateSync {
   }
 
   extend Command {
-    required StateSync command = 104;
+    required StateSync stateSync = 104;
   }
 
   required int32 networkId = 1;

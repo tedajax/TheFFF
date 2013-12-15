@@ -9,6 +9,7 @@ var Quad = (function (_super) {
     function Quad() {
         _super.call(this);
         this.buildMesh();
+        this.alpha = false;
     }
     Quad.prototype.buildMesh = function () {
         this.vertices = [
@@ -51,6 +52,11 @@ var Quad = (function (_super) {
         spriteShader.worldMatrix = this.buildWorldMatrix();
         spriteShader.texture = this.texture;
         spriteShader.objectDrawSetup();
+
+        if (this.alpha) {
+            game.gl.blendFunc(game.gl.SRC_ALPHA, game.gl.ONE_MINUS_SRC_ALPHA);
+            game.gl.enable(game.gl.BLEND);
+        }
 
         game.gl.bindBuffer(game.gl.ARRAY_BUFFER, this.vertexBuffer.glBuffer);
         game.gl.vertexAttribPointer(this.shader.attribs["position"], this.vertexBuffer.itemSize, game.gl.FLOAT, false, 0, 0);

@@ -1,0 +1,30 @@
+﻿{
+	"game_config": {
+		"texture_names": [
+			"dirt0",
+			"dirt1",
+			"grass0",
+			"grass1",
+			"mageAttack00",
+			"mageAttack01",
+			"mageAttack02",
+			"mageAttack03",
+			"mageAttack04",
+			"mageAttack05",
+			"mageAttack06",
+			"mageAttack07",
+			"mageIdle00",
+			"mageIdle01",
+			"mageIdle02",
+			"mageIdle03",
+			"mageWalk00",
+			"mageWalk01",
+			"mageWalk02",
+			"mageWalk03",
+			"mtn0",
+			"smile",
+			"water0",
+			"water1"
+		]
+	}
+}

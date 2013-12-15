@@ -38,6 +38,22 @@ var Game = (function () {
         this.textures.loadTexture("mtn0", "assets/mtn0.png");
         this.textures.loadTexture("water0", "assets/water0.png");
         this.textures.loadTexture("water1", "assets/water1.png");
+        this.textures.loadTexture("mageIdle00", "assets/mageWalk00.png");
+        this.textures.loadTexture("mageIdle01", "assets/mageWalk01.png");
+        this.textures.loadTexture("mageIdle02", "assets/mageWalk02.png");
+        this.textures.loadTexture("mageIdle03", "assets/mageWalk03.png");
+        this.textures.loadTexture("mageWalk00", "assets/mageWalk00.png");
+        this.textures.loadTexture("mageWalk01", "assets/mageWalk01.png");
+        this.textures.loadTexture("mageWalk02", "assets/mageWalk02.png");
+        this.textures.loadTexture("mageWalk03", "assets/mageWalk03.png");
+        this.textures.loadTexture("mageAttack00", "assets/mageAttack00.png");
+        this.textures.loadTexture("mageAttack01", "assets/mageAttack01.png");
+        this.textures.loadTexture("mageAttack02", "assets/mageAttack02.png");
+        this.textures.loadTexture("mageAttack03", "assets/mageAttack03.png");
+        this.textures.loadTexture("mageAttack04", "assets/mageAttack04.png");
+        this.textures.loadTexture("mageAttack05", "assets/mageAttack05.png");
+        this.textures.loadTexture("mageAttack06", "assets/mageAttack06.png");
+        this.textures.loadTexture("mageAttack07", "assets/mageAttack07.png");
 
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
@@ -46,7 +62,10 @@ var Game = (function () {
         this.terrain = new WorldTerrain();
 
         this.gameObjects = new GameObjectManager();
-        var go = this.gameObjects.add(new GameObject("smile"));
+        var go = this.gameObjects.add(new GameObject("mageIdle00"));
+        go.addAnimation("Idle", ["mageIdle00", "mageIdle01", "mageIdle02", "mageIdle03"]);
+        go.setActiveAnimation("Idle");
+        go.sprite.alpha = true;
         this.playerController = new LocalPlayerController(go);
         this.camera.gameObjectToFollow = go;
     };
