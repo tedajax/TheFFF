@@ -1,4 +1,5 @@
 class MessageHandler {
+    hasLogged: boolean;
     constructor() {
     }
 
@@ -44,6 +45,16 @@ class MessageHandler {
 
     parseStateSync(sync: any) {
         var id = sync.networkId;
+        if (!this.hasLogged) {
+            console.log(sync);
+            this.hasLogged = true;
+        }
+        
+        if (sync.ownedState != null) {
+            if (sync.ownedState.playerId == game.localPlayerId) {
+                game.localEntityId = id;
+            }
+        }
 
         if (game.gameObjects.gameObjects[id] == null) {
             var go = game.gameObjects.add(new GameObject("mageIdle00"), id);

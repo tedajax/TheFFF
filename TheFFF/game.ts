@@ -9,6 +9,7 @@ class Game {
     height: number;
 
     localPlayerId: number;
+    localEntityId: number;
     localPlayerUpdateInterval: number;
     localPlayerUpdateTimer: number;
 
@@ -34,6 +35,7 @@ class Game {
         document.onmousemove = (event: MouseEvent) => this.input.onMouseMove(event);
 
         this.localPlayerId = -1;
+        this.localEntityId = -1;
         this.localPlayerUpdateInterval = 0.1;
         this.localPlayerUpdateTimer = 0;
     }
@@ -91,7 +93,7 @@ class Game {
         this.camera.update();
         this.terrain.update();
 
-        if (this.localPlayerId >= 0) {
+        if (this.localEntityId >= 0) {
             this.localPlayerUpdateTimer += dt;
             if (this.localPlayerUpdateTimer >= this.localPlayerUpdateInterval) {
                 this.localPlayerUpdateTimer = 0;
@@ -100,7 +102,7 @@ class Game {
                     {
                         "type": 104,
                         "stateSync": {
-                            "networkId": this.localPlayerId,
+                            "networkId": this.localEntityId,
                             "moveableState": info["moveableState"],
                             "transformState": info["transformState"]
                         }
@@ -121,10 +123,10 @@ class Game {
     }
 
     updateLocalPlayer() {
-        if (this.localPlayerId >= 0 && this.playerController.gameObject == null) {
-            if (this.gameObjects.gameObjects[this.localPlayerId] != null) {
-                this.playerController.posess(this.gameObjects.gameObjects[this.localPlayerId]);
-                this.camera.gameObjectToFollow = this.gameObjects.gameObjects[this.localPlayerId];
+        if (this.localEntityId >= 0 && this.playerController.gameObject == null) {
+            if (this.gameObjects.gameObjects[this.localEntityId] != null) {
+                this.playerController.posess(this.gameObjects.gameObjects[this.localEntityId]);
+                this.camera.gameObjectToFollow = this.gameObjects.gameObjects[this.localEntityId];
             }    
         }
     }
