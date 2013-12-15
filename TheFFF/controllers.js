@@ -119,8 +119,9 @@ var NetworkPlayerController = (function (_super) {
     NetworkPlayerController.prototype.update = function (dt) {
         var vx = this.velocity.x * dt;
         var vy = this.velocity.y * dt;
-        this.gameObject.position.x += vx;
-        this.gameObject.position.y += vy;
+        this.position.x += vx;
+        this.position.y += vy;
+        this.gameObject.position = this.position;
     };
     return NetworkPlayerController;
 })(Controller);
