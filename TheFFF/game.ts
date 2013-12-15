@@ -36,7 +36,7 @@ class Game {
 
         this.localPlayerId = -1;
         this.localEntityId = -1;
-        this.localPlayerUpdateInterval = 0.1;
+        this.localPlayerUpdateInterval = 0.05;
         this.localPlayerUpdateTimer = 0;
     }
 
@@ -104,7 +104,7 @@ class Game {
                         "stateSync": {
                             "networkId": this.localEntityId,
                             "moveableState": info["moveableState"],
-                            "transformState": info["transformState"]
+                            "transformState": null
                         }
                     }
                 ]);

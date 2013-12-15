@@ -31,16 +31,17 @@ class Controller {
             this.velocity.x = sync.moveableState.velocity.x;
             this.velocity.y = sync.moveableState.velocity.y;
         }
-        this.gameObject.position.x = sync.transformState.position.x;
-        this.gameObject.position.y = sync.transformState.position.y;
+        this.position.x = sync.transformState.position.x;
+        this.position.y = sync.transformState.position.y;
+        this.gameObject.position = this.position;
     }
 
     getStateSyncInfo() {
         var info = {
             "transformState": {
                 "position": {
-                    "x": this.gameObject.position.x,
-                    "y": this.gameObject.position.y
+                    "x": this.position.x,
+                    "y": this.position.y
                 }
             },
             "moveableState": {
@@ -97,9 +98,9 @@ class LocalPlayerController extends Controller {
             moved = true;
         }
 
-        this.position.x += this.velocity.x * dt;
-        this.position.y += this.velocity.y * dt;
-        this.gameObject.position = this.position;
+        //this.position.x += this.velocity.x * dt;
+        //this.position.y += this.velocity.y * dt;
+        //this.gameObject.position = this.position;
 
         if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
             this.gameObject.setActiveAnimation("Attack");
@@ -124,8 +125,8 @@ class NetworkPlayerController extends Controller {
     update(dt) {
         var vx = this.velocity.x * dt;
         var vy = this.velocity.y * dt;
-        this.position.x += vx;
-        this.position.y += vy;
+        //this.position.x += vx;
+        //this.position.y += vy;
         this.gameObject.position = this.position;
     }
 }

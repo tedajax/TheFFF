@@ -45,10 +45,6 @@ class MessageHandler {
 
     parseStateSync(sync: any) {
         var id = sync.networkId;
-        if (!this.hasLogged) {
-            console.log(sync);
-            this.hasLogged = true;
-        }
         
         if (sync.ownedState != null) {
             if (sync.ownedState.playerId == game.localPlayerId) {
