@@ -38,6 +38,11 @@ var MessageHandler = (function () {
 
             case 104:
                 this.parseStateSync(command.stateSync);
+                break;
+
+            case 105:
+                this.destroyEntity(command.entityDestroy);
+                break;
         }
     };
 
@@ -58,6 +63,11 @@ var MessageHandler = (function () {
             var controller = game.gameObjects.gameObjects[id].controller;
             controller.handleStateSync(sync);
         }
+    };
+
+    MessageHandler.prototype.destroyEntity = function (destroy) {
+        var id = destroy.networkId;
+        game.gameObjects.gameObjects[id] = null;
     };
     return MessageHandler;
 })();

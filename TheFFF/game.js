@@ -33,6 +33,8 @@ var Game = (function () {
     Game.prototype.initialize = function () {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
+        this.config = loadJsonFile("config.json")["game_config"];
+
         this.textures = new TextureManager();
         this.textures.loadTexture("dirt0", "assets/tiles/dirt0.png");
         this.textures.loadTexture("dirt1", "assets/tiles/dirt1.png");

@@ -7,6 +7,7 @@ class Game {
     input: Input;
     width: number;
     height: number;
+    config: Object;
 
     localPlayerId: number;
     localEntityId: number;
@@ -42,6 +43,8 @@ class Game {
 
     initialize() {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+        this.config = loadJsonFile("config.json")["game_config"];
 
         this.textures = new TextureManager();
         this.textures.loadTexture("dirt0", "assets/tiles/dirt0.png");

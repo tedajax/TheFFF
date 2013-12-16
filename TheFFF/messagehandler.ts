@@ -39,7 +39,12 @@ class MessageHandler {
                 break;
 
             case 104:
-                this.parseStateSync(command.stateSync);           
+                this.parseStateSync(command.stateSync);          
+                break; 
+
+            case 105:
+                this.destroyEntity(command.entityDestroy);
+                break;
         }
     }
 
@@ -60,5 +65,10 @@ class MessageHandler {
             var controller = game.gameObjects.gameObjects[id].controller;
             controller.handleStateSync(sync);
         }
+    }
+
+    destroyEntity(destroy: any) {
+        var id = destroy.networkId;
+        game.gameObjects.gameObjects[id] = null;
     }
 } 
