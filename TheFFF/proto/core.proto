@@ -1,0 +1,128 @@
+
+message Command {
+  extensions 100 to max;
+
+  enum Type {
+    ConnectRequest = 100;
+    ConnectResponse = 101;
+    NotifyError = 102;
+    ConnectionClose = 103;
+    StateSync = 104;
+    EntityDestroy = 105;
+  }
+
+  required Type type = 1;
+}
+
+message ReliableCommand {
+  required int32 sequence = 1;
+  required Command command = 2;
+}
+
+message Message {
+  required int32 seqAck = 1;
+  repeated ReliableCommand reliableCommands = 2;
+  repeated Command commands = 3;
+}
+
+message ClientMessage {
+  required int32 token = 1;
+  required Message message = 2;
+}
+
+message ConnectRequest {
+  extend Command {
+    optional ConnectRequest connectRequest = 100;
+  }
+}
+
+message ConnectResponse {
+  extend Command {
+    optional ConnectResponse connectResponse = 101;
+  }
+
+  required ErrorInfo errorInfo = 1;
+  optional int32 playerId = 2;
+}
+
+message ConnectionClose {
+  extend Command {
+    optional ConnectionClose connectionClose = 103;
+  }
+
+  required ErrorInfo errorInfo = 1;
+}
+
+message ErrorInfo {
+  enum Error {
+    OK = 0;
+    InternalError = 1;
+    InvalidParameter = 2;
+    NotConnected = 3;
+  }
+
+  required Error error = 1;
+  required int32 module = 2;
+  required int32 line = 3;
+}
+
+message NotifyError {
+  extend Command {
+    optional NotifyError notifyError = 102;
+  }
+
+  required ErrorInfo errorInfo = 1;
+}
+
+message StateSync {
+  extensions 100 to max;
+
+  enum StateType {
+    Transform = 100;
+    Owned = 101;
+    MoveableState = 102;
+  }
+
+  extend Command {
+    optional StateSync stateSync = 104;
+  }
+
+  required int32 networkId = 1;
+}
+
+message NetVec2 {
+  required float x = 1;
+  required float y = 2;
+}
+
+message TransformState {
+  extend StateSync {
+    optional TransformState transformState = 100;
+  }
+
+  required NetVec2 position = 1;
+}
+
+message OwnedState {
+  extend StateSync {
+    optional OwnedState ownedState = 101;
+  }
+
+  required int32 playerId = 1;
+}
+
+message MoveableState {
+  extend StateSync {
+    optional MoveableState moveableState = 102;
+  }
+
+  required NetVec2 velocity = 1;
+}
+
+message EntityDestroy {
+  extend Command {
+    optional EntityDestroy entityDestroy = 105;
+  }
+
+  required int32 networkId = 1;
+}
