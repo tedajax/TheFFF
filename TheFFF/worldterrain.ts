@@ -26,16 +26,16 @@ class WorldTerrain {
         this.textureMapping[7] = "water0";
         this.textureMapping[8] = "water1";
 
-        this.worldDescriptor = this.genMap(this.width, this.height);
-        //var data = game.config.world_data;
-        //this.worldDescriptor = [];
-        //var index = 0;
-        //for (var i = 0; i < this.width; ++i) {
-        //    this.worldDescriptor[i] = [];
-        //    for (var j = 0; j < this.height; ++j) {
-        //        this.worldDescriptor[i][j] = data[index++];
-        //    }
-        //}        
+        //this.worldDescriptor = this.genMap(this.width, this.height);
+        var data = game.config.world_data;
+        this.worldDescriptor = [];
+        var index = 0;
+        for (var i = 0; i < this.width; ++i) {
+            this.worldDescriptor[i] = [];
+            for (var j = 0; j < this.height; ++j) {
+                this.worldDescriptor[i][j] = data[index++];
+            }
+        }        
 
         this.tileCountX = Math.ceil(game.canvas.width / this.tileWidth) + 2;
         this.tileCountY = Math.ceil(game.canvas.height / this.tileHeight) + 1;
