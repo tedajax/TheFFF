@@ -109,10 +109,7 @@ class Controller {
             return;
         }
 
-        var time = new Date().getTime() - 100;
-        var t1 = (time - this.previous.time);
-        var t2 = (this.current.time - this.previous.time);
-        
+        var time = new Date().getTime() - 100;        
         var perc = (time - this.previous.time) / (this.current.time - this.previous.time);
         this.interp = StateFrame.lerp(this.previous, this.current, perc);
         this.gameObject.position.x = this.interp.position.x;
