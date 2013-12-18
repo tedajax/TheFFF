@@ -9,6 +9,12 @@ var messageHandler;
 
 function initialize() {
     var canvas = document.getElementById('canvas');
+    canvas.addEventListener("contextmenu", function (e) {
+        if (e.button == 2) {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
     game = new Game(canvas);
 
     game.initialize();

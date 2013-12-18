@@ -11,6 +11,12 @@ var messageHandler: MessageHandler;
 
 function initialize() {
     var canvas = <HTMLCanvasElement>document.getElementById('canvas');
+    canvas.addEventListener("contextmenu", (e: MouseEvent) => {
+        if (e.button == 2) {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
     game = new Game(canvas);
    
     game.initialize(); 
