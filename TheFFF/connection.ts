@@ -51,11 +51,9 @@ class Connection {
     onMessage(msg: MessageEvent) {
         var data = this.messageRoot.Message.decode(msg.data);
 
-        for (var i = 0; i < data.reliableCommands; ++i) {
-            if (data.reliableCommands[i].sequence > this.highSeqAck) {
-                this.highSeqAck = data.reliableCommands[i].sequence;
-            }
-        }
+        var highSeqAck = this.highSeqAck;
+        data.reliableCommands = data.reliableCommands.filter(function (c) { return (c.sequence > highSeqAck); });
+        this.highSeqAck = data.reliableCommands.reduce(function (p, c) { return Math.max(p, c.sequence); }, highSeqAck);
 
         messageHandler.parseMessage(data);
     }
@@ -64,7 +62,7 @@ class Connection {
         var msg = {
             "token": this.token,
             "message": {
-                "seqAck": 0,
+                "seqAck": this.highSeqAck,
                 "reliableCommands": [],
                 "commands": commands
             }
@@ -97,5 +95,6 @@ class Connection {
 
     onClose() {
         console.log("closing connection to " + this.url);
+        this.connect();
     }
 } 

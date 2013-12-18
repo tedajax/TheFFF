@@ -44,11 +44,13 @@ var Connection = (function () {
     Connection.prototype.onMessage = function (msg) {
         var data = this.messageRoot.Message.decode(msg.data);
 
-        for (var i = 0; i < data.reliableCommands; ++i) {
-            if (data.reliableCommands[i].sequence > this.highSeqAck) {
-                this.highSeqAck = data.reliableCommands[i].sequence;
-            }
-        }
+        var highSeqAck = this.highSeqAck;
+        data.reliableCommands = data.reliableCommands.filter(function (c) {
+            return (c.sequence > highSeqAck);
+        });
+        this.highSeqAck = data.reliableCommands.reduce(function (p, c) {
+            return Math.max(p, c.sequence);
+        }, highSeqAck);
 
         messageHandler.parseMessage(data);
     };
@@ -57,7 +59,7 @@ var Connection = (function () {
         var msg = {
             "token": this.token,
             "message": {
-                "seqAck": 0,
+                "seqAck": this.highSeqAck,
                 "reliableCommands": [],
                 "commands": commands
             }
@@ -90,6 +92,7 @@ var Connection = (function () {
 
     Connection.prototype.onClose = function () {
         console.log("closing connection to " + this.url);
+        this.connect();
     };
     return Connection;
 })();
