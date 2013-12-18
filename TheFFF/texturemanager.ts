@@ -1,6 +1,7 @@
 class ImageTexture {
     texture: WebGLTexture;
     image: HTMLImageElement;
+    name: string;
     loaded: boolean;
 
     bindTextureParameters() {
@@ -29,6 +30,8 @@ class TextureManager {
         var imgTexture = new ImageTexture();
         imgTexture.texture = game.gl.createTexture();
         imgTexture.loaded = false;
+        imgTexture.name = name;
+        console.log(name);
         imgTexture.image = new Image();
         imgTexture.image.onload = () => {
             imgTexture.bindTextureParameters();

@@ -1,12 +1,17 @@
-﻿/// <reference path="TSM/tsm.ts" />
+/// <reference path="TSM/tsm.ts" />
 var Camera2D = (function () {
     function Camera2D() {
         this.position = new TSM.vec2([0, 0]);
     }
     Camera2D.prototype.update = function () {
         if (this.gameObjectToFollow != null) {
-            this.position = TSM.vec2.sum(this.gameObjectToFollow.position, new TSM.vec2([(-game.width / 2) + 32, (-game.height / 2) + 32]));
+            this.position = TSM.vec2.sum(this.gameObjectToFollow.position, this.followOffset);
         }
+    };
+
+    Camera2D.prototype.follow = function (go) {
+        this.gameObjectToFollow = go;
+        this.followOffset = new TSM.vec2([(-game.width / 2) + go.sprite.width / 2, (-game.height / 2) + go.sprite.height / 2]);
     };
 
     Camera2D.prototype.move = function (velocity) {

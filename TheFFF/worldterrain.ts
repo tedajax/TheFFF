@@ -1,3 +1,7 @@
+class TerrainQuad extends Quad {
+    textureIndex: number;
+}
+
 class WorldTerrain {
     worldDescriptor: number[][]
     textureMapping: string[]
@@ -8,7 +12,7 @@ class WorldTerrain {
     tileCountX: number;
     tileCountY: number;
 
-    worldQuads: Quad[][]
+    worldQuads: TerrainQuad[][]
 
     constructor() {
         this.tileWidth = 64;
@@ -26,49 +30,32 @@ class WorldTerrain {
         this.textureMapping[7] = "water0";
         this.textureMapping[8] = "water1";
 
-        //this.worldDescriptor = this.genMap(this.width, this.height);
-        var data = game.config["world_data"];
-        this.worldDescriptor = [];
-        var index = 0;
-        for (var i = 0; i < this.width; ++i) {
-            this.worldDescriptor[i] = [];
-            for (var j = 0; j < this.height; ++j) {
-                this.worldDescriptor[i][j] = data[index++];
-            }
-        }
+        //this.worldDescriptor = this.genMapRandomly(this.width, this.height);
+        this.worldDescriptor = this.genMapFromData(game.config["world_data"]);
 
-        for (var i = 0; i < this.width; ++i) {
-            for (var j = 0; j < this.height; ++j) {
-                this.worldDescriptor[i][j] = this.worldDescriptor[j][i];
-            }
-        }
-
-        this.tileCountX = Math.ceil(game.canvas.width / this.tileWidth) + 2;
+        this.tileCountX = Math.ceil(game.canvas.width / this.tileWidth) + 1;
         this.tileCountY = Math.ceil(game.canvas.height / this.tileHeight) + 1;
 
         this.worldQuads = [];
         var tileTopLeft = this.cameraTileMin();
-        var tx = tileTopLeft.x;
-        var ty = tileTopLeft.y;
-        for (var i = 0; i < this.tileCountX; ++i) {
+        
+        for (var i = 0; i < this.tileCountY; ++i) {
             this.worldQuads[i] = [];
-            for (var j = 0; j < this.tileCountY; ++j) {
-                this.worldQuads[i][j] = new Quad();
-                this.worldQuads[i][j].setShader(game.spriteShader);
-                this.worldQuads[i][j].position = this.tileSpaceToWorldSpace(new TSM.vec2([tx, ty]));
-                if (this.worldDescriptor[tx] != null && this.worldDescriptor[tx][ty] != null) {
-                    this.worldQuads[i][j].setTexture(game.textures.getTexture(this.textureMapping[this.worldDescriptor[tx][ty]]));
-                } else {
-                    this.worldQuads[i][j].setTexture(game.textures.getTexture("water1"));
-                }
-                ++ty;
+            for (var j = 0; j < this.tileCountX; ++j) {
+                var trow = j + tileTopLeft.x;
+                var tcol = i + tileTopLeft.y;
+                var tilePosition = new TSM.vec2([tcol, trow]);
+                var quad = new TerrainQuad();
+                quad.setShader(game.spriteShader);
+                quad.position = this.tileSpaceToWorldSpace(tilePosition);
+                quad.setTexture(this.getTextureAtTile(tilePosition));
+                this.worldQuads[i][j] = quad;
+                this.worldQuads[i][j].textureIndex = this.getTextureIndexAtTile(tilePosition);
             }
-            ++tx;
-            ty = tileTopLeft.y;
         }
     }
 
-    genMap(width: number, height: number) {
+    genMapRandomly(width: number, height: number) {
         var world = [];
         for (var i = 0; i < width; ++i) {
             world[i] = [];
@@ -94,9 +81,21 @@ class WorldTerrain {
         return world;
     }
 
+    genMapFromData(data: Object) {
+        var world = [];
+        var index = 0;
+        for (var i = 0; i < this.height; ++i) {
+            world[i] = [];
+            for (var j = 0; j < this.width; ++j) {
+                world[i][j] = data[index++];
+            }
+        }
+        return world;
+    }
+
     update() {
-        for (var i = 0; i < this.tileCountX; ++i) {
-            for (var j = 0; j < this.tileCountY; ++j) {
+        for (var i = 0; i < this.tileCountY; ++i) {
+            for (var j = 0; j < this.tileCountX; ++j) {
                 var quad = this.worldQuads[i][j];
                 var textureNeedsUpdating: boolean = false;
                 while (quad.position.x < game.camera.position.x - this.tileWidth) {
@@ -120,15 +119,32 @@ class WorldTerrain {
                 if (textureNeedsUpdating) {
                     var tile = this.worldSpaceToTileSpace(quad.position);
                     quad.setTexture(this.getTextureAtTile(tile));
+                    quad.textureIndex = this.getTextureIndexAtTile(tile);
                 }
             }
         }
     }
 
     render() {
-        for (var i = 0; i < this.tileCountX; ++i) {
-            for (var j = 0; j < this.tileCountY; ++j) {
-                this.worldQuads[i][j].render();
+        var quadsByTexture = [];
+        for (var i = 0; i < this.tileCountY; ++i) {
+            for (var j = 0; j < this.tileCountX; ++j) {
+                var quad = this.worldQuads[i][j];
+                if (quadsByTexture[quad.textureIndex] == null) {
+                    quadsByTexture[quad.textureIndex] = [];
+                }
+                quadsByTexture[quad.textureIndex].push(quad);
+            }
+        }
+
+        for (var i = 0, len = this.textureMapping.length; i < len; ++i) {
+            if (quadsByTexture[i] != null) {
+                for (var j = 0, len2 = quadsByTexture[i].length; j < len2; ++j) {
+                    var q = quadsByTexture[i][j];
+                    if (q != null) {
+                        q.render();
+                    }
+                }
             }
         }
     }
@@ -146,18 +162,31 @@ class WorldTerrain {
         }
     }
 
+    getTextureIndexAtTile(tile: TSM.vec2): number {
+        var row = this.worldDescriptor[tile.x];
+        if (row == null) {
+            return 0;
+        }
+        var wd = row[tile.y];
+        if (wd != null) {
+            return wd;
+        } else {
+            return 0;
+        }
+    }
+
     worldSpaceToTileSpace(world: TSM.vec2): TSM.vec2 {
         var tileSpaceX = Math.floor(world.x / this.tileWidth) + Math.floor(this.width / 2);
         var tileSpaceY = Math.floor(world.y / this.tileHeight) + Math.floor(this.height / 2);
 
-        return new TSM.vec2([tileSpaceX, tileSpaceY]);
+        return new TSM.vec2([tileSpaceY, tileSpaceX]);
     }
 
     tileSpaceToWorldSpace(tile: TSM.vec2): TSM.vec2 {
         var tx = tile.x - Math.floor(this.width / 2);
         var ty = tile.y - Math.floor(this.height / 2);
 
-        return new TSM.vec2([tx * this.tileWidth, ty * this.tileHeight])
+        return new TSM.vec2([ty * this.tileHeight, tx * this.tileWidth])
     }
 
     cameraTileMin(): TSM.vec2 {

@@ -7,9 +7,11 @@ var RenderBuffer = (function () {
 })();
 
 var Renderable = (function () {
-    function Renderable() {
+    function Renderable(depth) {
+        if (typeof depth === "undefined") { depth = 0; }
         this.position = TSM.vec2.zero;
         this.scale = new TSM.vec2([1, 1]);
+        this.depth = depth;
     }
     Renderable.prototype.setShader = function (shader) {
         this.shader = shader;
@@ -55,7 +57,7 @@ var Renderable = (function () {
         var scale = new TSM.mat4().setIdentity();
         scale.scale(new TSM.vec3([this.scale.x, this.scale.y, 1]));
         var translation = new TSM.mat4().setIdentity();
-        translation.translate(new TSM.vec3([this.position.x, this.position.y, 0]));
+        translation.translate(new TSM.vec3([this.position.x, this.position.y, this.depth]));
 
         return translation.multiply(scale);
     };

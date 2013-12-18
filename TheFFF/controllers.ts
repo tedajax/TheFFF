@@ -123,7 +123,7 @@ class LocalPlayerController extends Controller {
 
     constructor(gameObject: GameObject) {
         super(gameObject);
-        this.respectNetwork = true;
+        this.respectNetwork = false;
     }
 
     update(dt) {

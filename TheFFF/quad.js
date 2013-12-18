@@ -6,17 +6,27 @@ var __extends = this.__extends || function (d, b) {
 };
 var Quad = (function (_super) {
     __extends(Quad, _super);
-    function Quad() {
-        _super.call(this);
-        this.buildMesh();
+    function Quad(depth, width, height) {
+        if (typeof depth === "undefined") { depth = 0; }
+        if (typeof width === "undefined") { width = Quad.defaultWidth; }
+        if (typeof height === "undefined") { height = Quad.defaultHeight; }
+        _super.call(this, depth);
+
         this.alpha = false;
+
+        this.width = width;
+        this.height = height;
+
+        this.bindTexture = true;
+
+        this.buildMesh();
     }
     Quad.prototype.buildMesh = function () {
         this.vertices = [
             0, 0, 0,
-            0, 64, 0,
-            64, 64, 0,
-            64, 0, 0
+            0, this.height, 0,
+            this.width, this.height, 0,
+            this.width, 0, 0
         ];
 
         this.colors = [
@@ -45,13 +55,20 @@ var Quad = (function (_super) {
         this.texture = texture;
     };
 
+    Quad.prototype.setBindTexture = function (bind) {
+        this.bindTexture = bind;
+    };
+
     Quad.prototype.render = function () {
         game.gl.useProgram(this.shader.program);
 
         var spriteShader = this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
-        spriteShader.texture = this.texture;
         spriteShader.objectDrawSetup();
+        if (this.bindTexture) {
+            spriteShader.texture = this.texture;
+            spriteShader.bindTexture();
+        }
 
         if (this.alpha) {
             game.gl.blendFunc(game.gl.SRC_ALPHA, game.gl.ONE_MINUS_SRC_ALPHA);
@@ -70,6 +87,8 @@ var Quad = (function (_super) {
         game.gl.bindBuffer(game.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer.glBuffer);
         game.gl.drawElements(game.gl.TRIANGLES, this.indexBuffer.count, game.gl.UNSIGNED_SHORT, 0);
     };
+    Quad.defaultWidth = 64;
+    Quad.defaultHeight = 64;
     return Quad;
 })(Renderable);
 //# sourceMappingURL=quad.js.map

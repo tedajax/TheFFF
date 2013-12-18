@@ -1,19 +1,32 @@
 class Quad extends Renderable {
     texture: ImageTexture;
     alpha: boolean;
+    width: number;
+    height: number;
+    bindTexture: boolean;
 
-    constructor() {
-        super();
-        this.buildMesh();
+    static defaultWidth: number = 64;
+    static defaultHeight: number = 64;
+
+    constructor(depth: number = 0, width: number = Quad.defaultWidth, height: number = Quad.defaultHeight) {
+        super(depth);
+
         this.alpha = false;
+
+        this.width = width;
+        this.height = height;
+
+        this.bindTexture = true;
+
+        this.buildMesh();
     }
 
     buildMesh() {
         this.vertices = [
-             0,  0, 0,
-             0, 64, 0,
-            64, 64, 0,
-            64,  0, 0
+            0,          0,           0,
+            0,          this.height, 0,
+            this.width, this.height, 0,
+            this.width, 0,           0
         ];
 
         this.colors = [
@@ -42,13 +55,20 @@ class Quad extends Renderable {
         this.texture = texture;
     }
 
+    setBindTexture(bind: boolean) {
+        this.bindTexture = bind;
+    }
+
     render() {
         game.gl.useProgram(this.shader.program);
 
         var spriteShader = <SpriteShader>this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
-        spriteShader.texture = this.texture;
         spriteShader.objectDrawSetup();
+        if (this.bindTexture) {
+            spriteShader.texture = this.texture;
+            spriteShader.bindTexture();
+        }
 
         if (this.alpha) {
             game.gl.blendFunc(game.gl.SRC_ALPHA, game.gl.ONE_MINUS_SRC_ALPHA);

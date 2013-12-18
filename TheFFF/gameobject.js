@@ -1,6 +1,6 @@
-var GameObject = (function () {
+﻿var GameObject = (function () {
     function GameObject(textureName) {
-        this.sprite = new Quad();
+        this.sprite = new Quad(0, 128, 128);
         this.sprite.setShader(game.spriteShader);
         this.sprite.setTexture(game.textures.getTexture(textureName));
         this.position = new TSM.vec2([0, 0]);

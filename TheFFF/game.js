@@ -1,4 +1,4 @@
-/// <reference path="WebGL.d.ts" />
+﻿/// <reference path="WebGL.d.ts" />
 var Game = (function () {
     function Game(canvas) {
         var _this = this;
@@ -7,6 +7,7 @@ var Game = (function () {
         this.camera = new Camera2D();
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+        this.frame = 0;
 
         this.input = new Input();
         document.onkeydown = function (event) {
@@ -115,13 +116,14 @@ var Game = (function () {
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
         this.gameObjects.render();
+        ++this.frame;
     };
 
     Game.prototype.updateLocalPlayer = function () {
         if (this.localEntityId >= 0 && this.playerController.gameObject == null) {
             if (this.gameObjects.gameObjects[this.localEntityId] != null) {
                 this.playerController.posess(this.gameObjects.gameObjects[this.localEntityId]);
-                this.camera.gameObjectToFollow = this.gameObjects.gameObjects[this.localEntityId];
+                this.camera.follow(this.gameObjects.gameObjects[this.localEntityId]);
             }
         }
     };

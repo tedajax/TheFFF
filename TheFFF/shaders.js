@@ -1,4 +1,4 @@
-/// <reference path="TSM/tsm.ts" />
+﻿/// <reference path="TSM/tsm.ts" />
 /// <reference path="WebGL.d.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -96,7 +96,6 @@ var SpriteShader = (function (_super) {
     __extends(SpriteShader, _super);
     function SpriteShader() {
         _super.call(this);
-
         this.name = "sprite";
     }
     SpriteShader.prototype.initLocales = function () {
@@ -126,18 +125,21 @@ var SpriteShader = (function (_super) {
         game.gl.uniformMatrix4fv(this.uniforms["view"], false, new Float32Array(this.viewMatrix.all()));
     };
 
+    SpriteShader.prototype.bindTexture = function () {
+        if (this.texture != null && this.texture.loaded && this.texture != this.lastBoundTexture) {
+            game.gl.activeTexture(game.gl.TEXTURE0);
+            game.gl.bindTexture(game.gl.TEXTURE_2D, this.texture.texture);
+            game.gl.uniform1i(this.uniforms["texture"], 0);
+            this.lastBoundTexture = this.texture;
+        }
+    };
+
     SpriteShader.prototype.objectDrawSetup = function () {
         _super.prototype.objectDrawSetup.call(this);
 
         game.gl.useProgram(this.program);
 
         game.gl.uniformMatrix4fv(this.uniforms["world"], false, new Float32Array(this.worldMatrix.all()));
-
-        if (this.texture != null && this.texture.loaded) {
-            game.gl.activeTexture(game.gl.TEXTURE0);
-            game.gl.bindTexture(game.gl.TEXTURE_2D, this.texture.texture);
-            game.gl.uniform1i(this.uniforms["texture"], 0);
-        }
     };
     return SpriteShader;
 })(Shader);

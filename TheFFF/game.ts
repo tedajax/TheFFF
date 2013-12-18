@@ -7,6 +7,7 @@ class Game {
     input: Input;
     width: number;
     height: number;
+    frame: number;
     config: Object;
 
     localPlayerId: number;
@@ -28,6 +29,7 @@ class Game {
         this.camera = new Camera2D();
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+        this.frame = 0;
 
         this.input = new Input();
         document.onkeydown = (event: KeyboardEvent) => this.input.onKeyDown(event);
@@ -126,13 +128,14 @@ class Game {
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
         this.gameObjects.render();
+        ++this.frame;
     }
 
     updateLocalPlayer() {
         if (this.localEntityId >= 0 && this.playerController.gameObject == null) {
             if (this.gameObjects.gameObjects[this.localEntityId] != null) {
                 this.playerController.posess(this.gameObjects.gameObjects[this.localEntityId]);
-                this.camera.gameObjectToFollow = this.gameObjects.gameObjects[this.localEntityId];
+                this.camera.follow(this.gameObjects.gameObjects[this.localEntityId]);
             }    
         }
     }

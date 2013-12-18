@@ -115,7 +115,7 @@ var LocalPlayerController = (function (_super) {
     __extends(LocalPlayerController, _super);
     function LocalPlayerController(gameObject) {
         _super.call(this, gameObject);
-        this.respectNetwork = true;
+        this.respectNetwork = false;
     }
     LocalPlayerController.prototype.update = function (dt) {
         if (this.respectNetwork) {

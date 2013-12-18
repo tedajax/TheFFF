@@ -97,10 +97,10 @@ class SpriteShader extends Shader {
     viewMatrix: TSM.mat4;
     projectionMatrix: TSM.mat4;
     texture: ImageTexture;
+    lastBoundTexture: ImageTexture;
 
     constructor() {
         super();
-
         this.name = "sprite";
     }
 
@@ -131,17 +131,20 @@ class SpriteShader extends Shader {
         game.gl.uniformMatrix4fv(this.uniforms["view"], false, new Float32Array(this.viewMatrix.all()));
     }
 
+    bindTexture() {
+        if (this.texture != null && this.texture.loaded && this.texture != this.lastBoundTexture) {
+            game.gl.activeTexture(game.gl.TEXTURE0);
+            game.gl.bindTexture(game.gl.TEXTURE_2D, this.texture.texture);
+            game.gl.uniform1i(this.uniforms["texture"], 0);
+            this.lastBoundTexture = this.texture;
+        }
+    }
+
     objectDrawSetup() {
         super.objectDrawSetup();
 
         game.gl.useProgram(this.program);
 
         game.gl.uniformMatrix4fv(this.uniforms["world"], false, new Float32Array(this.worldMatrix.all()));
-
-        if (this.texture != null && this.texture.loaded) {
-            game.gl.activeTexture(game.gl.TEXTURE0);
-            game.gl.bindTexture(game.gl.TEXTURE_2D, this.texture.texture);
-            game.gl.uniform1i(this.uniforms["texture"], 0);
-        }
     }
 }
