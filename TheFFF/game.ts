@@ -18,6 +18,7 @@ class Game {
     terrain: WorldTerrain;
     gameObjects: GameObjectManager;
     playerController: LocalPlayerController;
+    animationFactory: AnimationFactory;
 
     spriteShader: SpriteShader;
 
@@ -71,6 +72,8 @@ class Game {
         this.textures.loadTexture("mageAttack05", "assets/magus/mageAttack05.png");
         this.textures.loadTexture("mageAttack06", "assets/magus/mageAttack06.png");
         this.textures.loadTexture("mageAttack07", "assets/magus/mageAttack07.png");
+
+        this.animationFactory = new AnimationFactory();
 
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();

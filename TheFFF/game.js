@@ -61,6 +61,8 @@ var Game = (function () {
         this.textures.loadTexture("mageAttack06", "assets/magus/mageAttack06.png");
         this.textures.loadTexture("mageAttack07", "assets/magus/mageAttack07.png");
 
+        this.animationFactory = new AnimationFactory();
+
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
         this.spriteShader.initLocales();

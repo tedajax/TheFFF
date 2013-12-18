@@ -13,8 +13,8 @@ class WorldTerrain {
     constructor() {
         this.tileWidth = 64;
         this.tileHeight = 64;
-        this.width = 256;
-        this.height = 256;
+        this.width = game.config["world_width"];
+        this.height = game.config["world_height"];
 
         this.textureMapping = [];
         this.textureMapping[1] = "dirt0";
@@ -27,7 +27,7 @@ class WorldTerrain {
         this.textureMapping[8] = "water1";
 
         //this.worldDescriptor = this.genMap(this.width, this.height);
-        var data = game.config.world_data;
+        var data = game.config["world_data"];
         this.worldDescriptor = [];
         var index = 0;
         for (var i = 0; i < this.width; ++i) {
@@ -35,7 +35,13 @@ class WorldTerrain {
             for (var j = 0; j < this.height; ++j) {
                 this.worldDescriptor[i][j] = data[index++];
             }
-        }        
+        }
+
+        for (var i = 0; i < this.width; ++i) {
+            for (var j = 0; j < this.height; ++j) {
+                this.worldDescriptor[i][j] = this.worldDescriptor[j][i];
+            }
+        }
 
         this.tileCountX = Math.ceil(game.canvas.width / this.tileWidth) + 2;
         this.tileCountY = Math.ceil(game.canvas.height / this.tileHeight) + 1;
@@ -50,7 +56,11 @@ class WorldTerrain {
                 this.worldQuads[i][j] = new Quad();
                 this.worldQuads[i][j].setShader(game.spriteShader);
                 this.worldQuads[i][j].position = this.tileSpaceToWorldSpace(new TSM.vec2([tx, ty]));
-                this.worldQuads[i][j].setTexture(game.textures.getTexture(this.textureMapping[this.worldDescriptor[tx][ty]]));
+                if (this.worldDescriptor[tx] != null && this.worldDescriptor[tx][ty] != null) {
+                    this.worldQuads[i][j].setTexture(game.textures.getTexture(this.textureMapping[this.worldDescriptor[tx][ty]]));
+                } else {
+                    this.worldQuads[i][j].setTexture(game.textures.getTexture("water1"));
+                }
                 ++ty;
             }
             ++tx;

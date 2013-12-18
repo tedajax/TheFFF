@@ -119,13 +119,17 @@ class Controller {
 
 class LocalPlayerController extends Controller {
     attacking: boolean;
+    respectNetwork: boolean;
 
     constructor(gameObject: GameObject) {
         super(gameObject);
+        this.respectNetwork = true;
     }
 
     update(dt) {
-        super.update(dt);
+        if (this.respectNetwork) {
+            super.update(dt);
+        }
 
         if (this.gameObject == null) {
             return;
@@ -152,9 +156,11 @@ class LocalPlayerController extends Controller {
             moved = true;
         }
 
-        //this.position.x += this.velocity.x * dt;
-        //this.position.y += this.velocity.y * dt;
-        //this.gameObject.position = this.position;
+        if (!this.respectNetwork) {
+            this.position.x += this.velocity.x * dt;
+            this.position.y += this.velocity.y * dt;
+            this.gameObject.position = this.position;
+        }
 
         if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
             this.gameObject.setActiveAnimation("Attack");

@@ -19,6 +19,7 @@ class Camera2D {
     }
 
     getProjectionMatrix() {
+        
         return TSM.mat4.orthographic(0 + this.position.x, game.width + this.position.x, game.height + this.position.y, 0 + this.position.y, 0, 1);
     }
 

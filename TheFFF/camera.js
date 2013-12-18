@@ -1,4 +1,4 @@
-/// <reference path="TSM/tsm.ts" />
+﻿/// <reference path="TSM/tsm.ts" />
 var Camera2D = (function () {
     function Camera2D() {
         this.position = new TSM.vec2([0, 0]);

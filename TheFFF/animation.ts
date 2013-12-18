@@ -21,7 +21,14 @@ class Animation {
         }
     }
 
-    play() {
+    play(loop?: boolean) {
+        this.paused = false;
+        this.loop = (loop == null) ? false : loop;
+        this.currentFrame = 0;
+        this.currentTimer = 0;
+    }
+
+    resume() {
         this.paused = false;
     }
 

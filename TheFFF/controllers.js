@@ -115,9 +115,12 @@ var LocalPlayerController = (function (_super) {
     __extends(LocalPlayerController, _super);
     function LocalPlayerController(gameObject) {
         _super.call(this, gameObject);
+        this.respectNetwork = true;
     }
     LocalPlayerController.prototype.update = function (dt) {
-        _super.prototype.update.call(this, dt);
+        if (this.respectNetwork) {
+            _super.prototype.update.call(this, dt);
+        }
 
         if (this.gameObject == null) {
             return;
@@ -144,9 +147,12 @@ var LocalPlayerController = (function (_super) {
             moved = true;
         }
 
-        //this.position.x += this.velocity.x * dt;
-        //this.position.y += this.velocity.y * dt;
-        //this.gameObject.position = this.position;
+        if (!this.respectNetwork) {
+            this.position.x += this.velocity.x * dt;
+            this.position.y += this.velocity.y * dt;
+            this.gameObject.position = this.position;
+        }
+
         if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
             this.gameObject.setActiveAnimation("Attack");
             this.attacking = true;

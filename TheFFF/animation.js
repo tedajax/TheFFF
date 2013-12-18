@@ -12,7 +12,14 @@ var Animation = (function () {
             this.frameImages[i] = game.textures.getTexture(imageNames[i]);
         }
     }
-    Animation.prototype.play = function () {
+    Animation.prototype.play = function (loop) {
+        this.paused = false;
+        this.loop = (loop == null) ? false : loop;
+        this.currentFrame = 0;
+        this.currentTimer = 0;
+    };
+
+    Animation.prototype.resume = function () {
         this.paused = false;
     };
 

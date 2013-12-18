@@ -18,6 +18,8 @@
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="animation.ts" />
+    <TypeScriptCompile Include="animationcontroller.ts" />
+    <TypeScriptCompile Include="animationfactory.ts" />
     <Content Include="app.css" />
     <TypeScriptCompile Include="worldterrain.ts" />
     <TypeScriptCompile Include="camera.ts" />
