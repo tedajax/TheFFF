@@ -1,4 +1,4 @@
-﻿/// <reference path="WebGL.d.ts" />
+/// <reference path="WebGL.d.ts" />
 var Game = (function () {
     function Game(canvas) {
         var _this = this;
@@ -36,33 +36,8 @@ var Game = (function () {
 
         this.config = loadJsonFile("config.json")["game_config"];
 
-        this.textures = new TextureManager();
-        this.textures.loadTexture("dirt0", "assets/tiles/dirt0.png");
-        this.textures.loadTexture("dirt1", "assets/tiles/dirt1.png");
-        this.textures.loadTexture("grass0", "assets/tiles/grass0.png");
-        this.textures.loadTexture("grass1", "assets/tiles/grass1.png");
-        this.textures.loadTexture("grass2", "assets/tiles/grass2.png");
-        this.textures.loadTexture("mtn0", "assets/tiles/mtn0.png");
-        this.textures.loadTexture("water0", "assets/tiles/water0.png");
-        this.textures.loadTexture("water1", "assets/tiles/water1.png");
-        this.textures.loadTexture("mageIdle00", "assets/magus/mageWalk00.png");
-        this.textures.loadTexture("mageIdle01", "assets/magus/mageWalk01.png");
-        this.textures.loadTexture("mageIdle02", "assets/magus/mageWalk02.png");
-        this.textures.loadTexture("mageIdle03", "assets/magus/mageWalk03.png");
-        this.textures.loadTexture("mageWalk00", "assets/magus/mageWalk00.png");
-        this.textures.loadTexture("mageWalk01", "assets/magus/mageWalk01.png");
-        this.textures.loadTexture("mageWalk02", "assets/magus/mageWalk02.png");
-        this.textures.loadTexture("mageWalk03", "assets/magus/mageWalk03.png");
-        this.textures.loadTexture("mageAttack00", "assets/magus/mageAttack00.png");
-        this.textures.loadTexture("mageAttack01", "assets/magus/mageAttack01.png");
-        this.textures.loadTexture("mageAttack02", "assets/magus/mageAttack02.png");
-        this.textures.loadTexture("mageAttack03", "assets/magus/mageAttack03.png");
-        this.textures.loadTexture("mageAttack04", "assets/magus/mageAttack04.png");
-        this.textures.loadTexture("mageAttack05", "assets/magus/mageAttack05.png");
-        this.textures.loadTexture("mageAttack06", "assets/magus/mageAttack06.png");
-        this.textures.loadTexture("mageAttack07", "assets/magus/mageAttack07.png");
-
-        this.animationFactory = new AnimationFactory();
+        this.initializeTextures();
+        this.initializeAnimations();
 
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
@@ -75,10 +50,27 @@ var Game = (function () {
         //var go = this.gameObjects.add(new GameObject("mageIdle00"), 0);
         //go.addAnimation("Idle", "mageIdle", 4);
         //go.addAnimation("Walk", "mageWalk", 4, true, [0.1, 0.1, 0.1, 0.1]);
-        //go.addAnimation("Attack", "mageAttack", 7, false, [0.5, 0, 0.1, 0.5, 0, 0, 0.5, 0.1]);
+        //go.addAnimation("Attack", "mageAttack", 8, false, [0.5, 0, 0.1, 0.5, 0, 0, 0.5, 0.1]);
         //go.setActiveAnimation("Idle");
         //go.sprite.alpha = true;
         this.playerController = new LocalPlayerController(null);
+    };
+
+    Game.prototype.initializeTextures = function () {
+        this.textures = new TextureManager();
+        var resourceMap = this.config["resource_map"];
+        for (var key in resourceMap) {
+            var value = resourceMap[key];
+            this.textures.loadTexture(key, value);
+        }
+    };
+
+    Game.prototype.initializeAnimations = function () {
+        this.animationFactory = new AnimationFactory();
+
+        this.animationFactory.createAnimation("mage", "idle", "mageIdle", 4);
+        this.animationFactory.createAnimation("mage", "walk", "mageWalk", 4, [0.1, 0.1, 0.1, 0.1], 1);
+        this.animationFactory.createAnimation("mage", "attack", "mageAttack", 8, [0.5, 0, 0.1, 0.5, 0, 0, 0.5, 0.1], 2);
     };
 
     Game.prototype.update = function (dt) {

@@ -11,10 +11,11 @@ var AnimationFactory = (function () {
             return null;
         }
 
-        return this.animations[klass][name];
+        return this.animations[klass][name].clone();
     };
 
-    AnimationFactory.prototype.createAnimation = function (klass, name, textureRootName, numFrames, frameDelays) {
+    AnimationFactory.prototype.createAnimation = function (klass, name, textureRootName, numFrames, frameDelays, priority) {
+        if (typeof priority === "undefined") { priority = 0; }
         if (this.animations == null) {
             throw new Error("Must instantiate animation factory before calling createAnimation()");
         }
@@ -41,7 +42,7 @@ var AnimationFactory = (function () {
                 textureNames[i] = tex;
             }
 
-            this.animations[klass][name] = new Animation(textureNames, frameDelays);
+            this.animations[klass][name] = new Animation(textureNames, frameDelays, priority);
         }
 
         return this.animations[klass][name];

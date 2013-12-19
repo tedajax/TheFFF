@@ -58,7 +58,8 @@ class MessageHandler {
         }
 
         if (game.gameObjects.gameObjects[id] == null) {
-            var go = game.gameObjects.add(new GameObject("mageIdle00"), id);
+            var go = game.gameObjects.add(new GameObject("mage", ["idle", "walk", "attack"]), id);
+            go.animations.play("idle", true);
             go.sprite.alpha = true;
             var netController = new NetworkPlayerController(go);
         } else {

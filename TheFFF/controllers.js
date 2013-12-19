@@ -1,4 +1,4 @@
-﻿var __extends = this.__extends || function (d, b) {
+var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -116,6 +116,8 @@ var LocalPlayerController = (function (_super) {
     function LocalPlayerController(gameObject) {
         _super.call(this, gameObject);
         this.respectNetwork = true;
+        this.moved = false;
+        this.previouslyMoved = false;
     }
     LocalPlayerController.prototype.update = function (dt) {
         if (this.respectNetwork) {
@@ -127,24 +129,25 @@ var LocalPlayerController = (function (_super) {
         }
 
         var speed = 500;
-        var moved = false;
+        this.previouslyMoved = this.moved;
+        this.moved = false;
         this.velocity.x = 0;
         this.velocity.y = 0;
         if (game.input.getKey(Keys.A)) {
             this.velocity.x = -speed;
-            moved = true;
+            this.moved = true;
         }
         if (game.input.getKey(Keys.D)) {
             this.velocity.x = speed;
-            moved = true;
+            this.moved = true;
         }
         if (game.input.getKey(Keys.W)) {
             this.velocity.y = -speed;
-            moved = true;
+            this.moved = true;
         }
         if (game.input.getKey(Keys.S)) {
             this.velocity.y = speed;
-            moved = true;
+            this.moved = true;
         }
 
         if (!this.respectNetwork) {
@@ -154,15 +157,16 @@ var LocalPlayerController = (function (_super) {
         }
 
         if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
-            this.gameObject.setActiveAnimation("Attack");
+            this.gameObject.animations.play("attack");
             this.attacking = true;
         }
 
-        if (!this.attacking) {
-            if (moved) {
-                this.gameObject.setActiveAnimation("Walk");
+        if (this.moved != this.previouslyMoved) {
+            if (this.moved) {
+                this.gameObject.animations.play("walk", true);
             } else {
-                this.gameObject.setActiveAnimation("Idle");
+                this.gameObject.animations.stop("walk");
+                this.gameObject.animations.play("idle", true);
             }
         }
     };

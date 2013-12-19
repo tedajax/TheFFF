@@ -1,49 +1,58 @@
 class Animation {
     maxFrames: number;
+    frameNames: string[];
     frameImages: ImageTexture[];
     frameDelays: number[];
     currentFrame: number;
     currentTimer: number;
     loop: boolean;
-    paused: boolean;
+    playing: boolean;
+    priority: number;
 
-    constructor(imageNames: string[], delays: number[], loop?: boolean) {
+    constructor(imageNames: string[], delays: number[], priority: number = 0) {
         this.maxFrames = imageNames.length;
         this.currentFrame = 0;
         this.currentTimer = 0;
         this.frameDelays = delays.slice(0);
-        this.loop = (loop == null) ? true : loop;
-        this.paused = true;
+        this.loop = false;
+        this.playing = false;
+        this.priority = priority;
 
+        this.frameNames = [];
         this.frameImages = [];
         for (var i = 0; i < this.maxFrames; ++i) {
+            this.frameNames[i] = imageNames[i];
             this.frameImages[i] = game.textures.getTexture(imageNames[i]);
         }
     }
 
-    play(loop?: boolean) {
-        this.paused = false;
-        this.loop = (loop == null) ? false : loop;
+    clone(): Animation {
+        return new Animation(this.frameNames, this.frameDelays, this.priority); 
+    }
+
+    play(loop: boolean = false) {
+        this.playing = true;
+        this.loop = loop;
         this.currentFrame = 0;
         this.currentTimer = 0;
     }
 
     resume() {
-        this.paused = false;
+        this.playing = true;
     }
 
     pause() {
-        this.paused = true;
+        this.playing = false;
     }
 
     stop() {
-        this.paused = true;
+        this.playing = false;
         this.currentFrame = 0;
         this.currentTimer = 0;
     }
 
     update(dt) {
-        if (this.paused) {
+        if (!this.playing) {
             return;
         }
 

@@ -15,10 +15,10 @@ class AnimationFactory {
             return null;
         }
 
-        return this.animations[klass][name];
+        return this.animations[klass][name].clone();
     }
 
-    createAnimation(klass: string, name: string, textureRootName: string, numFrames: number, frameDelays?: number[]): Animation {
+    createAnimation(klass: string, name: string, textureRootName: string, numFrames: number, frameDelays?: number[], priority: number = 0): Animation {
         if (this.animations == null) {
             throw new Error("Must instantiate animation factory before calling createAnimation()");
         }
@@ -45,7 +45,7 @@ class AnimationFactory {
                 textureNames[i] = tex;
             }
 
-            this.animations[klass][name] = new Animation(textureNames, frameDelays);
+            this.animations[klass][name] = new Animation(textureNames, frameDelays, priority);
         }
 
         return this.animations[klass][name];

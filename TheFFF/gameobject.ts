@@ -2,52 +2,23 @@ class GameObject {
     sprite: Quad;
     position: TSM.vec2;
     controller: Controller;
-    animations: Animation[];
     activeAnimation: string;
+    animations: AnimationController;
 
-    constructor(textureName: string) {
+    constructor(klass: string, animations?: string[]) {
         this.sprite = new Quad(0, 128, 128);
         this.sprite.setShader(game.spriteShader);
-        this.sprite.setTexture(game.textures.getTexture(textureName));
         this.position = new TSM.vec2([0, 0]);
-        this.animations = [];
         this.activeAnimation = null;
+
+        var anims = animations && animations || ["idle"];
+        this.animations = new AnimationController(klass, anims);
     }
 
-    addAnimation(name: string, textureRootName: string, numFrames: number, loop?: boolean, frameDelays?: number[]) {
-        if (this.animations[name] != null) {
-            return;
-        }
-
-        if (frameDelays == null) {
-            frameDelays = [];
-            for (var i = 0; i < numFrames; ++i) {
-                frameDelays[i] = 0.2;
-            }
-        }
-
-        var textureNames: string[] = [];
-        for (var i = 0; i < numFrames; ++i) {
-            var tex = textureRootName.slice(0);
-            if (i < 10) {
-                tex += "0";
-            }
-            tex += i.toString();
-            textureNames[i] = tex;
-        }
-
-        this.animations[name] = new Animation(textureNames, frameDelays, loop);
+    playAnimation(name: string) {
+        this.animations.play(name);
     }
-
-    setActiveAnimation(name: string) {
-        if (this.animations[name] == null) {
-            return;
-        }
-
-        this.activeAnimation = name;
-        this.animations[this.activeAnimation].play();
-    }
-
+    
     updateAnimation(dt: number) {
         this.animations[this.activeAnimation].update(dt);
     }
@@ -61,11 +32,9 @@ class GameObject {
             this.controller.update(dt);
         }
 
-        if (this.activeAnimation != null) {
-            this.updateAnimation(dt);
-            this.sprite.texture = this.animations[this.activeAnimation].getTexture();
-        }
-
+        this.animations.update(dt);
+        this.sprite.texture = this.animations.getCurrentTexture();
+        
         this.sprite.position = this.position;
     }
 

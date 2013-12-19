@@ -1,13 +1,3 @@
-class ActiveAnimation {
-    name: string;
-    priority: number;
-
-    constructor(name: string, priority?: number) {
-        this.name = name;
-        this.priority = (priority != null) ? priority : 0;
-    }
-}
-
 class AnimationController {
     klass: string;
     animations: Animation[];
@@ -21,7 +11,10 @@ class AnimationController {
     }
 
     addAnimation(name: string) {
-        this.animations.push(game.animationFactory.getAnimation(this.klass, name));
+        var anim = game.animationFactory.getAnimation(this.klass, name);
+        if (anim != null && this.animations[name] == null) {
+            this.animations[name] = anim;
+        }
     }
 
     addAnimations(names: string[]) {
@@ -30,9 +23,38 @@ class AnimationController {
         }
     }
 
-    playAnimation(name: string) {
+    play(name: string, loop: boolean = false) {
         if (this.animations[name] != null) {
-            this.animations[name].play();
+            this.animations[name].play(loop);
         }
+    }
+
+    stop(name: string) {
+        if (this.animations[name] != null) {
+            this.animations[name].stop();
+        }
+    }
+
+    update(dt: number) {
+        for (var key in this.animations) {
+            var anim: Animation = <Animation>this.animations[key];
+            anim.update(dt);
+        }
+    }
+
+    getCurrentTexture() {
+        var maxPriority = -10000;
+        var texture: ImageTexture;
+        for (var key in this.animations) {
+            var anim = <Animation>this.animations[key];
+            if (anim.playing) {
+                if (anim.priority > maxPriority) {
+                    maxPriority = anim.priority;
+                    texture = anim.getTexture();
+                }
+            }
+        }
+
+        return texture;
     }
 }

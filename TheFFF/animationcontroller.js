@@ -1,11 +1,3 @@
-var ActiveAnimation = (function () {
-    function ActiveAnimation(name, priority) {
-        this.name = name;
-        this.priority = (priority != null) ? priority : 0;
-    }
-    return ActiveAnimation;
-})();
-
 var AnimationController = (function () {
     function AnimationController(klass, animations) {
         this.klass = klass;
@@ -15,7 +7,10 @@ var AnimationController = (function () {
         }
     }
     AnimationController.prototype.addAnimation = function (name) {
-        this.animations.push(game.animationFactory.getAnimation(this.klass, name));
+        var anim = game.animationFactory.getAnimation(this.klass, name);
+        if (anim != null && this.animations[name] == null) {
+            this.animations[name] = anim;
+        }
     };
 
     AnimationController.prototype.addAnimations = function (names) {
@@ -24,10 +19,40 @@ var AnimationController = (function () {
         }
     };
 
-    AnimationController.prototype.playAnimation = function (name) {
+    AnimationController.prototype.play = function (name, loop) {
+        if (typeof loop === "undefined") { loop = false; }
         if (this.animations[name] != null) {
-            this.animations[name].play();
+            this.animations[name].play(loop);
         }
+    };
+
+    AnimationController.prototype.stop = function (name) {
+        if (this.animations[name] != null) {
+            this.animations[name].stop();
+        }
+    };
+
+    AnimationController.prototype.update = function (dt) {
+        for (var key in this.animations) {
+            var anim = this.animations[key];
+            anim.update(dt);
+        }
+    };
+
+    AnimationController.prototype.getCurrentTexture = function () {
+        var maxPriority = -10000;
+        var texture;
+        for (var key in this.animations) {
+            var anim = this.animations[key];
+            if (anim.playing) {
+                if (anim.priority > maxPriority) {
+                    maxPriority = anim.priority;
+                    texture = anim.getTexture();
+                }
+            }
+        }
+
+        return texture;
     };
     return AnimationController;
 })();

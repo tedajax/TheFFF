@@ -1,5 +1,6 @@
 class TerrainQuad extends Quad {
     textureIndex: number;
+    subIndex: number;
 }
 
 class WorldTerrain {
@@ -13,6 +14,7 @@ class WorldTerrain {
     tileCountY: number;
 
     worldQuads: TerrainQuad[][]
+    quadsByTexture: TerrainQuad[][];
 
     constructor() {
         this.tileWidth = 64;
@@ -51,6 +53,18 @@ class WorldTerrain {
                 quad.setTexture(this.getTextureAtTile(tilePosition));
                 this.worldQuads[i][j] = quad;
                 this.worldQuads[i][j].textureIndex = this.getTextureIndexAtTile(tilePosition);
+            }
+        }
+
+        this.quadsByTexture = [];
+        for (var i = 0; i < this.tileCountY; ++i) {
+            for (var j = 0; j < this.tileCountX; ++j) {
+                var quad = this.worldQuads[i][j];
+                if (this.quadsByTexture[quad.textureIndex] == null) {
+                    this.quadsByTexture[quad.textureIndex] = [];
+                }
+                this.quadsByTexture[quad.textureIndex].push(quad);
+                quad.subIndex = this.quadsByTexture[quad.textureIndex].length - 1;
             }
         }
     }
@@ -119,28 +133,24 @@ class WorldTerrain {
                 if (textureNeedsUpdating) {
                     var tile = this.worldSpaceToTileSpace(quad.position);
                     quad.setTexture(this.getTextureAtTile(tile));
+
+                    this.quadsByTexture[quad.textureIndex][quad.subIndex] = null;
                     quad.textureIndex = this.getTextureIndexAtTile(tile);
+                    if (this.quadsByTexture[quad.textureIndex] == null) {
+                        this.quadsByTexture[quad.textureIndex] = [];
+                    }
+                    this.quadsByTexture[quad.textureIndex].push(quad);
+                    quad.subIndex = this.quadsByTexture[quad.textureIndex].length - 1;
                 }
             }
         }
     }
 
     render() {
-        var quadsByTexture = [];
-        for (var i = 0; i < this.tileCountY; ++i) {
-            for (var j = 0; j < this.tileCountX; ++j) {
-                var quad = this.worldQuads[i][j];
-                if (quadsByTexture[quad.textureIndex] == null) {
-                    quadsByTexture[quad.textureIndex] = [];
-                }
-                quadsByTexture[quad.textureIndex].push(quad);
-            }
-        }
-
         for (var i = 0, len = this.textureMapping.length; i < len; ++i) {
-            if (quadsByTexture[i] != null) {
-                for (var j = 0, len2 = quadsByTexture[i].length; j < len2; ++j) {
-                    var q = quadsByTexture[i][j];
+            if (this.quadsByTexture[i] != null) {
+                for (var j = 0, len2 = this.quadsByTexture[i].length; j < len2; ++j) {
+                    var q = this.quadsByTexture[i][j];
                     if (q != null) {
                         q.render();
                     }

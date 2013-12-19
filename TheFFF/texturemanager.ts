@@ -31,7 +31,6 @@ class TextureManager {
         imgTexture.texture = game.gl.createTexture();
         imgTexture.loaded = false;
         imgTexture.name = name;
-        console.log(name);
         imgTexture.image = new Image();
         imgTexture.image.onload = () => {
             imgTexture.bindTextureParameters();

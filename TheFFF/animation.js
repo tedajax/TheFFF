@@ -1,40 +1,49 @@
 var Animation = (function () {
-    function Animation(imageNames, delays, loop) {
+    function Animation(imageNames, delays, priority) {
+        if (typeof priority === "undefined") { priority = 0; }
         this.maxFrames = imageNames.length;
         this.currentFrame = 0;
         this.currentTimer = 0;
         this.frameDelays = delays.slice(0);
-        this.loop = (loop == null) ? true : loop;
-        this.paused = true;
+        this.loop = false;
+        this.playing = false;
+        this.priority = priority;
 
+        this.frameNames = [];
         this.frameImages = [];
         for (var i = 0; i < this.maxFrames; ++i) {
+            this.frameNames[i] = imageNames[i];
             this.frameImages[i] = game.textures.getTexture(imageNames[i]);
         }
     }
+    Animation.prototype.clone = function () {
+        return new Animation(this.frameNames, this.frameDelays, this.priority);
+    };
+
     Animation.prototype.play = function (loop) {
-        this.paused = false;
-        this.loop = (loop == null) ? false : loop;
+        if (typeof loop === "undefined") { loop = false; }
+        this.playing = true;
+        this.loop = loop;
         this.currentFrame = 0;
         this.currentTimer = 0;
     };
 
     Animation.prototype.resume = function () {
-        this.paused = false;
+        this.playing = true;
     };
 
     Animation.prototype.pause = function () {
-        this.paused = true;
+        this.playing = false;
     };
 
     Animation.prototype.stop = function () {
-        this.paused = true;
+        this.playing = false;
         this.currentFrame = 0;
         this.currentTimer = 0;
     };
 
     Animation.prototype.update = function (dt) {
-        if (this.paused) {
+        if (!this.playing) {
             return;
         }
 
