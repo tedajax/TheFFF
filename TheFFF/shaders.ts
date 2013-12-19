@@ -1,4 +1,4 @@
-/// <reference path="TSM/tsm.ts" /> 
+/// <reference path="tsm-0.7.d.ts" /> 
 /// <reference path="WebGL.d.ts" />
 
 class Shader {

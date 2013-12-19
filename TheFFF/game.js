@@ -1,4 +1,4 @@
-﻿/// <reference path="WebGL.d.ts" />
+/// <reference path="WebGL.d.ts" />
 var Game = (function () {
     function Game(canvas) {
         var _this = this;

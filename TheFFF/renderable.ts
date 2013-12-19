@@ -1,5 +1,5 @@
 /// <reference path="WebGL.d.ts" />
-/// <reference path="TSM/tsm.ts" />
+/// <reference path="tsm-0.7.d.ts" />
 
 class RenderBuffer {
     glBuffer: WebGLBuffer;

@@ -1,9 +1,9 @@
-﻿/// <reference path="TSM/tsm.ts" />
+/// <reference path="tsm-0.7.d.ts" />
 var Camera2D = (function () {
     function Camera2D() {
-        this.position = new TSM.vec3([0, 0, 10]);
-        this.lookAt = new TSM.vec3([0, 0, -10]);
-        this.up = new TSM.vec3([0, 1, 0]);
+        this.position = new TSM.vec3([0, 0, -250]);
+        this.lookAt = new TSM.vec3([0, 0, 0]);
+        this.up = new TSM.vec3([0, 0, -1]);
     }
     Camera2D.prototype.update = function (dt) {
         if (this.gameObjectToFollow != null) {
@@ -12,7 +12,7 @@ var Camera2D = (function () {
             this.position.y = position2D.y;
         }
         this.lookAt.x = this.position.x;
-        this.lookAt.y = this.position.y;
+        this.lookAt.y = this.position.y - 250;
     };
 
     Camera2D.prototype.follow = function (go) {
@@ -27,7 +27,7 @@ var Camera2D = (function () {
 
     Camera2D.prototype.getProjectionMatrix = function () {
         var aspect = game.width / game.height;
-        return TSM.mat4.perspective(50, game.width / game.height, 0, 100);
+        return TSM.mat4.perspective(90, game.width / game.height, 0.1, 1000);
         //return TSM.mat4.orthographic(0 + this.position.x, game.width + this.position.x, game.height + this.position.y, 0 + this.position.y, 0, 1);
         //return TSM.mat4.orthographic(0, game.width, game.height, 0, 0, 100);
     };
