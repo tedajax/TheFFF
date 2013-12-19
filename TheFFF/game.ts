@@ -90,7 +90,7 @@ class Game {
 
         this.gameObjects.update(dt);
 
-        this.camera.update();
+        this.camera.update(dt);
         this.terrain.update();
 
         if (this.localEntityId >= 0) {

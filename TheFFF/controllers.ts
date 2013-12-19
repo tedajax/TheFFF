@@ -167,7 +167,7 @@ class LocalPlayerController extends Controller {
             this.gameObject.position = this.position;
         }
 
-        if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
+        if (game.input.getMouseButtonDown(MouseButtons.LEFT) && !this.attacking) {
             this.gameObject.animations.play("attack");
             this.attacking = true;
         }

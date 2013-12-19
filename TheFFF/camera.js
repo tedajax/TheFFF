@@ -1,12 +1,18 @@
-/// <reference path="TSM/tsm.ts" />
+﻿/// <reference path="TSM/tsm.ts" />
 var Camera2D = (function () {
     function Camera2D() {
-        this.position = new TSM.vec2([0, 0]);
+        this.position = new TSM.vec3([0, 0, 10]);
+        this.lookAt = new TSM.vec3([0, 0, -10]);
+        this.up = new TSM.vec3([0, 1, 0]);
     }
-    Camera2D.prototype.update = function () {
+    Camera2D.prototype.update = function (dt) {
         if (this.gameObjectToFollow != null) {
-            this.position = TSM.vec2.sum(this.gameObjectToFollow.position, this.followOffset);
+            var position2D = TSM.vec2.sum(this.gameObjectToFollow.position, this.followOffset);
+            this.position.x = position2D.x;
+            this.position.y = position2D.y;
         }
+        this.lookAt.x = this.position.x;
+        this.lookAt.y = this.position.y;
     };
 
     Camera2D.prototype.follow = function (go) {
@@ -15,15 +21,19 @@ var Camera2D = (function () {
     };
 
     Camera2D.prototype.move = function (velocity) {
-        this.position.subtract(velocity);
+        this.position.x -= velocity.x;
+        this.position.y -= velocity.y;
     };
 
     Camera2D.prototype.getProjectionMatrix = function () {
-        return TSM.mat4.orthographic(0 + this.position.x, game.width + this.position.x, game.height + this.position.y, 0 + this.position.y, 0, 1);
+        var aspect = game.width / game.height;
+        return TSM.mat4.perspective(50, game.width / game.height, 0, 100);
+        //return TSM.mat4.orthographic(0 + this.position.x, game.width + this.position.x, game.height + this.position.y, 0 + this.position.y, 0, 1);
+        //return TSM.mat4.orthographic(0, game.width, game.height, 0, 0, 100);
     };
 
     Camera2D.prototype.getViewMatrix = function () {
-        return TSM.mat4.lookAt(new TSM.vec3([0, 0, 0]), new TSM.vec3([0, 0, -1]), new TSM.vec3([0, 1, 0]));
+        return TSM.mat4.lookAt(this.position, this.lookAt, this.up);
     };
     return Camera2D;
 })();

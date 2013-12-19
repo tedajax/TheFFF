@@ -1,4 +1,4 @@
-var __extends = this.__extends || function (d, b) {
+﻿var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -156,7 +156,7 @@ var LocalPlayerController = (function (_super) {
             this.gameObject.position = this.position;
         }
 
-        if (game.input.getMouseButtonDown(MouseButtons.LEFT)) {
+        if (game.input.getMouseButtonDown(MouseButtons.LEFT) && !this.attacking) {
             this.gameObject.animations.play("attack");
             this.attacking = true;
         }
