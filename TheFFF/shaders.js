@@ -1,4 +1,4 @@
-/// <reference path="tsm-0.7.d.ts" />
+﻿/// <reference path="tsm-0.7.d.ts" />
 /// <reference path="WebGL.d.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -111,6 +111,11 @@ var SpriteShader = (function (_super) {
         this.addUniform("view", "uView");
         this.addUniform("projection", "uProjection");
         this.addUniform("texture", "uTexture");
+        this.addUniform("cameraPosition", "uCameraPosition");
+        this.addUniform("fogColor", "uFogColor");
+        this.addUniform("fogStart", "uFogStart");
+        this.addUniform("fogEnd", "uFogEnd");
+        this.addUniform("fogEnabled", "uFogEnabled");
     };
 
     SpriteShader.prototype.frameDrawSetup = function () {
@@ -123,6 +128,12 @@ var SpriteShader = (function (_super) {
 
         game.gl.uniformMatrix4fv(this.uniforms["projection"], false, new Float32Array(this.projectionMatrix.all()));
         game.gl.uniformMatrix4fv(this.uniforms["view"], false, new Float32Array(this.viewMatrix.all()));
+
+        game.gl.uniform3fv(this.uniforms["cameraPosition"], game.camera.position.xyz);
+        game.gl.uniform4fv(this.uniforms["fogColor"], new Float32Array([1, 1, 1, 1]));
+        game.gl.uniform1f(this.uniforms["fogStart"], 2);
+        game.gl.uniform1f(this.uniforms["fogEnd"], 10);
+        game.gl.uniform1i(this.uniforms["fogEnabled"], 5);
     };
 
     SpriteShader.prototype.bindTexture = function () {

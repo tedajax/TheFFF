@@ -87,8 +87,8 @@ var Quad = (function (_super) {
         game.gl.bindBuffer(game.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer.glBuffer);
         game.gl.drawElements(game.gl.TRIANGLES, this.indexBuffer.count, game.gl.UNSIGNED_SHORT, 0);
     };
-    Quad.defaultWidth = 64;
-    Quad.defaultHeight = 64;
+    Quad.defaultWidth = 1;
+    Quad.defaultHeight = 1;
     return Quad;
 })(Renderable);
 //# sourceMappingURL=quad.js.map

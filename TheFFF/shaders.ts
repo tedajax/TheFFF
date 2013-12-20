@@ -117,6 +117,11 @@ class SpriteShader extends Shader {
         this.addUniform("view", "uView");
         this.addUniform("projection", "uProjection");
         this.addUniform("texture", "uTexture");
+        this.addUniform("cameraPosition", "uCameraPosition");
+        this.addUniform("fogColor", "uFogColor");
+        this.addUniform("fogStart", "uFogStart");
+        this.addUniform("fogEnd", "uFogEnd");
+        this.addUniform("fogEnabled", "uFogEnabled");
     }
 
     frameDrawSetup() {
@@ -129,6 +134,12 @@ class SpriteShader extends Shader {
 
         game.gl.uniformMatrix4fv(this.uniforms["projection"], false, new Float32Array(this.projectionMatrix.all()));
         game.gl.uniformMatrix4fv(this.uniforms["view"], false, new Float32Array(this.viewMatrix.all()));
+
+        game.gl.uniform3fv(this.uniforms["cameraPosition"], game.camera.position.xyz);
+        game.gl.uniform4fv(this.uniforms["fogColor"], new Float32Array([1, 1, 1, 1]));
+        game.gl.uniform1f(this.uniforms["fogStart"], 2);
+        game.gl.uniform1f(this.uniforms["fogEnd"], 10);
+        game.gl.uniform1i(this.uniforms["fogEnabled"], 5);
     }
 
     bindTexture() {

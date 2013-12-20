@@ -5,8 +5,8 @@ class Quad extends Renderable {
     height: number;
     bindTexture: boolean;
 
-    static defaultWidth: number = 64;
-    static defaultHeight: number = 64;
+    static defaultWidth: number = 1;
+    static defaultHeight: number = 1;
 
     constructor(depth: number = 0, width: number = Quad.defaultWidth, height: number = Quad.defaultHeight) {
         super(depth);

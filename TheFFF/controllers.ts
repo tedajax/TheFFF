@@ -125,7 +125,7 @@ class LocalPlayerController extends Controller {
 
     constructor(gameObject: GameObject) {
         super(gameObject);
-        this.respectNetwork = true;
+        this.respectNetwork = false;
         this.moved = false;
         this.previouslyMoved = false;
     }
@@ -139,7 +139,7 @@ class LocalPlayerController extends Controller {
             return;
         }
 
-        var speed = 500;
+        var speed = 10;
         this.previouslyMoved = this.moved;
         this.moved = false;
         this.velocity.x = 0;

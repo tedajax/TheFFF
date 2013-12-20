@@ -126,16 +126,9 @@
     <Content Include="Long.min.js" />
     <TypeScriptCompile Include="messagehandler.ts" />
     <Content Include="ProtoBuf.js" />
+    <Content Include="tsm-0.7.d.ts" />
+    <Content Include="tsm-0.7.js" />
     <Content Include="tsm-0.7.min.js" />
-    <Content Include="TSM\common.ts" />
-    <Content Include="TSM\mat2.ts" />
-    <Content Include="TSM\mat3.ts" />
-    <Content Include="TSM\mat4.ts" />
-    <Content Include="TSM\quat.ts" />
-    <Content Include="TSM\tsm.ts" />
-    <Content Include="TSM\vec2.ts" />
-    <Content Include="TSM\vec3.ts" />
-    <Content Include="TSM\vec4.ts" />
     <Content Include="WebGL.d.ts" />
     <TypeScriptCompile Include="game.ts" />
     <Content Include="web.config">
@@ -149,6 +142,7 @@
     <Content Include="sprite-vs.glsl" />
     <Content Include="sprite-fs.glsl" />
     <Content Include="proto\core.proto" />
+    <Content Include="tsm-0.7.js.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

@@ -115,7 +115,7 @@ var LocalPlayerController = (function (_super) {
     __extends(LocalPlayerController, _super);
     function LocalPlayerController(gameObject) {
         _super.call(this, gameObject);
-        this.respectNetwork = true;
+        this.respectNetwork = false;
         this.moved = false;
         this.previouslyMoved = false;
     }
@@ -128,7 +128,7 @@ var LocalPlayerController = (function (_super) {
             return;
         }
 
-        var speed = 500;
+        var speed = 10;
         this.previouslyMoved = this.moved;
         this.moved = false;
         this.velocity.x = 0;

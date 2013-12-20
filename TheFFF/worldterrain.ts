@@ -10,6 +10,8 @@ class WorldTerrain {
     height: number;
     tileWidth: number;
     tileHeight: number;
+    worldWidth: number;
+    worldHeight: number;
     tileCountX: number;
     tileCountY: number;
 
@@ -17,8 +19,10 @@ class WorldTerrain {
     quadsByTexture: TerrainQuad[][];
 
     constructor() {
-        this.tileWidth = 64;
-        this.tileHeight = 64;
+        this.tileWidth = 1;
+        this.tileHeight = 1;
+        this.worldWidth = 40;
+        this.worldHeight = 25;
         this.width = game.config["world_width"];
         this.height = game.config["world_height"];
 
@@ -35,8 +39,8 @@ class WorldTerrain {
         //this.worldDescriptor = this.genMapRandomly(this.width, this.height);
         this.worldDescriptor = this.genMapFromData(game.config["world_data"]);
 
-        this.tileCountX = Math.ceil(game.canvas.width / this.tileWidth) + 1;
-        this.tileCountY = Math.ceil(game.canvas.height / this.tileHeight) + 1;
+        this.tileCountX = Math.ceil(this.worldWidth / this.tileWidth) + 1;
+        this.tileCountY = Math.ceil(this.worldHeight / this.tileHeight) + 1;
 
         this.worldQuads = [];
         var tileTopLeft = this.cameraTileMin();
@@ -112,25 +116,25 @@ class WorldTerrain {
             for (var j = 0; j < this.tileCountX; ++j) {
                 var quad = this.worldQuads[i][j];
                 var textureNeedsUpdating: boolean = false;
-                var left = game.camera.position.x - (game.width / 2) - this.tileWidth;
-                var right = game.camera.position.y + (game.width / 2) + this.tileWidth;
-                var top = game.camera.position.y - (game.height / 2) - this.tileHeight;
-                var bottom = game.camera.position.y + (game.height / 2) + this.tileHeight
+                var left = game.camera.position.x - (this.worldWidth / 2) - this.tileWidth;
+                var right = game.camera.position.y + (this.worldWidth / 2) + this.tileWidth;
+                var top = game.camera.position.y - (this.worldHeight / 2) - this.tileHeight;
+                var bottom = game.camera.position.y + (this.worldHeight / 2) + this.tileHeight
                 while (quad.position.x < left) {
-                    quad.position.x += game.width + this.tileWidth;
+                    quad.position.x += this.worldWidth * this.tileWidth;
                     textureNeedsUpdating = true;
                 }
                 while (quad.position.x > right) {
-                    quad.position.x -= game.width + this.tileWidth;
+                    quad.position.x -= this.worldWidth * this.tileWidth;;
                     textureNeedsUpdating = true;
                 }
 
                 while (quad.position.y < top) {
-                    quad.position.y += game.height + this.tileHeight;
+                    quad.position.y += (this.worldHeight + 1) * this.tileHeight;
                     textureNeedsUpdating = true;
                 }
                 while (quad.position.y > bottom) {
-                    quad.position.y -= game.height + this.tileHeight;
+                    quad.position.y -= (this.worldHeight + 1) * this.tileHeight;
                     textureNeedsUpdating = true;
                 }
 
@@ -205,11 +209,11 @@ class WorldTerrain {
 
     cameraTileMin(): TSM.vec2 {
         var camPos = new TSM.vec2([game.camera.position.x, game.camera.position.y]);
-        return this.worldSpaceToTileSpace(TSM.vec2.sum(camPos, new TSM.vec2([-game.width / 2, 0])));
+        return this.worldSpaceToTileSpace(TSM.vec2.sum(camPos, new TSM.vec2([-this.worldWidth / 2, 0])));
     }
 
     cameraTileMax(): TSM.vec2 {
         var camPos = new TSM.vec2([game.camera.position.x, game.camera.position.y]);
-        return TSM.vec2.sum(this.worldSpaceToTileSpace(TSM.vec2.sum(camPos, new TSM.vec2([game.width / 2, 0]))), new TSM.vec2([1, 1]));
+        return TSM.vec2.sum(this.worldSpaceToTileSpace(TSM.vec2.sum(camPos, new TSM.vec2([this.worldWidth / 2, 0]))), new TSM.vec2([1, 1]));
     }
 }

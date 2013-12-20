@@ -6,7 +6,7 @@ class GameObject {
     animations: AnimationController;
 
     constructor(klass: string, animations?: string[]) {
-        this.sprite = new Quad(0, 128, 128);
+        this.sprite = new Quad(0, 2, 2);
         this.sprite.setShader(game.spriteShader);
         this.position = new TSM.vec2([0, 0]);
         this.activeAnimation = null;

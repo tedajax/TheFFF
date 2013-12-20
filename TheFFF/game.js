@@ -32,7 +32,7 @@ var Game = (function () {
         this.localPlayerUpdateTimer = 0;
     }
     Game.prototype.initialize = function () {
-        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        this.gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
         this.config = loadJsonFile("config.json")["game_config"];
 
