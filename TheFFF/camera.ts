@@ -11,20 +11,24 @@ class Camera2D {
     followHeight: number;
     followBack: number;
     cameraAngle: number;
+    followDistance: number;
 
     constructor() {
         this.position = new TSM.vec3([0, 0, 0]);
         this.lookAt = new TSM.vec3([0, 0, 0]);
         this.up = new TSM.vec3([0, 0, -1]);
 
-        this.followHeight = 2;
-        this.followBack = 3;
         this.cameraAngle = 45;
+        this.followDistance = Math.sqrt(8);
 
         this.positionToFollow = new TSM.vec3([0, 0, 0]);
     }
 
     update(dt: number) {
+        this.followDistance += 1 * dt;
+        this.followBack = Math.cos(this.cameraAngle * Util.deg2Rad) * this.followDistance;
+        this.followHeight = Math.sin(this.cameraAngle * Util.deg2Rad) * this.followDistance;
+
         if (this.gameObjectToFollow != null) {
             this.positionToFollow.xy = this.gameObjectToFollow.position.xy;
         }

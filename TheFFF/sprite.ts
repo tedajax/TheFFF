@@ -1,6 +1,7 @@
 class Sprite extends Renderable {
     texture: ImageTexture;
     alpha: boolean;
+    billboard: boolean;
     width: number;
     height: number;
     bindTexture: boolean;
@@ -23,6 +24,8 @@ class Sprite extends Renderable {
 
         this.origin = new TSM.vec2([this.width / 2, this.height / 2]);
 
+        this.billboard = false;
+
         this.bindTexture = true;
     }
 
@@ -34,7 +37,16 @@ class Sprite extends Renderable {
         this.bindTexture = bind;
     }
 
+    billboardSprite() {
+        var xRot = Math.atan2(-game.camera.position.z, game.camera.position.y - this.position.y);        
+        this.rotation.x = 90 - (xRot * Util.rad2Deg);
+    }
+
     render() {
+        if (this.billboard) {
+            this.billboardSprite();
+        }
+
         var spriteShader = <SpriteShader>this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
         spriteShader.objectDrawSetup();

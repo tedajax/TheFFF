@@ -52,17 +52,17 @@ var MessageHandler = (function () {
         if (sync.ownedState != null) {
             if (sync.ownedState.playerId == game.localPlayerId) {
                 game.localEntityId = id;
-            }
-        }
 
-        if (game.gameObjects.gameObjects[id] == null) {
-            var go = game.gameObjects.add(new GameObject("mage", ["idle", "walk", "attack"]), id);
-            go.animations.play("idle", true);
-            go.sprite.alpha = true;
-            var netController = new NetworkPlayerController(go);
-        } else {
-            var controller = game.gameObjects.gameObjects[id].controller;
-            controller.handleStateSync(sync);
+                if (game.gameObjects.gameObjects[id] == null) {
+                    var go = game.gameObjects.add(new GameObject("mage", ["idle", "walk", "attack"]), id);
+                    go.animations.play("idle", true);
+                    go.sprite.alpha = true;
+                    var netController = new NetworkPlayerController(go);
+                } else {
+                    var controller = game.gameObjects.gameObjects[id].controller;
+                    controller.handleStateSync(sync);
+                }
+            }
         }
     };
 

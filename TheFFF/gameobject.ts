@@ -14,7 +14,8 @@ class GameObject {
         var anims = animations && animations || ["idle"];
         this.animations = new AnimationController(klass, anims);
 
-        this.sprite.rotation.x = 45;
+        this.sprite.billboard = true;
+        //this.sprite.rotation.x = 45;
     }
 
     playAnimation(name: string) {

@@ -23,6 +23,8 @@ var Sprite = (function (_super) {
 
         this.origin = new TSM.vec2([this.width / 2, this.height / 2]);
 
+        this.billboard = false;
+
         this.bindTexture = true;
     }
     Sprite.prototype.setTexture = function (texture) {
@@ -33,7 +35,16 @@ var Sprite = (function (_super) {
         this.bindTexture = bind;
     };
 
+    Sprite.prototype.billboardSprite = function () {
+        var xRot = Math.atan2(-game.camera.position.z, game.camera.position.y - this.position.y);
+        this.rotation.x = 90 - (xRot * Util.rad2Deg);
+    };
+
     Sprite.prototype.render = function () {
+        if (this.billboard) {
+            this.billboardSprite();
+        }
+
         var spriteShader = this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
         spriteShader.objectDrawSetup();
