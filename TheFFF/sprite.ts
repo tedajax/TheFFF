@@ -11,12 +11,17 @@ class Sprite extends Renderable {
     constructor(width: number = Sprite.defaultWidth, height: number = Sprite.defaultHeight) {
         super();
 
-        this.mesh = game.meshFactory.createQuad(width, height);
+        this.mesh = game.meshFactory.createQuad(1, 1);
 
         this.alpha = false;
 
         this.width = width;
         this.height = height;
+
+        this.scale.x = this.width;
+        this.scale.y = this.height
+
+        this.origin = new TSM.vec2([this.width / 2, this.height / 2]);
 
         this.bindTexture = true;
     }
@@ -32,6 +37,9 @@ class Sprite extends Renderable {
     render() {
         var spriteShader = <SpriteShader>this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
+        if (game.renderedFrames % 600 == 0) {
+            console.log(spriteShader.worldMatrix);
+        }
         spriteShader.objectDrawSetup();
         if (this.bindTexture) {
             spriteShader.texture = this.texture;

@@ -14,6 +14,9 @@ class RenderManager {
 
         this.alphaEnabled = false;
         game.gl.blendFunc(game.gl.SRC_ALPHA, game.gl.ONE_MINUS_SRC_ALPHA);
+
+        game.gl.enable(game.gl.CULL_FACE);
+        game.gl.cullFace(game.gl.FRONT);
     }
 
     setAlpha(alpha: boolean) {

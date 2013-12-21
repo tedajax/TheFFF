@@ -1,4 +1,4 @@
-var GameObject = (function () {
+﻿var GameObject = (function () {
     function GameObject(klass, animations) {
         this.sprite = new Sprite(2, 2);
         this.sprite.setShader(game.spriteShader);
@@ -7,6 +7,8 @@ var GameObject = (function () {
 
         var anims = animations && animations || ["idle"];
         this.animations = new AnimationController(klass, anims);
+
+        this.sprite.rotation.x = 45;
     }
     GameObject.prototype.playAnimation = function (name) {
         this.animations.play(name);

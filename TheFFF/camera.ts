@@ -29,7 +29,9 @@ class Camera2D {
             this.positionToFollow.xy = this.gameObjectToFollow.position.xy;
         }
         this.lookAt.x = this.positionToFollow.x;
-        this.lookAt.y = this.positionToFollow.y-0.01;
+        this.lookAt.y = this.positionToFollow.y - 0.01;
+        this.position.x = this.positionToFollow.x;
+        this.position.y = this.positionToFollow.y + this.followBack;
         this.position.z = -this.followHeight;
     }
 
