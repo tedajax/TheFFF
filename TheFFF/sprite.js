@@ -36,9 +36,6 @@ var Sprite = (function (_super) {
     Sprite.prototype.render = function () {
         var spriteShader = this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
-        if (game.renderedFrames % 600 == 0) {
-            console.log(spriteShader.worldMatrix);
-        }
         spriteShader.objectDrawSetup();
         if (this.bindTexture) {
             spriteShader.texture = this.texture;

@@ -144,8 +144,8 @@ class SpriteShader extends Shader {
         this.projectionMatrix = game.camera.getProjectionMatrix();
         this.viewMatrix = game.camera.getViewMatrix();
 
-        game.gl.uniformMatrix4fv(this.uniforms["projection"], false, new Float32Array(this.projectionMatrix.all()));
-        game.gl.uniformMatrix4fv(this.uniforms["view"], false, new Float32Array(this.viewMatrix.all()));
+        game.gl.uniformMatrix4fv(this.uniforms["projection"], false, this.projectionMatrix.all());
+        game.gl.uniformMatrix4fv(this.uniforms["view"], false, this.viewMatrix.all());
 
         game.gl.uniform3fv(this.uniforms["cameraPosition"], game.camera.position.xyz);
         game.gl.uniform4fv(this.uniforms["fogColor"], this.fogColor);
@@ -168,6 +168,6 @@ class SpriteShader extends Shader {
 
         //game.gl.useProgram(this.program);
 
-        game.gl.uniformMatrix4fv(this.uniforms["world"], false, new Float32Array(this.worldMatrix.all()));
+        game.gl.uniformMatrix4fv(this.uniforms["world"], false, this.worldMatrix.all());
     }
 }

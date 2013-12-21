@@ -37,9 +37,6 @@ class Sprite extends Renderable {
     render() {
         var spriteShader = <SpriteShader>this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
-        if (game.renderedFrames % 600 == 0) {
-            console.log(spriteShader.worldMatrix);
-        }
         spriteShader.objectDrawSetup();
         if (this.bindTexture) {
             spriteShader.texture = this.texture;

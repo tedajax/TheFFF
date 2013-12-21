@@ -2,11 +2,17 @@
     function GameObjectManager() {
         this.gameObjects = {};
     }
-    GameObjectManager.prototype.add = function (gameObject, networkId) {
-        if (this.gameObjects[networkId] == null) {
-            this.gameObjects[networkId] = gameObject;
+    GameObjectManager.prototype.add = function (gameObject, entityId) {
+        if (this.gameObjects[entityId] == null) {
+            this.gameObjects[entityId] = gameObject;
         }
         return gameObject;
+    };
+
+    GameObjectManager.prototype.remove = function (entityId) {
+        if (entityId in this.gameObjects) {
+            delete this.gameObjects[entityId];
+        }
     };
 
     GameObjectManager.prototype.update = function (dt) {

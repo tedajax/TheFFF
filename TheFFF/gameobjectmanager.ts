@@ -5,11 +5,17 @@ class GameObjectManager {
         this.gameObjects = {};
     }
 
-    add(gameObject: GameObject, networkId: number) {
-        if (this.gameObjects[networkId] == null) {
-            this.gameObjects[networkId] = gameObject;
+    add(gameObject: GameObject, entityId: number) {
+        if (this.gameObjects[entityId] == null) {
+            this.gameObjects[entityId] = gameObject;
         }
         return gameObject;
+    }
+
+    remove(entityId: number) {
+        if (entityId in this.gameObjects) {
+            delete this.gameObjects[entityId];
+        }
     }
 
     update(dt) {

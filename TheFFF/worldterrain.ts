@@ -117,7 +117,7 @@ class WorldTerrain {
                 var quad = this.worldQuads[i][j];
                 var textureNeedsUpdating: boolean = false;
                 var left = game.camera.position.x - (this.worldWidth / 2);
-                var right = game.camera.position.y + (this.worldWidth / 2);
+                var right = game.camera.position.x + (this.worldWidth / 2);
                 var top = game.camera.position.y - (this.worldHeight / 2);
                 var bottom = game.camera.position.y + (this.worldHeight / 2);
                 while (quad.position.x < left) {
