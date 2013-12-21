@@ -1,4 +1,4 @@
-precision highp float;
+precision lowp float;
 
 varying vec3 vVertexPosition;
 varying vec4 vVertexColor;
@@ -15,10 +15,10 @@ void main()
 {
     vec4 color = vVertexColor * texture2D(uTexture, vVertexUV);
     if (uFogEnabled) {
-      float camDist = distance(uCameraPosition, vVertexPosition);
-      float fogPerc = (camDist - uFogStart) / (uFogEnd - uFogStart);
-      float t = clamp(fogPerc, 0.0, 1.0);
-      color = mix(color, uFogColor, t);
+        float camDist = distance(uCameraPosition, vVertexPosition);
+        float fogPerc = (camDist - uFogStart) / (uFogEnd - uFogStart);
+        float t = clamp(fogPerc, 0.0, 1.0);
+        color.rgb= mix(color.rgb, uFogColor.rgb, t);
     }
     gl_FragColor = color;
 }

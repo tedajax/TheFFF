@@ -1,6 +1,6 @@
-var GameObjectManager = (function () {
+﻿var GameObjectManager = (function () {
     function GameObjectManager() {
-        this.gameObjects = [];
+        this.gameObjects = {};
     }
     GameObjectManager.prototype.add = function (gameObject, networkId) {
         if (this.gameObjects[networkId] == null) {
@@ -10,17 +10,19 @@ var GameObjectManager = (function () {
     };
 
     GameObjectManager.prototype.update = function (dt) {
-        for (var i = 0; i < this.gameObjects.length; ++i) {
-            if (this.gameObjects[i] != null) {
-                this.gameObjects[i].update(dt);
+        for (var key in this.gameObjects) {
+            var go = this.gameObjects[key];
+            if (go != null) {
+                go.update(dt);
             }
         }
     };
 
     GameObjectManager.prototype.render = function () {
-        for (var i = 0; i < this.gameObjects.length; ++i) {
-            if (this.gameObjects[i] != null) {
-                this.gameObjects[i].render();
+        for (var key in this.gameObjects) {
+            var go = this.gameObjects[key];
+            if (go != null) {
+                go.render();
             }
         }
     };

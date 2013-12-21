@@ -1,23 +1,30 @@
 /// <reference path="tsm-0.7.d.ts" />
 var Camera2D = (function () {
     function Camera2D() {
-        this.position = new TSM.vec3([0, 0, -2]);
+        this.position = new TSM.vec3([0, 0, 0]);
         this.lookAt = new TSM.vec3([0, 0, 0]);
         this.up = new TSM.vec3([0, 0, -1]);
+
+        this.followHeight = 2;
+        this.followBack = 3;
+        this.cameraAngle = 45;
+
+        this.positionToFollow = new TSM.vec3([0, 0, 0]);
     }
     Camera2D.prototype.update = function (dt) {
         if (this.gameObjectToFollow != null) {
-            var position2D = TSM.vec2.sum(this.gameObjectToFollow.position, this.followOffset);
-            this.position.x = position2D.x;
-            this.position.y = position2D.y;
+            this.positionToFollow.xy = this.gameObjectToFollow.position.xy;
         }
-        this.lookAt.x = this.position.x;
-        this.lookAt.y = this.position.y - 2;
+        this.lookAt.x = this.positionToFollow.x;
+        this.lookAt.y = this.positionToFollow.y - 0.01;
+        this.position.z = -this.followHeight;
     };
 
     Camera2D.prototype.follow = function (go) {
         this.gameObjectToFollow = go;
-        this.followOffset = new TSM.vec2([(-20 / 2) + go.sprite.width / 2, (-20 / 2) + go.sprite.height / 2]);
+        this.followOffset = new TSM.vec2([
+            (-game.terrain.worldWidth / 2) + go.sprite.width / 2,
+            (-game.terrain.worldHeight / 2) + go.sprite.height / 2 + 3]);
     };
 
     Camera2D.prototype.move = function (velocity) {

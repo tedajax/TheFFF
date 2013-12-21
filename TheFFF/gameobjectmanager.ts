@@ -1,8 +1,8 @@
 class GameObjectManager {
-    gameObjects: GameObject[];
+    gameObjects: {};
 
     constructor() {
-        this.gameObjects = [];
+        this.gameObjects = {};
     }
 
     add(gameObject: GameObject, networkId: number) {
@@ -13,17 +13,19 @@ class GameObjectManager {
     }
 
     update(dt) {
-        for (var i = 0; i < this.gameObjects.length; ++i) {
-            if (this.gameObjects[i] != null) {
-                this.gameObjects[i].update(dt);
+        for (var key in this.gameObjects) {
+            var go = this.gameObjects[key];
+            if (go != null) {
+                go.update(dt);
             }
         }
     }
 
     render() {
-        for (var i = 0; i < this.gameObjects.length; ++i) {
-            if (this.gameObjects[i] != null) {
-                this.gameObjects[i].render();
+        for (var key in this.gameObjects) {
+            var go = this.gameObjects[key];
+            if (go != null) {
+                go.render();
             }
         }
     }

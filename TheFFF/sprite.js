@@ -11,6 +11,8 @@ var Sprite = (function (_super) {
         if (typeof height === "undefined") { height = Sprite.defaultHeight; }
         _super.call(this);
 
+        this.mesh = game.meshFactory.createQuad(width, height);
+
         this.alpha = false;
 
         this.width = width;
@@ -27,8 +29,6 @@ var Sprite = (function (_super) {
     };
 
     Sprite.prototype.render = function () {
-        game.gl.useProgram(this.shader.program);
-
         var spriteShader = this.shader;
         spriteShader.worldMatrix = this.buildWorldMatrix();
         spriteShader.objectDrawSetup();
@@ -37,25 +37,12 @@ var Sprite = (function (_super) {
             spriteShader.bindTexture();
         }
 
-        if (this.alpha) {
-            game.gl.blendFunc(game.gl.SRC_ALPHA, game.gl.ONE_MINUS_SRC_ALPHA);
-            game.gl.enable(game.gl.BLEND);
-        }
+        game.renderer.setAlpha(this.alpha);
 
-        game.gl.bindBuffer(game.gl.ARRAY_BUFFER, this.vertexBuffer.glBuffer);
-        game.gl.vertexAttribPointer(this.shader.attribs["position"], this.vertexBuffer.itemSize, game.gl.FLOAT, false, 0, 0);
-
-        game.gl.bindBuffer(game.gl.ARRAY_BUFFER, this.texCoordBuffer.glBuffer);
-        game.gl.vertexAttribPointer(this.shader.attribs["uv"], this.texCoordBuffer.itemSize, game.gl.FLOAT, false, 0, 0);
-
-        game.gl.bindBuffer(game.gl.ARRAY_BUFFER, this.colorBuffer.glBuffer);
-        game.gl.vertexAttribPointer(this.shader.attribs["color"], this.colorBuffer.itemSize, game.gl.FLOAT, false, 0, 0);
-
-        game.gl.bindBuffer(game.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer.glBuffer);
-        game.gl.drawElements(game.gl.TRIANGLES, this.indexBuffer.count, game.gl.UNSIGNED_SHORT, 0);
+        this.mesh.render(this.shader);
     };
     Sprite.defaultWidth = 1;
     Sprite.defaultHeight = 1;
     return Sprite;
 })(Renderable);
-//# sourceMappingURL=quad.js.map
+//# sourceMappingURL=sprite.js.map

@@ -7,7 +7,9 @@ class Game {
     input: Input;
     width: number;
     height: number;
-    frame: number;
+    simulationTicks: number;
+    renderedFrames: number;
+    elapsedTime: number;
     config: Object;
 
     localPlayerId: number;
@@ -15,11 +17,13 @@ class Game {
     localPlayerUpdateInterval: number;
     localPlayerUpdateTimer: number;
 
+    renderer: RenderManager;
     textures: TextureManager;
     terrain: WorldTerrain;
     gameObjects: GameObjectManager;
     playerController: LocalPlayerController;
     animationFactory: AnimationFactory;
+    meshFactory: MeshFactory;
 
     spriteShader: SpriteShader;
 
@@ -29,7 +33,9 @@ class Game {
         this.camera = new Camera2D();
         this.width = this.canvas.width;
         this.height = this.canvas.height;
-        this.frame = 0;
+        this.renderedFrames = 0;
+        this.simulationTicks = 0;
+        this.elapsedTime = 0;
 
         this.input = new Input();
         document.onkeydown = (event: KeyboardEvent) => this.input.onKeyDown(event);
@@ -49,8 +55,12 @@ class Game {
 
         this.config = loadJsonFile("config.json")["game_config"];
 
+        this.renderer = new RenderManager();
+
         this.initializeTextures();
         this.initializeAnimations();
+
+        this.meshFactory = new MeshFactory();
         
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
@@ -111,7 +121,14 @@ class Game {
             }
         }
 
+        if (this.input.getKeyDown(Keys.F)) {
+            this.spriteShader.fogEnabled = !this.spriteShader.fogEnabled;
+        }
+
         this.input.update();
+
+        ++this.simulationTicks;
+        this.elapsedTime += dt;
     }
 
     render() {
@@ -120,7 +137,7 @@ class Game {
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
         this.gameObjects.render();
-        ++this.frame;
+        ++this.renderedFrames;
     }
 
     updateLocalPlayer() {

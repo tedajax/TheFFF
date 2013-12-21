@@ -1,4 +1,4 @@
-class TerrainQuad extends Quad {
+class TerrainQuad extends Sprite {
     textureIndex: number;
     subIndex: number;
 }
@@ -116,16 +116,16 @@ class WorldTerrain {
             for (var j = 0; j < this.tileCountX; ++j) {
                 var quad = this.worldQuads[i][j];
                 var textureNeedsUpdating: boolean = false;
-                var left = game.camera.position.x - (this.worldWidth / 2) - this.tileWidth;
-                var right = game.camera.position.y + (this.worldWidth / 2) + this.tileWidth;
-                var top = game.camera.position.y - (this.worldHeight / 2) - this.tileHeight;
-                var bottom = game.camera.position.y + (this.worldHeight / 2) + this.tileHeight
+                var left = game.camera.position.x - (this.worldWidth / 2);
+                var right = game.camera.position.y + (this.worldWidth / 2);
+                var top = game.camera.position.y - (this.worldHeight / 2);
+                var bottom = game.camera.position.y + (this.worldHeight / 2);
                 while (quad.position.x < left) {
                     quad.position.x += this.worldWidth * this.tileWidth;
                     textureNeedsUpdating = true;
                 }
                 while (quad.position.x > right) {
-                    quad.position.x -= this.worldWidth * this.tileWidth;;
+                    quad.position.x -= this.worldWidth * this.tileWidth;
                     textureNeedsUpdating = true;
                 }
 

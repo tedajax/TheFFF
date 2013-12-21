@@ -1,6 +1,6 @@
 var GameObject = (function () {
     function GameObject(klass, animations) {
-        this.sprite = new Quad(0, 2, 2);
+        this.sprite = new Sprite(2, 2);
         this.sprite.setShader(game.spriteShader);
         this.position = new TSM.vec2([0, 0]);
         this.activeAnimation = null;

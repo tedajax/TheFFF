@@ -1,32 +1,17 @@
 /// <reference path="WebGL.d.ts" />
 /// <reference path="tsm-0.7.d.ts" />
 
-class RenderBuffer {
-    glBuffer: WebGLBuffer;
-    count: number;
-    itemSize: number;
-}
-
 class Renderable {
-    vertices: number[];
-    indices: number[];
-    colors: number[];
-    texCoords: number[];
-
-    depth: number;
-
-    vertexBuffer: RenderBuffer;
-    indexBuffer: RenderBuffer;
-    colorBuffer: RenderBuffer;
-    texCoordBuffer: RenderBuffer;
-
     hidden: boolean;
+    depth: number;
 
     shader: Shader;
     position: TSM.vec2;
     scale: TSM.vec2;
 
-    constructor(depth:number = 0) {
+    mesh: Mesh;
+
+    constructor(depth: number = 0) {
         this.position = TSM.vec2.zero;
         this.scale = new TSM.vec2([1, 1]);
         this.depth = depth;
@@ -35,28 +20,7 @@ class Renderable {
     setShader(shader: Shader) {
         this.shader = shader;
     }
-
-    createBuffers() {
-        this.vertexBuffer = this.createBuffer(this.vertices, game.gl.ARRAY_BUFFER, game.gl.STATIC_DRAW, 3);
-        this.colorBuffer = this.createBuffer(this.colors, game.gl.ARRAY_BUFFER, game.gl.STATIC_DRAW, 4);
-        this.texCoordBuffer = this.createBuffer(this.texCoords, game.gl.ARRAY_BUFFER, game.gl.STATIC_DRAW, 2);
-        this.indexBuffer = this.createBuffer(this.indices, game.gl.ELEMENT_ARRAY_BUFFER, game.gl.STATIC_DRAW, 1);
-    }
-
-    createBuffer(data: number[], bufferType: number, drawMode: number, itemSize: number): RenderBuffer {
-        var newGLBuffer = game.gl.createBuffer();
-        game.gl.bindBuffer(bufferType, newGLBuffer);
-        game.gl.bufferData(bufferType,
-            (bufferType === game.gl.ARRAY_BUFFER) ? new Float32Array(data) : new Uint16Array(data),
-            drawMode);
-
-        var newBuffer = new RenderBuffer();
-        newBuffer.glBuffer = newGLBuffer;
-        newBuffer.itemSize = itemSize;
-        newBuffer.count = data.length / itemSize;
-        return newBuffer;
-    }
-
+    
     hide() {
         this.hidden = true;
     }

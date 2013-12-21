@@ -117,7 +117,7 @@
     <TypeScriptCompile Include="connection.ts" />
     <Content Include="default.htm" />
     <TypeScriptCompile Include="shaders.ts" />
-    <TypeScriptCompile Include="quad.ts" />
+    <TypeScriptCompile Include="sprite.ts" />
     <TypeScriptCompile Include="renderable.ts" />
     <TypeScriptCompile Include="texturemanager.ts" />
     <TypeScriptCompile Include="input.ts" />
@@ -125,6 +125,8 @@
     <TypeScriptCompile Include="gameobjectmanager.ts" />
     <Content Include="Long.min.js" />
     <TypeScriptCompile Include="messagehandler.ts" />
+    <TypeScriptCompile Include="meshfactory.ts" />
+    <TypeScriptCompile Include="mesh.ts" />
     <Content Include="ProtoBuf.js" />
     <Content Include="tsm-0.7.d.ts" />
     <Content Include="tsm-0.7.js" />
@@ -139,8 +141,8 @@
     <TypeScriptCompile Include="app.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="sprite-vs.glsl" />
-    <Content Include="sprite-fs.glsl" />
+    <None Include="assets\shaders\sprite.vert" />
+    <None Include="assets\shaders\sprite.frag" />
     <Content Include="proto\core.proto" />
     <Content Include="tsm-0.7.js.map" />
     <None Include="web.Debug.config">

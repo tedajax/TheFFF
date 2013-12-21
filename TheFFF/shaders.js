@@ -1,4 +1,4 @@
-﻿/// <reference path="tsm-0.7.d.ts" />
+/// <reference path="tsm-0.7.d.ts" />
 /// <reference path="WebGL.d.ts" />
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -50,24 +50,24 @@ var Shader = (function () {
 
     Shader.prototype.getShader = function (shaderType) {
         var shaderStr;
-        var shaderExtension;
+        var shaderFilename;
 
         if (shaderType == game.gl.FRAGMENT_SHADER) {
-            shaderExtension = this.name + "-fs.glsl";
+            shaderFilename = Shader.SHADER_PATH + this.name + ".frag";
         } else if (shaderType == game.gl.VERTEX_SHADER) {
-            shaderExtension = this.name + "-vs.glsl";
+            shaderFilename = Shader.SHADER_PATH + this.name + ".vert";
         } else {
             return null;
         }
 
-        shaderStr = this.getFileString(shaderExtension);
+        shaderStr = this.getFileString(shaderFilename);
 
         var shader = game.gl.createShader(shaderType);
         game.gl.shaderSource(shader, shaderStr);
         game.gl.compileShader(shader);
 
         if (!game.gl.getShaderParameter(shader, game.gl.COMPILE_STATUS)) {
-            alert(shaderExtension + "\n" + game.gl.getShaderInfoLog(shader));
+            alert(shaderFilename + "\n" + game.gl.getShaderInfoLog(shader));
             return null;
         }
 
@@ -89,6 +89,7 @@ var Shader = (function () {
 
         return request.responseText;
     };
+    Shader.SHADER_PATH = "assets/shaders/";
     return Shader;
 })();
 
@@ -97,6 +98,11 @@ var SpriteShader = (function (_super) {
     function SpriteShader() {
         _super.call(this);
         this.name = "sprite";
+
+        this.fogEnabled = true;
+        this.fogStart = 2;
+        this.fogEnd = 10;
+        this.fogColor = new Float32Array([1, 1, 1, 1]);
     }
     SpriteShader.prototype.initLocales = function () {
         _super.prototype.initLocales.call(this);
@@ -121,8 +127,7 @@ var SpriteShader = (function (_super) {
     SpriteShader.prototype.frameDrawSetup = function () {
         _super.prototype.frameDrawSetup.call(this);
 
-        game.gl.useProgram(this.program);
-
+        //game.gl.useProgram(this.program);
         this.projectionMatrix = game.camera.getProjectionMatrix();
         this.viewMatrix = game.camera.getViewMatrix();
 
@@ -130,10 +135,10 @@ var SpriteShader = (function (_super) {
         game.gl.uniformMatrix4fv(this.uniforms["view"], false, new Float32Array(this.viewMatrix.all()));
 
         game.gl.uniform3fv(this.uniforms["cameraPosition"], game.camera.position.xyz);
-        game.gl.uniform4fv(this.uniforms["fogColor"], new Float32Array([1, 1, 1, 1]));
-        game.gl.uniform1f(this.uniforms["fogStart"], 2);
-        game.gl.uniform1f(this.uniforms["fogEnd"], 10);
-        game.gl.uniform1i(this.uniforms["fogEnabled"], 5);
+        game.gl.uniform4fv(this.uniforms["fogColor"], this.fogColor);
+        game.gl.uniform1f(this.uniforms["fogStart"], this.fogStart);
+        game.gl.uniform1f(this.uniforms["fogEnd"], this.fogEnd);
+        game.gl.uniform1i(this.uniforms["fogEnabled"], (this.fogEnabled) ? 1 : 0);
     };
 
     SpriteShader.prototype.bindTexture = function () {
@@ -148,8 +153,7 @@ var SpriteShader = (function (_super) {
     SpriteShader.prototype.objectDrawSetup = function () {
         _super.prototype.objectDrawSetup.call(this);
 
-        game.gl.useProgram(this.program);
-
+        //game.gl.useProgram(this.program);
         game.gl.uniformMatrix4fv(this.uniforms["world"], false, new Float32Array(this.worldMatrix.all()));
     };
     return SpriteShader;

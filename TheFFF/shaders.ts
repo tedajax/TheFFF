@@ -7,6 +7,8 @@ class Shader {
     attribs: number[];
     uniforms: WebGLUniformLocation[];
 
+    static SHADER_PATH: string = "assets/shaders/";
+
     constructor() {
         this.name = "default";
         this.attribs = [];
@@ -51,24 +53,24 @@ class Shader {
 
     getShader(shaderType: number) {
         var shaderStr: string;
-        var shaderExtension: string;
+        var shaderFilename: string;
 
         if (shaderType == game.gl.FRAGMENT_SHADER) {
-            shaderExtension = this.name + "-fs.glsl";
+            shaderFilename = Shader.SHADER_PATH + this.name + ".frag";
         } else if (shaderType == game.gl.VERTEX_SHADER) {
-            shaderExtension = this.name + "-vs.glsl";
+            shaderFilename = Shader.SHADER_PATH + this.name + ".vert";
         } else {
             return null;
         }
 
-        shaderStr = this.getFileString(shaderExtension);
+        shaderStr = this.getFileString(shaderFilename);
 
         var shader = game.gl.createShader(shaderType);
         game.gl.shaderSource(shader, shaderStr);
         game.gl.compileShader(shader);
 
         if (!game.gl.getShaderParameter(shader, game.gl.COMPILE_STATUS)) {
-            alert(shaderExtension + "\n" + game.gl.getShaderInfoLog(shader));
+            alert(shaderFilename + "\n" + game.gl.getShaderInfoLog(shader));
             return null;
         }
 
@@ -99,9 +101,19 @@ class SpriteShader extends Shader {
     texture: ImageTexture;
     lastBoundTexture: ImageTexture;
 
+    fogEnabled: boolean;
+    fogStart: number;
+    fogEnd: number;
+    fogColor: Float32Array;
+
     constructor() {
         super();
         this.name = "sprite";
+
+        this.fogEnabled = true;
+        this.fogStart = 2;
+        this.fogEnd = 10;
+        this.fogColor = new Float32Array([1, 1, 1, 1]);
     }
 
     initLocales() {
@@ -127,7 +139,7 @@ class SpriteShader extends Shader {
     frameDrawSetup() {
         super.frameDrawSetup();
 
-        game.gl.useProgram(this.program);
+        //game.gl.useProgram(this.program);
 
         this.projectionMatrix = game.camera.getProjectionMatrix();
         this.viewMatrix = game.camera.getViewMatrix();
@@ -136,10 +148,10 @@ class SpriteShader extends Shader {
         game.gl.uniformMatrix4fv(this.uniforms["view"], false, new Float32Array(this.viewMatrix.all()));
 
         game.gl.uniform3fv(this.uniforms["cameraPosition"], game.camera.position.xyz);
-        game.gl.uniform4fv(this.uniforms["fogColor"], new Float32Array([1, 1, 1, 1]));
-        game.gl.uniform1f(this.uniforms["fogStart"], 2);
-        game.gl.uniform1f(this.uniforms["fogEnd"], 10);
-        game.gl.uniform1i(this.uniforms["fogEnabled"], 5);
+        game.gl.uniform4fv(this.uniforms["fogColor"], this.fogColor);
+        game.gl.uniform1f(this.uniforms["fogStart"], this.fogStart);
+        game.gl.uniform1f(this.uniforms["fogEnd"], this.fogEnd);
+        game.gl.uniform1i(this.uniforms["fogEnabled"], (this.fogEnabled) ? 1 : 0);
     }
 
     bindTexture() {
@@ -154,7 +166,7 @@ class SpriteShader extends Shader {
     objectDrawSetup() {
         super.objectDrawSetup();
 
-        game.gl.useProgram(this.program);
+        //game.gl.useProgram(this.program);
 
         game.gl.uniformMatrix4fv(this.uniforms["world"], false, new Float32Array(this.worldMatrix.all()));
     }

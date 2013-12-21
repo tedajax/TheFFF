@@ -7,7 +7,9 @@ var Game = (function () {
         this.camera = new Camera2D();
         this.width = this.canvas.width;
         this.height = this.canvas.height;
-        this.frame = 0;
+        this.renderedFrames = 0;
+        this.simulationTicks = 0;
+        this.elapsedTime = 0;
 
         this.input = new Input();
         document.onkeydown = function (event) {
@@ -36,8 +38,12 @@ var Game = (function () {
 
         this.config = loadJsonFile("config.json")["game_config"];
 
+        this.renderer = new RenderManager();
+
         this.initializeTextures();
         this.initializeAnimations();
+
+        this.meshFactory = new MeshFactory();
 
         this.spriteShader = new SpriteShader();
         this.spriteShader.initialize();
@@ -99,7 +105,14 @@ var Game = (function () {
             }
         }
 
+        if (this.input.getKeyDown(Keys.F)) {
+            this.spriteShader.fogEnabled = !this.spriteShader.fogEnabled;
+        }
+
         this.input.update();
+
+        ++this.simulationTicks;
+        this.elapsedTime += dt;
     };
 
     Game.prototype.render = function () {
@@ -108,7 +121,7 @@ var Game = (function () {
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
         this.gameObjects.render();
-        ++this.frame;
+        ++this.renderedFrames;
     };
 
     Game.prototype.updateLocalPlayer = function () {

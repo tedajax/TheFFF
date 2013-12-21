@@ -1,12 +1,12 @@
 class GameObject {
-    sprite: Quad;
+    sprite: Sprite;
     position: TSM.vec2;
     controller: Controller;
     activeAnimation: string;
     animations: AnimationController;
 
     constructor(klass: string, animations?: string[]) {
-        this.sprite = new Quad(0, 2, 2);
+        this.sprite = new Sprite(2, 2);
         this.sprite.setShader(game.spriteShader);
         this.position = new TSM.vec2([0, 0]);
         this.activeAnimation = null;

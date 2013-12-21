@@ -7,6 +7,10 @@ window.onload = initialize;
 var connection;
 var messageHandler;
 
+var FPS = 60;
+var framesThisSecond = 0;
+var lastTick;
+
 function initialize() {
     var canvas = document.getElementById('canvas');
     canvas.addEventListener("contextmenu", function (e) {
@@ -25,13 +29,11 @@ function initialize() {
 
     connection.sendCommands([{ "type": 100, "connectRequest": {} }]);
 
-    var FPS = 60;
-    setInterval(tick, 1000 / FPS);
-}
+    lastTick = new Date().getTime();
+    framesThisSecond = 0;
 
-function tick() {
-    update();
-    render();
+    setTimeout(update, 1000 / FPS);
+    requestAnimationFrame(render);
 }
 
 function update() {
@@ -39,10 +41,22 @@ function update() {
     currTime = new Date().getTime();
     var dt = (currTime - prevTime) / 1000.0;
     game.update(dt);
+
+    setTimeout(update, 1000 / FPS);
 }
 
 function render() {
     game.render();
+
+    ++framesThisSecond;
+    var now = new Date().getTime();
+    if (now - lastTick >= 1000) {
+        console.log("FPS: " + framesThisSecond);
+        framesThisSecond = 0;
+        lastTick = now;
+    }
+
+    requestAnimationFrame(render);
 }
 
 function loadJsonFile(url) {

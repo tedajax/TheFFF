@@ -12,11 +12,11 @@ uniform mat4 uProjection;
 
 void main()
 {
-	mat4 modelView = uView * uWorld;
+    mat4 modelView = uView * uWorld;
 
-  vVertexPosition = (uWorld * vec4(aVertexPosition, 1.0)).xyz;
-	vVertexUV = aVertexUV;
-  vVertexColor = aVertexColor;
+    vVertexPosition = (uWorld * vec4(aVertexPosition, 1.0)).xyz;
+    vVertexUV = aVertexUV;
+    vVertexColor = aVertexColor;
 
-	gl_Position = uProjection * modelView * vec4(aVertexPosition, 1.0);
+    gl_Position = uProjection * modelView * vec4(aVertexPosition, 1.0);
 }

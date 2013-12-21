@@ -6,26 +6,37 @@ class Camera2D {
     up: TSM.vec3;
     followOffset: TSM.vec2;
     gameObjectToFollow: GameObject;
+    positionToFollow: TSM.vec3;
+
+    followHeight: number;
+    followBack: number;
+    cameraAngle: number;
 
     constructor() {
-        this.position = new TSM.vec3([0, 0, -2]);
+        this.position = new TSM.vec3([0, 0, 0]);
         this.lookAt = new TSM.vec3([0, 0, 0]);
         this.up = new TSM.vec3([0, 0, -1]);
+
+        this.followHeight = 2;
+        this.followBack = 3;
+        this.cameraAngle = 45;
+
+        this.positionToFollow = new TSM.vec3([0, 0, 0]);
     }
 
     update(dt: number) {
         if (this.gameObjectToFollow != null) {
-            var position2D = TSM.vec2.sum(this.gameObjectToFollow.position, this.followOffset);
-            this.position.x = position2D.x;
-            this.position.y = position2D.y;
+            this.positionToFollow.xy = this.gameObjectToFollow.position.xy;
         }
-        this.lookAt.x = this.position.x;
-        this.lookAt.y = this.position.y - 2;
+        this.lookAt.x = this.positionToFollow.x;
+        this.lookAt.y = this.positionToFollow.y-0.01;
+        this.position.z = -this.followHeight;
     }
 
     follow(go: GameObject) {
         this.gameObjectToFollow = go;
-        this.followOffset = new TSM.vec2([(-20 / 2) + go.sprite.width / 2, (-20 / 2) + go.sprite.height / 2]);
+        this.followOffset = new TSM.vec2([(-game.terrain.worldWidth / 2) + go.sprite.width / 2,
+                                          (-game.terrain.worldHeight / 2) + go.sprite.height / 2 + 3]);
     }
 
     move(velocity: TSM.vec2) {
