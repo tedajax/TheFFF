@@ -1,4 +1,4 @@
-var Keys = (function () {
+﻿var Keys = (function () {
     function Keys() {
     }
     Keys.ZERO = 48;
@@ -38,6 +38,8 @@ var Keys = (function () {
     Keys.X = 88;
     Keys.Y = 89;
     Keys.Z = 90;
+
+    Keys.SPACE = 32;
 
     Keys.LEFT = 37;
     Keys.RIGHT = 39;

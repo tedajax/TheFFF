@@ -6,7 +6,7 @@ class Renderable {
     depth: number;
 
     shader: Shader;
-    position: TSM.vec2;
+    position: TSM.vec3;
     origin: TSM.vec2;
     scale: TSM.vec2;
     rotation: TSM.vec3;
@@ -14,7 +14,7 @@ class Renderable {
     mesh: Mesh;
 
     constructor(depth: number = 0) {
-        this.position = new TSM.vec2([0, 0]);
+        this.position = new TSM.vec3([0, 0, 0]);
         this.origin = new TSM.vec2([0, 0]);
         this.scale = new TSM.vec2([1, 1]);
         this.rotation = new TSM.vec3([0, 0, 0]);
@@ -51,7 +51,7 @@ class Renderable {
         rotation.rotate(this.rotation.x * 0.0174532925, TSM.vec3.right);
 
         var translation = new TSM.mat4().setIdentity();
-        translation.translate(new TSM.vec3([this.position.x, this.position.y, this.depth]));
+        translation.translate(new TSM.vec3([this.position.x, this.position.y, this.position.z]));
 
         var origin = new TSM.mat4().setIdentity();
         origin.translate(new TSM.vec3([-this.origin.x, -this.origin.y, 0]));

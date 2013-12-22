@@ -40,8 +40,8 @@ class Controller {
     current: StateFrame;
     interp: StateFrame;
 
-    position: TSM.vec2;
-    velocity: TSM.vec2;
+    position: TSM.vec3;
+    velocity: TSM.vec3;
 
     constructor(gameObject: GameObject) {
         this.gameObject = gameObject;
@@ -49,8 +49,8 @@ class Controller {
             this.gameObject.setController(this);
         }
 
-        this.position = new TSM.vec2([0, 0]);
-        this.velocity = new TSM.vec2([0, 0]);
+        this.position = new TSM.vec3([0, 0, 0]);
+        this.velocity = new TSM.vec3([0, 0, 0]);
 
         this.previous = new StateFrame();
         this.current = new StateFrame();

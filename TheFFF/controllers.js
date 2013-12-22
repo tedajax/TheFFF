@@ -43,8 +43,8 @@ var Controller = (function () {
             this.gameObject.setController(this);
         }
 
-        this.position = new TSM.vec2([0, 0]);
-        this.velocity = new TSM.vec2([0, 0]);
+        this.position = new TSM.vec3([0, 0, 0]);
+        this.velocity = new TSM.vec3([0, 0, 0]);
 
         this.previous = new StateFrame();
         this.current = new StateFrame();

@@ -1,4 +1,4 @@
-var RenderManager = (function () {
+﻿var RenderManager = (function () {
     function RenderManager() {
         this.lastBoundVertexBuffer = null;
         this.lastBoundColorBuffer = null;
@@ -10,6 +10,9 @@ var RenderManager = (function () {
 
         game.gl.enable(game.gl.CULL_FACE);
         game.gl.cullFace(game.gl.FRONT);
+
+        game.gl.enable(game.gl.DEPTH_TEST);
+        game.gl.depthFunc(game.gl.LEQUAL);
     }
     RenderManager.prototype.setAlpha = function (alpha) {
         if (this.alphaEnabled != alpha) {

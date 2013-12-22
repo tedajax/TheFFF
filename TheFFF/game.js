@@ -87,6 +87,19 @@ var Game = (function () {
         this.camera.update(dt);
         this.terrain.update();
 
+        if (this.input.getKey(Keys.Z)) {
+            this.spriteShader.fogStart -= 1 * dt;
+        }
+        if (this.input.getKey(Keys.X)) {
+            this.spriteShader.fogStart += 1 * dt;
+        }
+        if (this.input.getKey(Keys.C)) {
+            this.spriteShader.fogEnd -= 1 * dt;
+        }
+        if (this.input.getKey(Keys.V)) {
+            this.spriteShader.fogEnd += 1 * dt;
+        }
+
         if (this.localEntityId >= 0) {
             this.localPlayerUpdateTimer += dt;
             if (this.localPlayerUpdateTimer >= this.localPlayerUpdateInterval) {

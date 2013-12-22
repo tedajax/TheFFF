@@ -1,6 +1,6 @@
 class GameObject {
     sprite: Sprite;
-    position: TSM.vec2;
+    position: TSM.vec3;
     controller: Controller;
     activeAnimation: string;
     animations: AnimationController;
@@ -8,7 +8,7 @@ class GameObject {
     constructor(klass: string, animations?: string[]) {
         this.sprite = new Sprite(2, 2);
         this.sprite.setShader(game.spriteShader);
-        this.position = new TSM.vec2([0, 0]);
+        this.position = new TSM.vec3([0, 0, 0]);
         this.activeAnimation = null;
 
         var anims = animations && animations || ["idle"];
@@ -37,7 +37,9 @@ class GameObject {
 
         this.animations.update(dt);
         this.sprite.texture = this.animations.getCurrentTexture();
-        
+
+        var terrainHeight = game.camera.getTerrainHeight(this.position, 0) - 1;
+        this.position.z = terrainHeight;
         this.sprite.position = this.position;
     }
 

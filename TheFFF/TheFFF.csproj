@@ -128,9 +128,11 @@
     <TypeScriptCompile Include="meshfactory.ts" />
     <TypeScriptCompile Include="mesh.ts" />
     <Content Include="ProtoBuf.js" />
+    <TypeScriptCompile Include="rendermanager.ts" />
     <Content Include="tsm-0.7.d.ts" />
     <Content Include="tsm-0.7.js" />
     <Content Include="tsm-0.7.min.js" />
+    <TypeScriptCompile Include="util.ts" />
     <Content Include="WebGL.d.ts" />
     <TypeScriptCompile Include="game.ts" />
     <Content Include="web.config">

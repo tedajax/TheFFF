@@ -112,8 +112,8 @@ var WorldTerrain = (function () {
                 var textureNeedsUpdating = false;
                 var left = game.camera.position.x - (this.worldWidth / 2);
                 var right = game.camera.position.x + (this.worldWidth / 2);
-                var top = game.camera.position.y - (this.worldHeight / 2);
-                var bottom = game.camera.position.y + (this.worldHeight / 2);
+                var top = game.camera.position.y - (this.worldHeight - 4);
+                var bottom = game.camera.position.y + 4;
                 while (quad.position.x < left) {
                     quad.position.x += this.worldWidth * this.tileWidth;
                     textureNeedsUpdating = true;
@@ -131,6 +131,14 @@ var WorldTerrain = (function () {
                     quad.position.y -= (this.worldHeight + 1) * this.tileHeight;
                     textureNeedsUpdating = true;
                 }
+
+                var front = game.camera.getTerrainHeight(quad.position, 0.5);
+                var back = game.camera.getTerrainHeight(quad.position, -0.5);
+                var yDiff = front - back;
+                var arctan = Math.atan2(yDiff, 1);
+                quad.rotation.x = arctan * Util.rad2Deg;
+                quad.position.z = (front + back) / 2;
+                quad.scale.y = 1 + arctan;
 
                 if (textureNeedsUpdating) {
                     var tile = this.worldSpaceToTileSpace(quad.position);
@@ -198,17 +206,17 @@ var WorldTerrain = (function () {
         var tx = tile.x - Math.floor(this.width / 2);
         var ty = tile.y - Math.floor(this.height / 2);
 
-        return new TSM.vec2([ty * this.tileHeight, tx * this.tileWidth]);
+        return new TSM.vec3([ty * this.tileHeight, tx * this.tileWidth, 0]);
     };
 
     WorldTerrain.prototype.cameraTileMin = function () {
-        var camPos = new TSM.vec2([game.camera.position.x, game.camera.position.y]);
-        return this.worldSpaceToTileSpace(TSM.vec2.sum(camPos, new TSM.vec2([-this.worldWidth / 2, 0])));
+        var camTL = TSM.vec3.sum(game.camera.position, new TSM.vec3([-this.worldWidth / 2, 0, 0]));
+        return this.worldSpaceToTileSpace(camTL);
     };
 
     WorldTerrain.prototype.cameraTileMax = function () {
-        var camPos = new TSM.vec2([game.camera.position.x, game.camera.position.y]);
-        return TSM.vec2.sum(this.worldSpaceToTileSpace(TSM.vec2.sum(camPos, new TSM.vec2([this.worldWidth / 2, 0]))), new TSM.vec2([1, 1]));
+        var camBR = TSM.vec3.sum(game.camera.position, new TSM.vec3([this.worldWidth / 2, 0, 0]));
+        return this.worldSpaceToTileSpace(camBR);
     };
     return WorldTerrain;
 })();

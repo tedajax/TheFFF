@@ -1,8 +1,8 @@
-﻿var GameObject = (function () {
+var GameObject = (function () {
     function GameObject(klass, animations) {
         this.sprite = new Sprite(2, 2);
         this.sprite.setShader(game.spriteShader);
-        this.position = new TSM.vec2([0, 0]);
+        this.position = new TSM.vec3([0, 0, 0]);
         this.activeAnimation = null;
 
         var anims = animations && animations || ["idle"];
@@ -31,6 +31,8 @@
         this.animations.update(dt);
         this.sprite.texture = this.animations.getCurrentTexture();
 
+        var terrainHeight = game.camera.getTerrainHeight(this.position, 0) - 1;
+        this.position.z = terrainHeight;
         this.sprite.position = this.position;
     };
 

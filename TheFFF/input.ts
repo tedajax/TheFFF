@@ -37,6 +37,8 @@ class Keys {
     static Y = 89;
     static Z = 90;
 
+    static SPACE = 32;
+
     static LEFT = 37;
     static RIGHT = 39;
     static UP = 38;
