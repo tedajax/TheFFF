@@ -67,7 +67,7 @@ class Camera2D {
         }
 
         if (this.terrainFollowCam) {
-            this.terrainReferencePoint = this.position.y + 1;
+            this.terrainReferencePoint = this.position.y + 2;
         }
 
         this.followBack = Math.cos(this.cameraAngle * Util.deg2Rad) * this.followDistance;

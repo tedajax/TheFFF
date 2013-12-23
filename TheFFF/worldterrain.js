@@ -16,8 +16,8 @@ var WorldTerrain = (function () {
     function WorldTerrain() {
         this.tileWidth = 1;
         this.tileHeight = 1;
-        this.worldWidth = 40;
-        this.worldHeight = 25;
+        this.worldWidth = 38;
+        this.worldHeight = 23;
         this.width = game.config["world_width"];
         this.height = game.config["world_height"];
 
@@ -60,10 +60,9 @@ var WorldTerrain = (function () {
             for (var j = 0; j < this.tileCountX; ++j) {
                 var quad = this.worldQuads[i][j];
                 if (this.quadsByTexture[quad.textureIndex] == null) {
-                    this.quadsByTexture[quad.textureIndex] = [];
+                    this.quadsByTexture[quad.textureIndex] = new PoolArray();
                 }
-                this.quadsByTexture[quad.textureIndex].push(quad);
-                quad.subIndex = this.quadsByTexture[quad.textureIndex].length - 1;
+                quad.subIndex = this.quadsByTexture[quad.textureIndex].push(quad);
             }
         }
     }
@@ -110,10 +109,10 @@ var WorldTerrain = (function () {
             for (var j = 0; j < this.tileCountX; ++j) {
                 var quad = this.worldQuads[i][j];
                 var textureNeedsUpdating = false;
-                var left = game.camera.position.x - (this.worldWidth / 2);
-                var right = game.camera.position.x + (this.worldWidth / 2);
-                var top = game.camera.position.y - (this.worldHeight - 4);
-                var bottom = game.camera.position.y + 4;
+                var left = game.camera.position.x - (this.worldWidth / 2) - this.tileWidth;
+                var right = game.camera.position.x + (this.worldWidth / 2) + this.tileWidth;
+                var top = game.camera.position.y - (this.worldHeight - 4) - this.tileWidth;
+                var bottom = game.camera.position.y + 4 + this.tileWidth;
                 while (quad.position.x < left) {
                     quad.position.x += this.worldWidth * this.tileWidth;
                     textureNeedsUpdating = true;
@@ -144,13 +143,12 @@ var WorldTerrain = (function () {
                     var tile = this.worldSpaceToTileSpace(quad.position);
                     quad.setTexture(this.getTextureAtTile(tile));
 
-                    this.quadsByTexture[quad.textureIndex][quad.subIndex] = null;
+                    this.quadsByTexture[quad.textureIndex].removeAt(quad.subIndex);
                     quad.textureIndex = this.getTextureIndexAtTile(tile);
                     if (this.quadsByTexture[quad.textureIndex] == null) {
-                        this.quadsByTexture[quad.textureIndex] = [];
+                        this.quadsByTexture[quad.textureIndex] = new PoolArray();
                     }
-                    this.quadsByTexture[quad.textureIndex].push(quad);
-                    quad.subIndex = this.quadsByTexture[quad.textureIndex].length - 1;
+                    quad.subIndex = this.quadsByTexture[quad.textureIndex].push(quad);
                 }
             }
         }
@@ -160,7 +158,7 @@ var WorldTerrain = (function () {
         for (var i = 0, len = this.textureMapping.length; i < len; ++i) {
             if (this.quadsByTexture[i] != null) {
                 for (var j = 0, len2 = this.quadsByTexture[i].length; j < len2; ++j) {
-                    var q = this.quadsByTexture[i][j];
+                    var q = this.quadsByTexture[i].at(j);
                     if (q != null) {
                         q.render();
                     }

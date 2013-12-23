@@ -50,6 +50,7 @@ var Game = (function () {
         this.spriteShader.initLocales();
 
         this.terrain = new WorldTerrain();
+        this.worldObjects = new WorldObjects();
 
         this.gameObjects = new GameObjectManager();
 
@@ -86,6 +87,7 @@ var Game = (function () {
 
         this.camera.update(dt);
         this.terrain.update();
+        this.worldObjects.update(dt);
 
         if (this.input.getKey(Keys.Z)) {
             this.spriteShader.fogStart -= 1 * dt;
@@ -133,6 +135,7 @@ var Game = (function () {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
+        this.worldObjects.render();
         this.gameObjects.render();
         ++this.renderedFrames;
     };

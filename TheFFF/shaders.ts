@@ -111,8 +111,8 @@ class SpriteShader extends Shader {
         this.name = "sprite";
 
         this.fogEnabled = true;
-        this.fogStart = 10;
-        this.fogEnd = 22;
+        this.fogStart = 13;
+        this.fogEnd = 20;
         this.fogColor = new Float32Array([1, 1, 1, 1]);
     }
 

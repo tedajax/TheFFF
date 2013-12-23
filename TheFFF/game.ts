@@ -20,6 +20,7 @@ class Game {
     renderer: RenderManager;
     textures: TextureManager;
     terrain: WorldTerrain;
+    worldObjects: WorldObjects;
     gameObjects: GameObjectManager;
     playerController: LocalPlayerController;
     animationFactory: AnimationFactory;
@@ -67,6 +68,7 @@ class Game {
         this.spriteShader.initLocales();
 
         this.terrain = new WorldTerrain();
+        this.worldObjects = new WorldObjects();
 
         this.gameObjects = new GameObjectManager();
         //var go = this.gameObjects.add(new GameObject("mageIdle00"), 0);
@@ -102,6 +104,7 @@ class Game {
 
         this.camera.update(dt);
         this.terrain.update();
+        this.worldObjects.update(dt);
 
         if (this.input.getKey(Keys.Z)) {
             this.spriteShader.fogStart -= 1 * dt;
@@ -149,6 +152,7 @@ class Game {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
+        this.worldObjects.render();
         this.gameObjects.render();
         ++this.renderedFrames;
     }

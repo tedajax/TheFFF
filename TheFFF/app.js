@@ -1,4 +1,4 @@
-var game;
+﻿var game;
 var currTime;
 var prevTime;
 
@@ -7,6 +7,7 @@ window.onload = initialize;
 var connection;
 var messageHandler;
 
+var FPSElement;
 var FPS = 60;
 var framesThisSecond = 0;
 var lastTick;
@@ -20,6 +21,8 @@ function initialize() {
         }
     }, false);
     game = new Game(canvas);
+
+    FPSElement = document.getElementById("fps");
 
     game.initialize();
 
@@ -51,7 +54,7 @@ function render() {
     ++framesThisSecond;
     var now = new Date().getTime();
     if (now - lastTick >= 1000) {
-        console.log("FPS: " + framesThisSecond);
+        FPSElement.textContent = "FPS: " + framesThisSecond;
         framesThisSecond = 0;
         lastTick = now;
     }

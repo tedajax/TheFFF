@@ -1,4 +1,4 @@
-var __extends = this.__extends || function (d, b) {
+﻿var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -36,7 +36,7 @@ var Sprite = (function (_super) {
     };
 
     Sprite.prototype.billboardSprite = function () {
-        var xRot = Math.atan2(-game.camera.position.z, game.camera.position.y - this.position.y);
+        var xRot = Math.atan2(-(game.camera.position.z - this.position.z), game.camera.position.y - this.position.y);
         this.rotation.x = 90 - (xRot * Util.rad2Deg);
     };
 
