@@ -31,7 +31,7 @@ class Game {
     spriteShader: SpriteShader;
 
     constructor(canvas: HTMLCanvasElement) {
-        this.useFullWindow = false;
+        this.useFullWindow = true;
 
         this.canvas = canvas;
         if (this.useFullWindow) {
@@ -60,7 +60,7 @@ class Game {
         window.onresize = () => this.onResize();
 
         document.addEventListener("keydown", (e: KeyboardEvent) => {
-            if (e.keyCode == Keys.G) {
+            if (e.keyCode == Keys.F) {
                 ["requestFullscreen", "msRequestFullscreen", "webkitRequestFullscreen", "mozRequestFullscreen"].forEach((name: string) => {
                     if (this.canvas[name] != null) {
                         game.fullscreen = true;
@@ -172,7 +172,7 @@ class Game {
             }
         }
 
-        if (this.input.getKeyDown(Keys.F)) {
+        if (this.input.getKeyDown(Keys.G)) {
             this.spriteShader.fogEnabled = !this.spriteShader.fogEnabled;
         }
 

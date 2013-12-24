@@ -18,6 +18,13 @@ class Util {
         A.splice(newIndex, 0, A.splice(oldIndex, 1)[0]);
         return A;
     }
+
+    static nextPowerOf2(value: number, pow: number = 1) {
+        while (pow < value) {
+            pow *= 2;
+        }
+        return pow;
+    }
 }
 
 class PoolArray<T> {

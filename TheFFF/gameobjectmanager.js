@@ -1,4 +1,4 @@
-﻿var GameObjectManager = (function () {
+var GameObjectManager = (function () {
     function GameObjectManager() {
         this.gameObjects = {};
         this.renderOrdered = [];

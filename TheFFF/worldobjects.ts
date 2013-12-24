@@ -57,7 +57,8 @@ class WorldObjects {
             var sprite = new Sprite(3, 3);
             sprite.setShader(game.spriteShader);
             sprite.alpha = true;
-            sprite.texture = game.textures.getTexture("mountain");
+            var r = Math.floor(Math.random() * 2);         
+            sprite.texture = game.textures.getTexture((r == 0) ? "mountain" : "tree0");
             sprite.rotation.x = 90 - game.camera.cameraAngle;
             sprite.position = this.worldDescriptors[i].position;
             sprite.position.x -= Math.floor(width / 2);

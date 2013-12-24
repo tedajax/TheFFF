@@ -6,9 +6,9 @@ var Camera2D = (function () {
         this.up = new TSM.vec3([0, 0, -1]);
         this.positionOffset = new TSM.vec3([0, 0, 0]);
 
-        this.cameraAngle = 30;
+        this.cameraAngle = 50;
         this.yRotation = 0;
-        this.followDistance = 3;
+        this.followDistance = 6;
 
         this.positionToFollow = new TSM.vec3([0, 0, 0]);
 

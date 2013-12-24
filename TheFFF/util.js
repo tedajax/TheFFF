@@ -1,4 +1,4 @@
-﻿var Util = (function () {
+var Util = (function () {
     function Util() {
     }
     Util.toDegrees = function (radians) {
@@ -15,6 +15,14 @@
         }
         A.splice(newIndex, 0, A.splice(oldIndex, 1)[0]);
         return A;
+    };
+
+    Util.nextPowerOf2 = function (value, pow) {
+        if (typeof pow === "undefined") { pow = 1; }
+        while (pow < value) {
+            pow *= 2;
+        }
+        return pow;
     };
     Util.deg2Rad = 0.0174532925;
     Util.rad2Deg = 57.2957795;

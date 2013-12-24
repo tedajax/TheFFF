@@ -24,7 +24,8 @@
       "mageWalk01": "assets/magus/mageWalk01.png",
       "mageWalk02": "assets/magus/mageWalk02.png",
       "mageWalk03": "assets/magus/mageWalk03.png",
-      "mountain": "assets/billboards/mountain.png"
+      "mountain": "assets/billboards/mountain.png",
+      "tree0": "assets/billboards/tree0.png"
     },
     "world_width": 100,
     "world_height": 100,

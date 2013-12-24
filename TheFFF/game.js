@@ -2,7 +2,7 @@
 var Game = (function () {
     function Game(canvas) {
         var _this = this;
-        this.useFullWindow = false;
+        this.useFullWindow = true;
 
         this.canvas = canvas;
         if (this.useFullWindow) {
@@ -43,7 +43,7 @@ var Game = (function () {
         };
 
         document.addEventListener("keydown", function (e) {
-            if (e.keyCode == Keys.G) {
+            if (e.keyCode == Keys.F) {
                 ["requestFullscreen", "msRequestFullscreen", "webkitRequestFullscreen", "mozRequestFullscreen"].forEach(function (name) {
                     if (_this.canvas[name] != null) {
                         game.fullscreen = true;
@@ -153,7 +153,7 @@ var Game = (function () {
             }
         }
 
-        if (this.input.getKeyDown(Keys.F)) {
+        if (this.input.getKeyDown(Keys.G)) {
             this.spriteShader.fogEnabled = !this.spriteShader.fogEnabled;
         }
 
