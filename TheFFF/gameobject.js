@@ -1,22 +1,31 @@
 var GameObject = (function () {
-    function GameObject(klass, animations) {
-        this.sprite = new Sprite(2, 2);
-        this.sprite.setShader(game.spriteShader);
-        this.position = new TSM.vec3([0, 0, 0]);
-        this.activeAnimation = null;
+    function GameObject(klass, animations, sprite) {
+        if (sprite == null) {
+            this.sprite = new Sprite(1, 1);
+            this.sprite.setShader(game.spriteShader);
+            this.position = new TSM.vec3([0, 0, 0]);
+            this.oldPosition = new TSM.vec3([0, 0, 0]);
+            this.activeAnimation = null;
 
-        var anims = animations && animations || ["idle"];
-        this.animations = new AnimationController(klass, anims);
+            var anims = animations && animations || ["idle"];
+            this.animations = new AnimationController(klass, anims);
 
-        this.sprite.billboard = true;
-        //this.sprite.rotation.x = 45;
+            this.sprite.billboard = true;
+            //this.sprite.rotation.x = 45;
+        } else {
+            this.sprite = sprite;
+            this.position = sprite.position;
+        }
     }
     GameObject.prototype.playAnimation = function (name) {
         this.animations.play(name);
     };
 
     GameObject.prototype.updateAnimation = function (dt) {
-        this.animations[this.activeAnimation].update(dt);
+        if (this.animations != null) {
+            this.animations.update(dt);
+            this.sprite.texture = this.animations.getCurrentTexture();
+        }
     };
 
     GameObject.prototype.setController = function (controller) {
@@ -25,19 +34,26 @@ var GameObject = (function () {
 
     GameObject.prototype.update = function (dt) {
         if (this.controller != null) {
+            this.oldPosition.xyz = this.position.xyz;
+
             this.controller.update(dt);
+
+            if (this.oldPosition.y != this.position.y) {
+                game.gameObjects.recalcOrder(this.renderOrderIndex);
+            }
         }
 
-        this.animations.update(dt);
-        this.sprite.texture = this.animations.getCurrentTexture();
+        this.updateAnimation(dt);
 
-        var terrainHeight = game.camera.getTerrainHeight(this.position, 0) - 1;
+        var terrainHeight = game.terrain.getTerrainHeight(this.position, 0) - (this.sprite.height / 2);
         this.position.z = terrainHeight;
         this.sprite.position = this.position;
     };
 
     GameObject.prototype.render = function () {
-        this.sprite.render();
+        if (game.camera.inRenderRange(this.position)) {
+            this.sprite.render();
+        }
     };
     return GameObject;
 })();

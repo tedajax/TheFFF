@@ -43,6 +43,19 @@ class Keys {
     static RIGHT = 39;
     static UP = 38;
     static DOWN = 40;
+
+    static F1  = 112;
+    static F2  = 113;
+    static F3  = 114;
+    static F4  = 115;
+    static F5  = 116;
+    static F6  = 117;
+    static F7  = 118;
+    static F8  = 119;
+    static F9  = 120;
+    static F10 = 121;
+    static F11 = 122;
+    static F12 = 123;
 } 
 
 class MouseButtons {

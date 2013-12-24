@@ -26,27 +26,47 @@ var WorldObjects = (function () {
 
         var width = game.config["world_width"];
         var height = game.config["world_height"];
+        this.width = width;
+        this.height = height;
         var data = game.config["world_data"];
         for (var index in data) {
             var d = data[index];
-            if (d == 6) {
-                var pos = new TSM.vec3([index % width, Math.floor(index / width), 0]);
-                this.worldDescriptors.push(new WorldObjectDescriptor(pos, 0 /* Mountain */));
+            var pos = this.indexToCoordinate(index);
+            var right = data[this.coordinatesToIndex(pos.x + 1, pos.y)];
+            var left = data[this.coordinatesToIndex(pos.x - 1, pos.y)];
+            var top = data[this.coordinatesToIndex(pos.x, pos.y - 1)];
+            var bottom = data[this.coordinatesToIndex(pos.x, pos.y + 1)];
+
+            if (d == 6 && (right != 6 || left != 6 || top != 6 || bottom != 6)) {
+                var position = new TSM.vec3([index % width, Math.floor(index / width), 0]);
+                this.worldDescriptors.push(new WorldObjectDescriptor(position, 0 /* Mountain */));
             }
         }
 
         for (var i = 0, len = this.worldDescriptors.length; i < len; ++i) {
-            var obj = new Sprite(1, 1);
-            obj.setShader(game.spriteShader);
-            obj.alpha = true;
-            obj.texture = game.textures.getTexture("mountain");
-            obj.billboard = true;
-            obj.position = this.worldDescriptors[i].position;
-            obj.position.x -= Math.floor(width / 2);
-            obj.position.y -= Math.floor(height / 2);
-            this.worldObjects[this.currentObjectId++] = obj;
+            var sprite = new Sprite(3, 3);
+            sprite.setShader(game.spriteShader);
+            sprite.alpha = true;
+            sprite.texture = game.textures.getTexture("mountain");
+            sprite.rotation.x = 90 - game.camera.cameraAngle;
+            sprite.position = this.worldDescriptors[i].position;
+            sprite.position.x -= Math.floor(width / 2);
+            sprite.position.y -= Math.floor(height / 2);
+            var gameObj = game.gameObjects.add(new GameObject(null, null, sprite), 10000 + i);
+            this.worldObjects[this.currentObjectId++] = gameObj;
         }
     }
+    WorldObjects.prototype.indexToCoordinate = function (index) {
+        return {
+            x: index % this.width,
+            y: Math.floor(index / this.width)
+        };
+    };
+
+    WorldObjects.prototype.coordinatesToIndex = function (x, y) {
+        return y * this.width + x % this.width;
+    };
+
     WorldObjects.prototype.update = function (dt) {
         for (var k in this.worldObjects) {
             var obj = this.worldObjects[k];
@@ -64,7 +84,7 @@ var WorldObjects = (function () {
                 update = false;
             }
             if (update) {
-                var terrainHeight = game.camera.getTerrainHeight(obj.position, 0) - 0.5;
+                var terrainHeight = game.terrain.getTerrainHeight(obj.position, 0) - 0.5;
                 obj.position.z = terrainHeight;
             }
         }

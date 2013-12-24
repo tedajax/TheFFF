@@ -1,4 +1,4 @@
-﻿var Keys = (function () {
+var Keys = (function () {
     function Keys() {
     }
     Keys.ZERO = 48;
@@ -45,6 +45,19 @@
     Keys.RIGHT = 39;
     Keys.UP = 38;
     Keys.DOWN = 40;
+
+    Keys.F1 = 112;
+    Keys.F2 = 113;
+    Keys.F3 = 114;
+    Keys.F4 = 115;
+    Keys.F5 = 116;
+    Keys.F6 = 117;
+    Keys.F7 = 118;
+    Keys.F8 = 119;
+    Keys.F9 = 120;
+    Keys.F10 = 121;
+    Keys.F11 = 122;
+    Keys.F12 = 123;
     return Keys;
 })();
 

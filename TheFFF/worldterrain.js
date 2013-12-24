@@ -14,6 +14,10 @@ var TerrainQuad = (function (_super) {
 
 var WorldTerrain = (function () {
     function WorldTerrain() {
+        this.terrainEllipseDepth = 40;
+        this.terrainEllipseHeight = 3;
+        this.terrainFollowCam = true;
+
         this.tileWidth = 1;
         this.tileHeight = 1;
         this.worldWidth = 38;
@@ -105,6 +109,14 @@ var WorldTerrain = (function () {
     };
 
     WorldTerrain.prototype.update = function () {
+        if (game.input.getKeyDown(Keys.SPACE)) {
+            this.terrainFollowCam = !this.terrainFollowCam;
+        }
+
+        if (this.terrainFollowCam) {
+            this.terrainReferencePoint = game.camera.position.y + 2;
+        }
+
         for (var i = 0; i < this.tileCountY; ++i) {
             for (var j = 0; j < this.tileCountX; ++j) {
                 var quad = this.worldQuads[i][j];
@@ -131,8 +143,8 @@ var WorldTerrain = (function () {
                     textureNeedsUpdating = true;
                 }
 
-                var front = game.camera.getTerrainHeight(quad.position, 0.5);
-                var back = game.camera.getTerrainHeight(quad.position, -0.5);
+                var front = this.getTerrainHeight(quad.position, 0.5);
+                var back = this.getTerrainHeight(quad.position, -0.5);
                 var yDiff = front - back;
                 var arctan = Math.atan2(yDiff, 1);
                 quad.rotation.x = arctan * Util.rad2Deg;
@@ -152,6 +164,22 @@ var WorldTerrain = (function () {
                 }
             }
         }
+    };
+
+    WorldTerrain.prototype.getTerrainHeight = function (position, offset) {
+        var b = this.terrainEllipseDepth / 2;
+        var a = this.terrainEllipseHeight;
+        var c = this.terrainReferencePoint - b;
+        var diff = c - (position.y + offset);
+        var diffsqr = Math.pow(diff, 2);
+        if (Math.abs(diff) > b) {
+            return 0;
+        }
+        var asqr = Math.pow(a, 2);
+        var bsqr = Math.pow(b, 2);
+        var result = Math.max(Math.sqrt(((-asqr * diffsqr) / bsqr) + asqr), 0);
+
+        return -result;
     };
 
     WorldTerrain.prototype.render = function () {

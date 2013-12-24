@@ -17,6 +17,7 @@
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="worldobjects.ts" />
     <TypeScriptCompile Include="animation.ts" />
     <TypeScriptCompile Include="animationcontroller.ts" />
     <TypeScriptCompile Include="animationfactory.ts" />

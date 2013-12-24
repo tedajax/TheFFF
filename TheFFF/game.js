@@ -2,11 +2,22 @@
 var Game = (function () {
     function Game(canvas) {
         var _this = this;
+        this.useFullWindow = false;
+
         this.canvas = canvas;
-        this.gl = this.canvas.getContext("webgl", { alpha: false });
-        this.camera = new Camera2D();
+        if (this.useFullWindow) {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
+
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+        this.fullscreen = false;
+
+        this.gl = this.canvas.getContext("webgl", { alpha: true });
+        this.gl.viewport(0, 0, this.width, this.height);
+
+        this.camera = new Camera2D();
         this.renderedFrames = 0;
         this.simulationTicks = 0;
         this.elapsedTime = 0;
@@ -27,7 +38,30 @@ var Game = (function () {
         document.onmousemove = function (event) {
             return _this.input.onMouseMove(event);
         };
+        window.onresize = function () {
+            return _this.onResize();
+        };
 
+        document.addEventListener("keydown", function (e) {
+            if (e.keyCode == Keys.G) {
+                ["requestFullscreen", "msRequestFullscreen", "webkitRequestFullscreen", "mozRequestFullscreen"].forEach(function (name) {
+                    if (_this.canvas[name] != null) {
+                        game.fullscreen = true;
+                        _this.canvas[name]();
+                        return false;
+                    }
+                });
+            }
+        });
+
+        //var myFullscreenFuncs = ;
+        //for (var f in myFullscreenFuncs) {
+        //    if (this.canvas[f] != null) {
+        //        console.log(myFullscreenFuncs[f]);
+        //        this.canvas[myFullscreenFuncs[f]]();
+        //        break;
+        //    }
+        //}
         this.localPlayerId = -1;
         this.localEntityId = -1;
         this.localPlayerUpdateInterval = 0.05;
@@ -50,9 +84,8 @@ var Game = (function () {
         this.spriteShader.initLocales();
 
         this.terrain = new WorldTerrain();
-        this.worldObjects = new WorldObjects();
-
         this.gameObjects = new GameObjectManager();
+        this.worldObjects = new WorldObjects();
 
         //var go = this.gameObjects.add(new GameObject("mageIdle00"), 0);
         //go.addAnimation("Idle", "mageIdle", 4);
@@ -87,8 +120,8 @@ var Game = (function () {
 
         this.camera.update(dt);
         this.terrain.update();
-        this.worldObjects.update(dt);
 
+        //this.worldObjects.update(dt);
         if (this.input.getKey(Keys.Z)) {
             this.spriteShader.fogStart -= 1 * dt;
         }
@@ -131,11 +164,11 @@ var Game = (function () {
     };
 
     Game.prototype.render = function () {
-        this.gl.viewport(0, 0, this.width, this.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
-        this.worldObjects.render();
+
+        //this.worldObjects.render();
         this.gameObjects.render();
         ++this.renderedFrames;
     };
@@ -146,6 +179,18 @@ var Game = (function () {
                 this.playerController.posess(this.gameObjects.gameObjects[this.localEntityId]);
                 this.camera.follow(this.gameObjects.gameObjects[this.localEntityId]);
             }
+        }
+    };
+
+    Game.prototype.onResize = function () {
+        if (this.useFullWindow) {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+
+            this.width = this.canvas.width;
+            this.height = this.canvas.height;
+
+            this.gl.viewport(0, 0, this.width, this.height);
         }
     };
     return Game;

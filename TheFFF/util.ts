@@ -9,6 +9,15 @@ class Util {
     static toRadians(degrees: number) {
         return degrees * Util.deg2Rad;
     }
+
+    static arrayMove(A: any[], oldIndex: number, newIndex: number) {
+        if (oldIndex < 0 || oldIndex >= A.length ||
+            newIndex < 0 || newIndex >= A.length) {
+                return A;
+        }
+        A.splice(newIndex, 0, A.splice(oldIndex, 1)[0]);
+        return A;
+    }
 }
 
 class PoolArray<T> {
@@ -58,3 +67,4 @@ class PoolArray<T> {
         return this.array[index];
     }
 }
+

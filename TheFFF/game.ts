@@ -7,6 +7,8 @@ class Game {
     input: Input;
     width: number;
     height: number;
+    useFullWindow: boolean;
+    fullscreen: boolean;
     simulationTicks: number;
     renderedFrames: number;
     elapsedTime: number;
@@ -29,11 +31,22 @@ class Game {
     spriteShader: SpriteShader;
 
     constructor(canvas: HTMLCanvasElement) {
+        this.useFullWindow = false;
+
         this.canvas = canvas;
-        this.gl = this.canvas.getContext("webgl", { alpha: false });
-        this.camera = new Camera2D();
+        if (this.useFullWindow) {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
+
         this.width = this.canvas.width;
         this.height = this.canvas.height;
+        this.fullscreen = false;
+
+        this.gl = this.canvas.getContext("webgl", { alpha: true });
+        this.gl.viewport(0, 0, this.width, this.height);
+
+        this.camera = new Camera2D();
         this.renderedFrames = 0;
         this.simulationTicks = 0;
         this.elapsedTime = 0;
@@ -44,6 +57,28 @@ class Game {
         document.onmousedown = (event: MouseEvent) => this.input.onMouseDown(event);
         document.onmouseup = (event: MouseEvent) => this.input.onMouseUp(event);
         document.onmousemove = (event: MouseEvent) => this.input.onMouseMove(event);
+        window.onresize = () => this.onResize();
+
+        document.addEventListener("keydown", (e: KeyboardEvent) => {
+            if (e.keyCode == Keys.G) {
+                ["requestFullscreen", "msRequestFullscreen", "webkitRequestFullscreen", "mozRequestFullscreen"].forEach((name: string) => {
+                    if (this.canvas[name] != null) {
+                        game.fullscreen = true;
+                        this.canvas[name]();
+                        return false;
+                    }
+                });
+            }
+        });
+        
+        //var myFullscreenFuncs = ;
+        //for (var f in myFullscreenFuncs) {
+        //    if (this.canvas[f] != null) {
+        //        console.log(myFullscreenFuncs[f]);
+        //        this.canvas[myFullscreenFuncs[f]]();
+        //        break;
+        //    }
+        //}
 
         this.localPlayerId = -1;
         this.localEntityId = -1;
@@ -68,9 +103,9 @@ class Game {
         this.spriteShader.initLocales();
 
         this.terrain = new WorldTerrain();
-        this.worldObjects = new WorldObjects();
-
         this.gameObjects = new GameObjectManager();
+        this.worldObjects = new WorldObjects();
+                
         //var go = this.gameObjects.add(new GameObject("mageIdle00"), 0);
         //go.addAnimation("Idle", "mageIdle", 4);
         //go.addAnimation("Walk", "mageWalk", 4, true, [0.1, 0.1, 0.1, 0.1]);
@@ -104,7 +139,7 @@ class Game {
 
         this.camera.update(dt);
         this.terrain.update();
-        this.worldObjects.update(dt);
+        //this.worldObjects.update(dt);
 
         if (this.input.getKey(Keys.Z)) {
             this.spriteShader.fogStart -= 1 * dt;
@@ -148,11 +183,10 @@ class Game {
     }
 
     render() {
-        this.gl.viewport(0, 0, this.width, this.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.spriteShader.frameDrawSetup();
         this.terrain.render();
-        this.worldObjects.render();
+        //this.worldObjects.render();
         this.gameObjects.render();
         ++this.renderedFrames;
     }
@@ -163,6 +197,18 @@ class Game {
                 this.playerController.posess(this.gameObjects.gameObjects[this.localEntityId]);
                 this.camera.follow(this.gameObjects.gameObjects[this.localEntityId]);
             }    
+        }
+    }
+
+    onResize() {
+        if (this.useFullWindow) {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+
+            this.width = this.canvas.width;
+            this.height = this.canvas.height;
+
+            this.gl.viewport(0, 0, this.width, this.height);
         }
     }
 }
