@@ -19,8 +19,8 @@ class RenderManager {
         game.gl.enable(game.gl.CULL_FACE);
         game.gl.cullFace(game.gl.FRONT);
 
-        game.gl.enable(game.gl.DEPTH_TEST);
-        game.gl.depthFunc(game.gl.LEQUAL);
+        //game.gl.enable(game.gl.DEPTH_TEST);
+        game.gl.depthFunc(game.gl.NEVER);
     }
 
     setAlpha(alpha: boolean) {

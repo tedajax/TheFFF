@@ -16,6 +16,8 @@ var GameObject = (function () {
             this.sprite = sprite;
             this.position = sprite.position;
         }
+
+        this.terrainOffset = 0;
     }
     GameObject.prototype.playAnimation = function (name) {
         this.animations.play(name);
@@ -46,7 +48,7 @@ var GameObject = (function () {
         this.updateAnimation(dt);
 
         var terrainHeight = game.terrain.getTerrainHeight(this.position, 0) - (this.sprite.height / 2);
-        this.position.z = terrainHeight;
+        this.position.z = terrainHeight - this.terrainOffset;
         this.sprite.position = this.position;
     };
 

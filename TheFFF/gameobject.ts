@@ -8,6 +8,8 @@ class GameObject {
     entityId: number;
     renderOrderIndex: number;
 
+    terrainOffset: number;
+
     constructor(klass?: string, animations?: string[], sprite?: Sprite) {
         if (sprite == null) {
             this.sprite = new Sprite(1, 1);
@@ -25,6 +27,8 @@ class GameObject {
             this.sprite = sprite;
             this.position = sprite.position;
         }
+
+        this.terrainOffset = 0;
     }
 
     playAnimation(name: string) {
@@ -56,7 +60,7 @@ class GameObject {
         this.updateAnimation(dt);
         
         var terrainHeight = game.terrain.getTerrainHeight(this.position, 0) - (this.sprite.height / 2);
-        this.position.z = terrainHeight;
+        this.position.z = terrainHeight - this.terrainOffset;
         this.sprite.position = this.position;
     }
 

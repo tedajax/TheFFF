@@ -15,6 +15,10 @@ var Game = (function () {
         this.fullscreen = false;
 
         this.gl = this.canvas.getContext("webgl", { alpha: true });
+        if (!this.gl) {
+            console.log("reverting to experimental-webgl");
+            this.gl = this.canvas.getContext("experimental-webgl", { alpha: true });
+        }
         this.gl.viewport(0, 0, this.width, this.height);
 
         this.camera = new Camera2D();
