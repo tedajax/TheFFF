@@ -8,7 +8,7 @@ var StateFrame = (function () {
     function StateFrame() {
         this.position = new TSM.vec2([0, 0]);
         this.velocity = new TSM.vec2([0, 0]);
-        this.time = new Date().getTime();
+        this.time = performance.now();
     }
     StateFrame.prototype.clone = function (other) {
         this.position.x = other.position.x;
@@ -64,7 +64,7 @@ var Controller = (function () {
 
     Controller.prototype.handleStateSync = function (sync) {
         this.previous.clone(this.current);
-        this.current.time = new Date().getTime();
+        this.current.time = performance.now();
         if (sync.moveableState != null) {
             this.current.velocity.x = sync.moveableState.velocity.x;
             this.current.velocity.y = sync.moveableState.velocity.y;
@@ -102,7 +102,7 @@ var Controller = (function () {
             return;
         }
 
-        var time = new Date().getTime() - 100;
+        var time = performance.now() - 100;
         var perc = (time - this.previous.time) / (this.current.time - this.previous.time);
         this.interp = StateFrame.lerp(this.previous, this.current, perc);
         this.gameObject.position.x = this.interp.position.x;

@@ -6,7 +6,7 @@ class StateFrame {
     constructor() {
         this.position = new TSM.vec2([0, 0]);
         this.velocity = new TSM.vec2([0, 0]);
-        this.time = new Date().getTime();
+        this.time = performance.now();
     }
 
     clone(other: StateFrame) {
@@ -71,7 +71,7 @@ class Controller {
 
     handleStateSync(sync: any) {
         this.previous.clone(this.current);
-        this.current.time = new Date().getTime();
+        this.current.time = performance.now();
         if (sync.moveableState != null) {
             this.current.velocity.x = sync.moveableState.velocity.x;
             this.current.velocity.y = sync.moveableState.velocity.y;
@@ -109,7 +109,7 @@ class Controller {
             return;
         }
 
-        var time = new Date().getTime() - 100;        
+        var time = performance.now() - 100;        
         var perc = (time - this.previous.time) / (this.current.time - this.previous.time);
         this.interp = StateFrame.lerp(this.previous, this.current, perc);
         this.gameObject.position.x = this.interp.position.x;

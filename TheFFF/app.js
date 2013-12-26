@@ -32,7 +32,7 @@ function initialize() {
 
     connection.sendCommands([{ "type": 100, "connectRequest": {} }]);
 
-    lastTick = new Date().getTime();
+    lastTick = performance.now();
     framesThisSecond = 0;
 
     setTimeout(update, 1000 / FPS);
@@ -40,8 +40,8 @@ function initialize() {
 }
 
 function update() {
-    prevTime = (currTime != null) ? currTime : new Date().getTime();
-    currTime = new Date().getTime();
+    prevTime = (currTime != null) ? currTime : performance.now();
+    currTime = performance.now();
     var dt = (currTime - prevTime) / 1000.0;
     game.update(dt);
 
@@ -52,7 +52,7 @@ function render() {
     game.render();
 
     ++framesThisSecond;
-    var now = new Date().getTime();
+    var now = performance.now();
     if (now - lastTick >= 1000) {
         FPSElement.textContent = "FPS: " + framesThisSecond;
         framesThisSecond = 0;
