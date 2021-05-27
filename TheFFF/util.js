@@ -1,24 +1,22 @@
-var Util = (function () {
+var Util = /** @class */ (function () {
     function Util() {
     }
     Util.toDegrees = function (radians) {
         return radians * Util.rad2Deg;
     };
-
     Util.toRadians = function (degrees) {
         return degrees * Util.deg2Rad;
     };
-
     Util.arrayMove = function (A, oldIndex, newIndex) {
-        if (oldIndex < 0 || oldIndex >= A.length || newIndex < 0 || newIndex >= A.length) {
+        if (oldIndex < 0 || oldIndex >= A.length ||
+            newIndex < 0 || newIndex >= A.length) {
             return A;
         }
         A.splice(newIndex, 0, A.splice(oldIndex, 1)[0]);
         return A;
     };
-
     Util.nextPowerOf2 = function (value, pow) {
-        if (typeof pow === "undefined") { pow = 1; }
+        if (pow === void 0) { pow = 1; }
         while (pow < value) {
             pow *= 2;
         }
@@ -27,11 +25,10 @@ var Util = (function () {
     Util.deg2Rad = 0.0174532925;
     Util.rad2Deg = 57.2957795;
     return Util;
-})();
-
-var PoolArray = (function () {
+}());
+var PoolArray = /** @class */ (function () {
     function PoolArray(capacity) {
-        if (typeof capacity === "undefined") { capacity = 64; }
+        if (capacity === void 0) { capacity = 64; }
         this.maxIndex = 0;
         this.array = new Array(capacity);
         this.freeStack = [];
@@ -43,10 +40,9 @@ var PoolArray = (function () {
         get: function () {
             return this.array.length;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
-
     PoolArray.prototype.push = function (obj) {
         var index = -1;
         if (this.freeStack.length > 0) {
@@ -54,27 +50,24 @@ var PoolArray = (function () {
         }
         if (index > 0) {
             this.array[index] = obj;
-        } else {
+        }
+        else {
             index = this.array.push(obj) - 1;
         }
-
         if (index > this.maxIndex) {
             this.maxIndex = index;
         }
-
         return index;
     };
-
     PoolArray.prototype.removeAt = function (index) {
         if (this.array[index] != null) {
             this.array[index] = null;
             this.freeStack.push(index);
         }
     };
-
     PoolArray.prototype.at = function (index) {
         return this.array[index];
     };
     return PoolArray;
-})();
+}());
 //# sourceMappingURL=util.js.map

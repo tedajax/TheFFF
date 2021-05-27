@@ -1,5 +1,3 @@
-/// <reference path="WebGL.d.ts" />
-
 class Game {
     canvas: HTMLCanvasElement;
     gl: WebGLRenderingContext;
@@ -46,7 +44,7 @@ class Game {
         this.gl = this.canvas.getContext("webgl", { alpha: true });
         if (!this.gl) {
             console.log("reverting to experimental-webgl");
-            this.gl = this.canvas.getContext("experimental-webgl", { alpha: true });
+            this.gl = this.canvas.getContext("webgl", { alpha: true });
         }
         this.gl.viewport(0, 0, this.width, this.height);
 
@@ -109,14 +107,13 @@ class Game {
         this.terrain = new WorldTerrain();
         this.gameObjects = new GameObjectManager();
         this.worldObjects = new WorldObjects();
-                
-        //var go = this.gameObjects.add(new GameObject("mageIdle00"), 0);
-        //go.addAnimation("Idle", "mageIdle", 4);
-        //go.addAnimation("Walk", "mageWalk", 4, true, [0.1, 0.1, 0.1, 0.1]);
-        //go.addAnimation("Attack", "mageAttack", 8, false, [0.5, 0, 0.1, 0.5, 0, 0, 0.5, 0.1]);
-        //go.setActiveAnimation("Idle");
-        //go.sprite.alpha = true;
-        this.playerController = new LocalPlayerController(null);
+
+        this.localEntityId = 0;
+        var go = game.gameObjects.add(new GameObject("mage", ["idle", "walk", "attack"]), this.localEntityId);
+        go.animations.play("idle", true);
+        go.sprite.alpha = true;
+        this.playerController = new LocalPlayerController(go);
+        this.camera.follow(go);
     }
 
     initializeTextures() {

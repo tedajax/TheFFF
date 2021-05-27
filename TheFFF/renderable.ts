@@ -1,4 +1,3 @@
-/// <reference path="WebGL.d.ts" />
 /// <reference path="tsm-0.7.d.ts" />
 
 class Renderable {

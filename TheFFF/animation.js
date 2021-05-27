@@ -1,6 +1,6 @@
-var Animation = (function () {
-    function Animation(imageNames, delays, priority) {
-        if (typeof priority === "undefined") { priority = 0; }
+var FFFAnimation = /** @class */ (function () {
+    function FFFAnimation(imageNames, delays, priority) {
+        if (priority === void 0) { priority = 0; }
         this.maxFrames = imageNames.length;
         this.currentFrame = 0;
         this.currentTimer = 0;
@@ -8,7 +8,6 @@ var Animation = (function () {
         this.loop = false;
         this.playing = false;
         this.priority = priority;
-
         this.frameNames = [];
         this.frameImages = [];
         for (var i = 0; i < this.maxFrames; ++i) {
@@ -16,44 +15,39 @@ var Animation = (function () {
             this.frameImages[i] = game.textures.getTexture(imageNames[i]);
         }
     }
-    Animation.prototype.clone = function () {
-        return new Animation(this.frameNames, this.frameDelays, this.priority);
+    FFFAnimation.prototype.clone = function () {
+        return new FFFAnimation(this.frameNames, this.frameDelays, this.priority);
     };
-
-    Animation.prototype.play = function (loop) {
-        if (typeof loop === "undefined") { loop = false; }
+    FFFAnimation.prototype.play = function (loop) {
+        if (loop === void 0) { loop = false; }
         this.playing = true;
         this.loop = loop;
         this.currentFrame = 0;
         this.currentTimer = 0;
     };
-
-    Animation.prototype.resume = function () {
+    FFFAnimation.prototype.resume = function () {
         this.playing = true;
     };
-
-    Animation.prototype.pause = function () {
+    FFFAnimation.prototype.pause = function () {
         this.playing = false;
     };
-
-    Animation.prototype.stop = function () {
+    FFFAnimation.prototype.stop = function () {
         this.playing = false;
         this.currentFrame = 0;
         this.currentTimer = 0;
     };
-
-    Animation.prototype.update = function (dt) {
+    FFFAnimation.prototype.update = function (dt) {
         if (!this.playing) {
             return;
         }
-
         this.currentTimer += dt;
         if (this.currentTimer >= this.frameDelays[this.currentFrame]) {
             this.currentFrame++;
             if (this.currentFrame >= this.maxFrames) {
                 if (this.loop) {
                     this.currentFrame = 0;
-                } else {
+                }
+                else {
                     this.currentFrame--;
                     this.pause();
                 }
@@ -61,10 +55,9 @@ var Animation = (function () {
             this.currentTimer = 0;
         }
     };
-
-    Animation.prototype.getTexture = function () {
+    FFFAnimation.prototype.getTexture = function () {
         return this.frameImages[this.currentFrame];
     };
-    return Animation;
-})();
+    return FFFAnimation;
+}());
 //# sourceMappingURL=animation.js.map

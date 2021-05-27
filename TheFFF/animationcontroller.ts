@@ -1,6 +1,6 @@
 class AnimationController {
     klass: string;
-    animations: Animation[];
+    animations: FFFAnimation[];
         
     constructor(klass: string, animations?: string[]) {
         this.klass = klass;
@@ -37,7 +37,7 @@ class AnimationController {
 
     update(dt: number) {
         for (var key in this.animations) {
-            var anim: Animation = <Animation>this.animations[key];
+            var anim: FFFAnimation = <FFFAnimation >this.animations[key];
             anim.update(dt);
         }
     }
@@ -46,7 +46,7 @@ class AnimationController {
         var maxPriority = -10000;
         var texture: ImageTexture;
         for (var key in this.animations) {
-            var anim = <Animation>this.animations[key];
+            var anim = <FFFAnimation >this.animations[key];
             if (anim.playing) {
                 if (anim.priority > maxPriority) {
                     maxPriority = anim.priority;

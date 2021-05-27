@@ -1,4 +1,4 @@
-var Keys = (function () {
+var Keys = /** @class */ (function () {
     function Keys() {
     }
     Keys.ZERO = 48;
@@ -11,7 +11,6 @@ var Keys = (function () {
     Keys.SEVEN = 55;
     Keys.EIGHT = 56;
     Keys.NINE = 57;
-
     Keys.A = 65;
     Keys.B = 66;
     Keys.C = 67;
@@ -38,14 +37,11 @@ var Keys = (function () {
     Keys.X = 88;
     Keys.Y = 89;
     Keys.Z = 90;
-
     Keys.SPACE = 32;
-
     Keys.LEFT = 37;
     Keys.RIGHT = 39;
     Keys.UP = 38;
     Keys.DOWN = 40;
-
     Keys.F1 = 112;
     Keys.F2 = 113;
     Keys.F3 = 114;
@@ -59,9 +55,8 @@ var Keys = (function () {
     Keys.F11 = 122;
     Keys.F12 = 123;
     return Keys;
-})();
-
-var MouseButtons = (function () {
+}());
+var MouseButtons = /** @class */ (function () {
     function MouseButtons() {
     }
     MouseButtons.NONE = -1;
@@ -69,9 +64,8 @@ var MouseButtons = (function () {
     MouseButtons.MIDDLE = 1;
     MouseButtons.RIGHT = 2;
     return MouseButtons;
-})();
-
-var MouseState = (function () {
+}());
+var MouseState = /** @class */ (function () {
     function MouseState() {
         this.x = 0;
         this.y = 0;
@@ -83,85 +77,66 @@ var MouseState = (function () {
         this.buttons = other.buttons.slice(0);
     };
     return MouseState;
-})();
-
-var Input = (function () {
+}());
+var Input = /** @class */ (function () {
     function Input() {
         this.newKeys = [];
         this.oldKeys = [];
-
         for (var i = 0; i < 256; ++i) {
             this.newKeys[i] = false;
             this.oldKeys[i] = false;
         }
-
         this.newMouseState = new MouseState();
         this.oldMouseState = new MouseState();
     }
     Input.prototype.onKeyDown = function (event) {
         this.newKeys[event.keyCode] = true;
     };
-
     Input.prototype.onKeyUp = function (event) {
         this.newKeys[event.keyCode] = false;
     };
-
     Input.prototype.onMouseDown = function (event) {
         this.newMouseState.buttons[event.button] = true;
-
         return false;
     };
-
     Input.prototype.onMouseUp = function (event) {
         this.newMouseState.buttons[event.button] = false;
-
         return false;
     };
-
     Input.prototype.onMouseMove = function (event) {
         var x = event.clientX - game.canvas.offsetLeft;
         var y = event.clientY - game.canvas.offsetTop;
-
         this.newMouseState.x = x;
         this.newMouseState.y = y;
     };
-
     Input.prototype.update = function () {
         this.oldKeys = this.newKeys.slice(0);
         this.oldMouseState.clone(this.newMouseState);
     };
-
     Input.prototype.getKey = function (keycode) {
         return this.newKeys[keycode];
     };
-
     Input.prototype.getKeyUp = function (keycode) {
         return (!this.newKeys[keycode] && this.oldKeys[keycode]);
     };
-
     Input.prototype.getKeyDown = function (keycode) {
         return (this.newKeys[keycode] && !this.oldKeys[keycode]);
     };
-
     Input.prototype.getMouseButton = function (button) {
         return this.newMouseState.buttons[button];
     };
-
     Input.prototype.getMouseButtonUp = function (button) {
         return (!this.newMouseState.buttons[button] && this.oldMouseState.buttons[button]);
     };
-
     Input.prototype.getMouseButtonDown = function (button) {
         return (this.newMouseState.buttons[button] && !this.oldMouseState.buttons[button]);
     };
-
     Input.prototype.getMouseX = function () {
         return this.newMouseState.x;
     };
-
     Input.prototype.getMouseY = function () {
         return this.newMouseState.y;
     };
     return Input;
-})();
+}());
 //# sourceMappingURL=input.js.map

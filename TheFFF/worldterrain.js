@@ -1,30 +1,34 @@
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var TerrainQuad = (function (_super) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var TerrainQuad = /** @class */ (function (_super) {
     __extends(TerrainQuad, _super);
     function TerrainQuad() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return TerrainQuad;
-})(Sprite);
-
-var WorldTerrain = (function () {
+}(Sprite));
+var WorldTerrain = /** @class */ (function () {
     function WorldTerrain() {
         this.terrainEllipseDepth = 40;
         this.terrainEllipseHeight = 3;
         this.terrainFollowCam = true;
-
         this.tileWidth = 1;
         this.tileHeight = 1;
         this.worldWidth = 38;
         this.worldHeight = 23;
         this.width = game.config["world_width"];
         this.height = game.config["world_height"];
-
         this.textureMapping = [];
         this.textureMapping[1] = "dirt0";
         this.textureMapping[2] = "dirt1";
@@ -34,16 +38,12 @@ var WorldTerrain = (function () {
         this.textureMapping[6] = "mtn0";
         this.textureMapping[7] = "water0";
         this.textureMapping[8] = "water1";
-
         //this.worldDescriptor = this.genMapRandomly(this.width, this.height);
         this.worldDescriptor = this.genMapFromData(game.config["world_data"]);
-
         this.tileCountX = Math.ceil(this.worldWidth / this.tileWidth) + 1;
         this.tileCountY = Math.ceil(this.worldHeight / this.tileHeight) + 1;
-
         this.worldQuads = [];
         var tileTopLeft = this.cameraTileMin();
-
         for (var i = 0; i < this.tileCountY; ++i) {
             this.worldQuads[i] = [];
             for (var j = 0; j < this.tileCountX; ++j) {
@@ -58,7 +58,6 @@ var WorldTerrain = (function () {
                 this.worldQuads[i][j].textureIndex = this.getTextureIndexAtTile(tilePosition);
             }
         }
-
         this.quadsByTexture = [];
         for (var i = 0; i < this.tileCountY; ++i) {
             for (var j = 0; j < this.tileCountX; ++j) {
@@ -78,7 +77,6 @@ var WorldTerrain = (function () {
                 world[i][j] = 1;
             }
         }
-
         for (var r = 0; r < 1000; ++r) {
             var t = Math.floor(Math.random() * 7) + 2;
             var rad = Math.floor(Math.random() * 5) + 1;
@@ -92,10 +90,8 @@ var WorldTerrain = (function () {
                 }
             }
         }
-
         return world;
     };
-
     WorldTerrain.prototype.genMapFromData = function (data) {
         var world = [];
         var index = 0;
@@ -107,16 +103,13 @@ var WorldTerrain = (function () {
         }
         return world;
     };
-
     WorldTerrain.prototype.update = function () {
         if (game.input.getKeyDown(Keys.SPACE)) {
             this.terrainFollowCam = !this.terrainFollowCam;
         }
-
         if (this.terrainFollowCam) {
             this.terrainReferencePoint = game.camera.position.y + 2;
         }
-
         for (var i = 0; i < this.tileCountY; ++i) {
             for (var j = 0; j < this.tileCountX; ++j) {
                 var quad = this.worldQuads[i][j];
@@ -133,7 +126,6 @@ var WorldTerrain = (function () {
                     quad.position.x -= this.worldWidth * this.tileWidth;
                     textureNeedsUpdating = true;
                 }
-
                 while (quad.position.y < top) {
                     quad.position.y += (this.worldHeight + 1) * this.tileHeight;
                     textureNeedsUpdating = true;
@@ -142,7 +134,6 @@ var WorldTerrain = (function () {
                     quad.position.y -= (this.worldHeight + 1) * this.tileHeight;
                     textureNeedsUpdating = true;
                 }
-
                 var front = this.getTerrainHeight(quad.position, 0.5);
                 var back = this.getTerrainHeight(quad.position, -0.5);
                 var yDiff = front - back;
@@ -150,11 +141,9 @@ var WorldTerrain = (function () {
                 quad.rotation.x = arctan * Util.rad2Deg;
                 quad.position.z = (front + back) / 2;
                 quad.scale.y = 1 + arctan;
-
                 if (textureNeedsUpdating) {
                     var tile = this.worldSpaceToTileSpace(quad.position);
                     quad.setTexture(this.getTextureAtTile(tile));
-
                     this.quadsByTexture[quad.textureIndex].removeAt(quad.subIndex);
                     quad.textureIndex = this.getTextureIndexAtTile(tile);
                     if (this.quadsByTexture[quad.textureIndex] == null) {
@@ -165,7 +154,6 @@ var WorldTerrain = (function () {
             }
         }
     };
-
     WorldTerrain.prototype.getTerrainHeight = function (position, offset) {
         var b = this.terrainEllipseDepth / 2;
         var a = this.terrainEllipseHeight;
@@ -178,10 +166,8 @@ var WorldTerrain = (function () {
         var asqr = Math.pow(a, 2);
         var bsqr = Math.pow(b, 2);
         var result = Math.max(Math.sqrt(((-asqr * diffsqr) / bsqr) + asqr), 0);
-
         return -result;
     };
-
     WorldTerrain.prototype.render = function () {
         for (var i = 0, len = this.textureMapping.length; i < len; ++i) {
             if (this.quadsByTexture[i] != null) {
@@ -194,7 +180,6 @@ var WorldTerrain = (function () {
             }
         }
     };
-
     WorldTerrain.prototype.getTextureAtTile = function (tile) {
         var row = this.worldDescriptor[tile.x];
         if (row == null) {
@@ -203,11 +188,11 @@ var WorldTerrain = (function () {
         var wd = row[tile.y];
         if (wd != null) {
             return game.textures.getTexture(this.textureMapping[wd]);
-        } else {
+        }
+        else {
             return game.textures.getTexture("water1");
         }
     };
-
     WorldTerrain.prototype.getTextureIndexAtTile = function (tile) {
         var row = this.worldDescriptor[tile.x];
         if (row == null) {
@@ -216,34 +201,29 @@ var WorldTerrain = (function () {
         var wd = row[tile.y];
         if (wd != null) {
             return wd;
-        } else {
+        }
+        else {
             return 0;
         }
     };
-
     WorldTerrain.prototype.worldSpaceToTileSpace = function (world) {
         var tileSpaceX = Math.floor(world.x / this.tileWidth) + Math.floor(this.width / 2);
         var tileSpaceY = Math.floor(world.y / this.tileHeight) + Math.floor(this.height / 2);
-
         return new TSM.vec2([tileSpaceY, tileSpaceX]);
     };
-
     WorldTerrain.prototype.tileSpaceToWorldSpace = function (tile) {
         var tx = tile.x - Math.floor(this.width / 2);
         var ty = tile.y - Math.floor(this.height / 2);
-
         return new TSM.vec3([ty * this.tileHeight, tx * this.tileWidth, 0]);
     };
-
     WorldTerrain.prototype.cameraTileMin = function () {
         var camTL = TSM.vec3.sum(game.camera.position, new TSM.vec3([-this.worldWidth / 2, 0, 0]));
         return this.worldSpaceToTileSpace(camTL);
     };
-
     WorldTerrain.prototype.cameraTileMax = function () {
         var camBR = TSM.vec3.sum(game.camera.position, new TSM.vec3([this.worldWidth / 2, 0, 0]));
         return this.worldSpaceToTileSpace(camBR);
     };
     return WorldTerrain;
-})();
+}());
 //# sourceMappingURL=worldterrain.js.map

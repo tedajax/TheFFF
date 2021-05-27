@@ -45,7 +45,7 @@ class AnimationFactory {
                 textureNames[i] = tex;
             }
 
-            this.animations[klass][name] = new Animation(textureNames, frameDelays, priority);
+            this.animations[klass][name] = new FFFAnimation(textureNames, frameDelays, priority);
         }
 
         return this.animations[klass][name];

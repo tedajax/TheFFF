@@ -1,4 +1,4 @@
-class Animation {
+class FFFAnimation {
     maxFrames: number;
     frameNames: string[];
     frameImages: ImageTexture[];
@@ -26,8 +26,8 @@ class Animation {
         }
     }
 
-    clone(): Animation {
-        return new Animation(this.frameNames, this.frameDelays, this.priority); 
+    clone(): FFFAnimation {
+        return new FFFAnimation(this.frameNames, this.frameDelays, this.priority); 
     }
 
     play(loop: boolean = false) {

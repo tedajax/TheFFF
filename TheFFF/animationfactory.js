@@ -1,4 +1,4 @@
-var AnimationFactory = (function () {
+var AnimationFactory = /** @class */ (function () {
     function AnimationFactory() {
         this.animations = [];
     }
@@ -6,24 +6,19 @@ var AnimationFactory = (function () {
         if (this.animations == null) {
             throw new Error("Must instantiate animation factory before calling createAnimation()");
         }
-
         if (this.animations[klass] == null) {
             return null;
         }
-
         return this.animations[klass][name].clone();
     };
-
     AnimationFactory.prototype.createAnimation = function (klass, name, textureRootName, numFrames, frameDelays, priority) {
-        if (typeof priority === "undefined") { priority = 0; }
+        if (priority === void 0) { priority = 0; }
         if (this.animations == null) {
             throw new Error("Must instantiate animation factory before calling createAnimation()");
         }
-
         if (this.animations[klass] == null) {
             this.animations[klass] = [];
         }
-
         if (this.animations[klass][name] == null) {
             if (frameDelays == null) {
                 frameDelays = [];
@@ -31,7 +26,6 @@ var AnimationFactory = (function () {
                     frameDelays[i] = AnimationFactory.defaultFrameDelay;
                 }
             }
-
             var textureNames = [];
             for (var i = 0; i < numFrames; ++i) {
                 var tex = textureRootName.slice(0);
@@ -41,13 +35,11 @@ var AnimationFactory = (function () {
                 tex += i.toString();
                 textureNames[i] = tex;
             }
-
-            this.animations[klass][name] = new Animation(textureNames, frameDelays, priority);
+            this.animations[klass][name] = new FFFAnimation(textureNames, frameDelays, priority);
         }
-
         return this.animations[klass][name];
     };
     AnimationFactory.defaultFrameDelay = 0.2;
     return AnimationFactory;
-})();
+}());
 //# sourceMappingURL=animationfactory.js.map

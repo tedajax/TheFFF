@@ -39,7 +39,8 @@ class WorldObjects {
         this.width = width;
         this.height = height;
         var data = game.config["world_data"];
-        for (var index in data) {
+        for (var indexstr in data) {
+            var index: number = parseInt(indexstr);
             var d = data[index];
             var pos = this.indexToCoordinate(index);
             var right = data[this.coordinatesToIndex(pos.x + 1, pos.y)];

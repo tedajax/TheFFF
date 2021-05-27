@@ -1,5 +1,4 @@
 /// <reference path="tsm-0.7.d.ts" /> 
-/// <reference path="WebGL.d.ts" />
 
 class Shader {
     name: string;

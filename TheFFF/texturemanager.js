@@ -1,4 +1,4 @@
-var ImageTexture = (function () {
+var ImageTexture = /** @class */ (function () {
     function ImageTexture() {
     }
     ImageTexture.prototype.bindTextureParameters = function () {
@@ -11,9 +11,8 @@ var ImageTexture = (function () {
         this.loaded = true;
     };
     return ImageTexture;
-})();
-
-var TextureManager = (function () {
+}());
+var TextureManager = /** @class */ (function () {
     function TextureManager() {
         this.textures = [];
     }
@@ -21,7 +20,6 @@ var TextureManager = (function () {
         if (this.textures[name] != null) {
             return this.textures[name];
         }
-
         var imgTexture = new ImageTexture();
         imgTexture.texture = game.gl.createTexture();
         imgTexture.loaded = false;
@@ -31,14 +29,12 @@ var TextureManager = (function () {
             imgTexture.bindTextureParameters();
         };
         imgTexture.image.src = url;
-
         this.textures[name] = imgTexture;
         return this.textures[name];
     };
-
     TextureManager.prototype.getTexture = function (name) {
         return this.textures[name];
     };
     return TextureManager;
-})();
+}());
 //# sourceMappingURL=texturemanager.js.map
